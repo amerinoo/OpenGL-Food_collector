@@ -3,7 +3,7 @@
 using namespace std;
 
 int main(){
-	Map map (10,10);
+	Map map (11,10);
+	map.generate();
 	map.print();
-
 }

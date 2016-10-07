@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include <vector>
 #include "map.h"
 using namespace std;
 
@@ -7,65 +7,60 @@ Map::Map(int a, int b){
 	heigth = b;
 }
 void Map::generate(){
+	int init = -1;
+	int corridor = 0;
+	int wall = 1;
+	int mirror = 2;
+
 	srand(time(NULL));
 	int i, j;
-    int matriz[10][10];
-
-	// Ponendo los unos de las laterais e los zeros a dentro.
-	for(i=0;i<width;i++){
-		for(j=0;j<heigth;j++){
-            if(i == 0 || i == width-1 || j == 0 || j == heigth-1 )
-                matriz[i][j] = 1;
-            else
-                matriz[i][j] = 0;
+	// Outside
+	for(i=0; i<heigth; i++){
+		vector<int> aux(width, mirror);
+		for(j=0; j<ceil(width/2.0); j++){
+            if(i == 0 || i == heigth-1 || j == 0 || j == width-1 ){
+                aux[j] = wall;
+            }else
+                aux[j] = init;
 		}
+		map.push_back(aux);
     }
+	map[1][1] = corridor;
 
-    cout << endl;
-
-	for(i=1;i<width-1;i++)
+	//Inside
+	for(i=1;i<heigth-1;i++)
 	{
-		for(j=1;j<floor(heigth/2);j++)
+		for(j=1;j<floor(width/2.0);j++)
 		{
             int r = rand() % 2;
 
             if(r == 0)
-                matriz[i][j] = 0;
+                map[i][j] = corridor;
             else
-                matriz[i][j] = 1;
+                map[i][j] = wall;
 		}
 	}
 
-    cout << endl;
+	//Mirror
+	for(i=0; i<=heigth-1; i++){
+		for(j=0; j<floor(width/2.0); j++){
+			map[i][width-1-j] = map[i][j];
+		}
+	}
+	//Corredor in the middle
+	if (width%2 == 1) {
+		for (i = 1; i < heigth-1; i++) {
+			map[i][floor(width/2.0)] = corridor;
+		}
+	}
+
 }
 void Map::print(){
-	for(i=0;i<width;i++)
-	{
-		for(j=0;j<heigth;j++)
+	for(int i=0;i<heigth;i++){
+		for(int j=0;j<width;j++)
 		{
-             cout << matriz[i][j];
+			 cout << map[i][j];
 		}
 		cout << endl;
-    }
-
-    for(i=0;i<=width-1;i++)
-	{
-		for(j=0;j<floor(heigth/2);j++)
-		{
-            matriz[i][width-1-j] = matriz[i][j];
-		}
 	}
-
-    cout << endl;
-    // Mostrar
-	for(i=0;i<10;i++)
-	{
-		for(j=0;j<10;j++)
-		{
-             cout << matriz[i][j];
-		}
-		cout << endl;
-    }
 }
-
-
