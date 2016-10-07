@@ -15,4 +15,7 @@ class Map{
 	 void mirror();
 	 void middle();
 	 bool check(int, int);
+	 bool disparar(int, int);
+	 int getRandom();
+	 void change(int, int);
 };
