@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
-#include <vector>
+#include "cell.h"
 using namespace std;
 
 class Map{
 	int width, heigth;
-	vector<vector<int> > map;
+	vector<vector<Cell*> > map;
  public:
 	Map(int, int);
 	void generate();
@@ -14,8 +14,5 @@ class Map{
 	 void inside();
 	 void mirror();
 	 void middle();
-	 bool check(int, int);
-	 bool disparar(int, int);
 	 int getRandom();
-	 void change(int, int);
 };

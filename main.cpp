@@ -16,6 +16,6 @@ int main(int argc, char const * argv[]){
     Map map(heigth, width);
 
     map.generate();
-    map.print();
+    // map.print();
     return 0;
 }

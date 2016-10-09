@@ -1,5 +1,6 @@
-#include <vector>
 #include "map.h"
+#include "wall.h"
+#include "corridor.h"
 using namespace std;
 
 #define blank    -1
@@ -12,12 +13,14 @@ Map::Map(int a, int b){
 }
 
 void Map::print(){
-    for (int i = 0; i < heigth; i++) {
-        for (int j = 0; j < width; j++)
-            if (map[i][j] == wall) cout << "#";
+    for (int i = 0; i < map.size(); i++) {
+        for (int j = 0; j < map[i].size(); j++) {
+            if (map[i][j]->type() == 1) cout << "#";
             else cout << "·";
+        }
         cout << endl;
     }
+    cout << endl;
 }
 
 void Map::generate(){
@@ -26,70 +29,49 @@ void Map::generate(){
     inside();
     mirror();
     middle();
+    // print();
 }
 
 void Map::outside(){
     for (int i = 0; i < heigth; i++) {
-        vector<int> aux(width, wall);
+        vector<Cell *> aux;
         for (int j = 0; j < ceil(width / 2.0); j++)
-            aux[j] = (i == 0 || i == heigth - 1 || j == 0 || j == width - 1 ) ? wall : blank;
+            aux.push_back(new Wall(i, j));
         map.push_back(aux);
     }
-    map[1][1] = corridor;
+
+    map[1][1] = new Corridor(1, 1);
 }
 
 void Map::inside(){
-    for (int i = 1; i < heigth - 1; i++)
-        for (int j = 1; j < floor(width / 2.0); j++) {
-            map[i][j] = getRandom();
-            if (!check(i, j)) change(i, j);
+    vector<Cell *> unvisited;
+    for (int i = 1; i < heigth - 1; i += 2)
+        for (int j = 1; j < floor(width / 2.0); j += 2) {
+            map[i][j] = new Corridor(i, j);
+            unvisited.push_back(map[i][j]);
         }
+    print();
+
+    cout << getRandom() << endl;
+
+    print();
 }
 
 void Map::mirror(){
     for (int i = 0; i <= heigth - 1; i++)
-        for (int j = 0; j < floor(width / 2.0); j++)
-            map[i][width - 1 - j] = map[i][j];
+        for (int j = width / 2.0 - 1; j >= 0; j--)
+            map[i].push_back(map[i][j]);
 }
 
 void Map::middle(){
+    int mid = floor(width / 2.0);
+
     if (width % 2 == 1) {
         for (int i = 1; i < heigth - 1; i++)
-            map[i][floor(width / 2.0)] = corridor;
+            map[i][mid] = new Corridor(i, mid);
     }
 }
 
-/*
- * Comprovamos si es corredor
- * Comprovamos arriba
- * Comprovamos anterior
- */
-bool Map::check(int i, int j){
-    return (map[i][j] == corridor) ||
-           (i != 1 && disparar(i, j - 1)) && // left
-           (j != 1 && disparar(i - 1, j));   // up
-}
-
-bool Map::disparar(int i, int j){
-    if (map[i][j] == wall) return true;
-
-    int cont = 0;
-    // up
-    if (map[i - 1][j] == wall) cont++;
-    // down
-    if (map[i + 1][j] == wall) cont++;
-    // left
-    if (map[i][j - 1] == wall) cont++;
-    // right
-    if (map[i][j + 1] == wall) cont++;
-
-    return cont < 3;
-}
-
 int Map::getRandom(){
-    return (rand() % 100 <= 40) ? corridor : wall;
-}
-
-void Map::change(int i, int j){
-    map[i][j] = corridor;
+    return rand() % 4 + 1;
 }
