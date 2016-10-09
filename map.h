@@ -14,5 +14,9 @@ class Map{
 	 void inside();
 	 void mirror();
 	 void middle();
-	 int getRandom();
+	 int getRandomDirection();
+	 bool isValid(int);
+	 void print(vector<vector<Cell *> >);
+	 void test(vector<vector<Cell *> >);
+	 bool hasValidNeighbours(Cell*);
 };
