@@ -11,12 +11,16 @@ class Cell{
     int getY();
 	bool isVisited();
 	void setVisited(bool b);
-    vector<Cell*> getNeighbours();
+    //vector<Cell*> getNeighbours();
+	Cell *top, *left, *right, *bottom;
+
 	virtual int type();
     void toString();
-protected:
+
+	protected:
 		int x, y;
 		bool visited;
-        vector<Cell*> neighbours;
+        //vector<Cell*> neighbours;
 };
+
 #endif
