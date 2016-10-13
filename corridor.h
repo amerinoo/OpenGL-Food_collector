@@ -6,6 +6,6 @@
 class Corridor : public Cell{
  public:
 	Corridor(int, int);
-    int type();
+    int getType();
 };
 #endif

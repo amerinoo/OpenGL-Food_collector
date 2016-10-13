@@ -1,5 +1,8 @@
 #include <bits/stdc++.h>
 #include "cell.h"
+#include "corridor.h"
+#include "wall.h"
+
 using namespace std;
 
 class Map{
@@ -14,10 +17,20 @@ class Map{
  	void connectCells();
  	Cell* connect(Cell *);
 
+ 	Wall* copyToWall(Cell *);
+ 	Corridor* copyToCorridor(Cell *);
+
 	void outside();
+
+	void putWhiteCells();
+	vector<vector<Cell *> > getWhitePositionCells();
+	Cell* randomCellPosition(vector<vector<Cell *> > visited);
+
 	void inside();
 	void mirror();
 	void middle();
+
+	bool insideCondition(Cell *c);
 	Cell* randomDiscoverPath(Cell*);
 
 	int  getRandomDirection();

@@ -6,6 +6,8 @@ Cell::Cell(int a, int b){
     y       = b;
     visited = false;
 
+    //setType(-1);
+
     top = NULL;
     bottom = NULL;
     left = NULL;
@@ -28,13 +30,17 @@ void Cell::setVisited(bool b){
     visited = b;
 }
 
+void Cell::setType(int k){
+    type = k;
+}
+
+int Cell::getType(){
+    return -1;
+}
+
 /*vector<Cell *> Cell::getNeighbours(){
     return neighbours;
 }*/
-
-int Cell::type(){
-    return -1;
-}
 
 void Cell::toString(){
     cout << getX() << getY() << endl;

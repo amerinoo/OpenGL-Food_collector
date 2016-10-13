@@ -6,6 +6,6 @@
 class Wall : public Cell{
  public:
 	Wall(int, int);
-    int type();
+    int getType();
 };
 #endif

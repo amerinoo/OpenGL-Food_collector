@@ -1,6 +1,6 @@
-#include "map.h"
 #include "wall.h"
 #include "corridor.h"
+#include "map.h"
 using namespace std;
 
 #define LEFT  0
@@ -21,8 +21,8 @@ void Map::print(){
 void Map::print(vector<vector<Cell *> > v){
     for (int i = 0; i < v.size(); i++) {
         for (int j = 0; j < v[i].size(); j++) {
-            if(v[i][j]->type() == -1) cout << "_";
-            else if(v[i][j]->type() ==  1) cout << "#";
+            if(v[i][j]->getType() == -1) cout << "_";
+            else if(v[i][j]->getType() ==  1) cout << "#";
             else cout << "·";
 
             //cout << endl;
@@ -43,8 +43,14 @@ void Map::generate(){
     populationCells();
     connectCells();
     outside();
+
+    /*cout << "Antes" << endl;
+    cout << "X : " << (*map[1][1]->top)->getX() << " " << "Y : " << (*map[1][1]->top)->getY() << " ";
+    cout << "Atual" << endl;
+    cout << "X : " << map[1][1]->getX() << " " << "Y : " << map[1][1]->getY() << " ";*/
+
     inside();
-    //mirror();
+    mirror();
     //middle();
     print();
 }
@@ -55,7 +61,7 @@ void Map::generate(){
 void Map::populationCells(){
     for (int i = 0; i < heigth; i++) {
         vector<Cell *> aux;
-        for (int j = 0; j < ceil(width / 2.0); j++)
+        for (int j = 0; j < width; j++)
             aux.push_back(new Cell(i, j));
         map.push_back(aux);
     }
@@ -74,157 +80,162 @@ void Map::connectCells(){
 Cell* Map::connect(Cell *c){
     //Top
     if((c->getX() - 1) >= 0){
-        c->top = map[c->getX()-1][c->getY()];
-        //cout << "||| Entrei (1) |||";
+        c->top = &map[c->getX()-1][c->getY()];
     }
     //Bottom
     if((c->getX() + 1) <= heigth-1){
-        c->bottom = map[c->getX()+1][c->getY()];
-        //cout << "||| Entrei (2) |||";
+        c->bottom = &map[c->getX()+1][c->getY()];
     }
     //Left
     if((c->getY() - 1) >= 0){
-        c->left = map[c->getX()][c->getY()-1];
-        //cout << "||| Entrei (3) |||";
+        c->left = &map[c->getX()][c->getY()-1];
     }
     //Rigth
     if((c->getY() + 1) <= width+1){
-        c->right = map[c->getX()][c->getY()+1];
-        //cout << "||| Entrei (4) |||";
+        c->right = &map[c->getX()][c->getY()+1];
     }
-
-    /*if(c->getX() == 1 && c->getY() == 1)
-    {
-        cout << "PQP ENtra " << c->top->getX() << " " << map[1][1]->top->getX() << " ." << endl;
-
-        int j;
-        cin >> j;
-    }*/
     return c;
 }
 
+Wall* Map::copyToWall(Cell *cell)
+{
+    Cell* parede = new Wall(cell->getX(), cell->getY());
+    parede->setVisited(cell->isVisited());
+    parede->top = cell->top;
+    parede->bottom = cell->bottom;
+    parede->left = cell->left;
+    parede->right = cell->right;
 
+    return (Wall*)parede;
+}
+
+Corridor* Map::copyToCorridor(Cell *cell)
+{
+    Cell* corredor = new Corridor(cell->getX(), cell->getY());
+    corredor->setVisited(cell->isVisited());
+    corredor->top = cell->top;
+    corredor->bottom = cell->bottom;
+    corredor->left = cell->left;
+    corredor->right = cell->right;
+
+    return (Corridor*)corredor;
+}
 
 void Map::outside(){
     for (int i = 0; i < heigth; i++) {
-        for (int j = 0; j < ceil(width / 2.0); j++)
-        {
-            Cell* parede = new Wall(map[i][j]->getX(), map[i][j]->getY());
-            parede->setVisited(map[i][j]->isVisited());
-            parede->top = map[i][j]->top;
-            parede->bottom = map[i][j]->bottom;
-            parede->left = map[i][j]->left;
-            parede->right = map[i][j]->right;
-
-            map[i][j] = parede;
+        for (int j = 0; j < ceil(width / 2.0); j++) {
+            //cout << "Map[i][j] -> " << map[i][j]->getX() << " " << map[i][j]->getY() << " Parede->" << parede->getX() << " " << parede->getY() << endl;
+            map[i][j] = copyToWall(map[i][j]);
         }
     }
-    //map[1][1] = new Corridor(1, 1);
 }
 
+void Map::putWhiteCells(){
+    for (int i = 1; i < heigth - 1; i += 2) {
+        for (int j = 1; j <= floor(width / 2.0); j += 2) {
+            map[i][j] = copyToCorridor(map[i][j]);
+        }
+    }
+}
 
-
-void Map::inside(){
+vector<vector<Cell *> > Map::getWhitePositionCells(){
     vector<vector<Cell *> > visited;
-
-    //Add in Lista visited the Cells [Corridor]
     for (int i = 1; i < heigth - 1; i += 2) {
         vector<Cell *> aux;
         for (int j = 1; j <= floor(width / 2.0); j += 2) {
-            Cell * auxCorridor = new Corridor(map[i][j]->getX(), map[i][j]->getY());
-            auxCorridor->setVisited(false);
-            auxCorridor->top = map[i][j]->top;
-            auxCorridor->bottom = map[i][j]->bottom;
-            auxCorridor->left = map[i][j]->left;
-            auxCorridor->right = map[i][j]->right;
-
-            map[i][j] = auxCorridor;
             aux.push_back(map[i][j]);
         }
         visited.push_back(aux);
     }
+    return visited;
+}
 
+
+Cell* Map::randomCellPosition(vector<vector<Cell *> > visited){
     // Size Height and Width visited'list.
     int h = visited.size();
     int w = visited[0].size();
 
+    int randX, randY;
+    srand (time(NULL));
+    randX = rand()%(w+1);
+    randY = rand()%(int)(floor((h+1)/2.0));
 
-    /*Cell * c;
-    for (int i = 0; i < h; i++) {
-        for (int j = 0; j < w; j++) {
-            c = visited[i][j];
-            vector<Cell *> neighbours = c->getNeighbours();
-            if (i - 1 >= 0) neighbours.push_back(visited[i - 1][j]);  // Left
-            if (i + 1 < w) neighbours.push_back(visited[i + 1][j]);   // Right
-            if (j - 1 >= 0) neighbours.push_back(visited[i][j - 1]);  // Up
-            if (j + 1 < h) neighbours.push_back(visited[i][j + 1]);   // Down
-            std::cout << c->getNeighbours().size() << std::endl;
+    int in = 0;
+    for (int i = 0; i < visited.size(); i++){
+        for (int j = 0; j < visited[0].size(); j++){
+            //cout << "i:"<<i<<"j:"<<j<<endl;
+            if(!visited[i][j]->isVisited()){
+                //cout << "Mostrando final: " << visited[i][j]->isVisited() << "X : " << i << " y: "<< j << "Teste: " << visited[i][j]->getX() << endl;
+                //visited[i][j]->setVisited(true);
+                return visited[i][j];
+            }
         }
+    }
+    return NULL;
+
+    /*while(visited[randX][randY]->isVisited()){
+        srand (time(NULL));
+        randX = rand()%w;
+        randY = rand()%(int)(floor(h/2.0));
+        //cout << randX << " " << randY << endl;
+    }*/
+}
+
+void Map::inside(){
+    putWhiteCells();
+    vector<vector<Cell *> > visited = getWhitePositionCells();
+
+    /*for (int i = 0; i < visited.size(); i++){
+        for (int j = 0; j < visited[0].size(); j++){
+            cout << visited[i][j]->isVisited() << " ";
+        }
+        cout << endl;
     }*/
 
-    srand(time(NULL));
-    int rX, rY;
+    int h = visited.size();
+    int w = visited[0].size();
 
-    rX = rand()%w;
-    int rest = floor(h/2.0);
-    rY = rand()%rest;
 
-    int numVisited = 1;
-    //stack<Cell *> path;
-    Cell * cellPath;
-    cellPath = visited[rX][rY];
-    cellPath->setVisited(true);
+    // Primeiro elemento visitado.
+    Cell *inicial = randomCellPosition(visited);
+    inicial = map[inicial->getX()][inicial->getY()];
+    inicial->setVisited(true);
+    int quantidadeVisitados = 1;
 
-    int j;
-    
-    connectCells();
+    cout << " ...:: Inicio verificando ::..." << endl;
+    cout << "Inicial : " << inicial->getX() << " " << inicial->getY() << "." << endl;
+    while(inicial != NULL)// && (quantidadeVisitados <= (h*w)))
+    {
+        inicial = randomDiscoverPath(inicial);
 
-    cout << "Passo 1: Verificação do Inicial -> " << rX << " " << rY << " " << endl;
-    cout << "H: " << h << " W: "<< w << endl;
-    while ((numVisited <= h * w) && !(cellPath == NULL)) {
-        Cell *nextCell = randomDiscoverPath(cellPath);
-        int sairLoop = 0;
-
-        //cout << "Sai !" << endl;
-        //cin >> j;
-
-        if(nextCell == NULL){
-            //cout << "Entao entrei aqui dentro desse if !" << endl;
-            int auxX, auxY;
-            for(int i=0;i<visited.size();i++){
-                for(int j=0;j<visited[0].size();j++)
-                {
-                    if(!visited[i][j]->isVisited()){
-                        cellPath = visited[i][j];
-                        visited[i][j]->setVisited(true);
-                        //numVisited++;
-                        //cout << "Entreiiiiii no iffffff" << endl;
-                        sairLoop=1;
-                        break;
-                    }
-                }
-                if(sairLoop==1)
-                    break;
-            }   
-            /*if(sairLoop == 1)
-            {
-                cout << "Aconteceu algo." << endl;
-                cout << "Posicao X: " << cellPath->getX() << " Y: " << cellPath->getY() << endl;
+        if(inicial == NULL){
+            inicial = randomCellPosition(visited);
+            if(inicial != NULL){
+                inicial = map[inicial->getX()][inicial->getY()];
+                inicial->setVisited(true);
+                //cout << "Saiu aqui 2" << endl;
             }
-            else
-                cout << "Nada aconteceu." << endl;*/
-
-            cellPath = nextCell;
-        }else {
-            cellPath = nextCell;
-            cellPath->setVisited(true);
-            numVisited++;
         }
-
-        connectCells();
-        print();
+        else{
+            //print();
+        }
+        quantidadeVisitados++;
     }
 } // inside
+
+bool Map::insideCondition(Cell *c){
+    int x, y;
+    x = c->getX();
+    y = c->getY();
+
+    if((x >= 1 && x < (heigth-1)) && (y >= 1 && y < (width-1)))
+        return true;
+    else
+        return false;
+}
+
+
 
 Cell* Map::randomDiscoverPath(Cell * c){
     int roll;
@@ -235,78 +246,127 @@ Cell* Map::randomDiscoverPath(Cell * c){
     for(int i=0;i<4;i++) shuffle.push_back(i);
     random_shuffle(shuffle.begin(), shuffle.end());
 
+    //cout << "Ordem shuffle: ";
+    /*for (int i = 0; i < shuffle.size(); i++)
+        cout << shuffle[i] << " ";
+    cout << endl;*/
+
     for (int i = 0; i < shuffle.size(); i++)
     {
-        cout << shuffle[i] << endl;
+        //cout << shuffle[i] << endl;
 
-        if((shuffle[i] == 0) && (c->top != NULL) && (c->top->getX() > 0) && (c->top->type() == 1) && (!c->top->top->isVisited()))
+        if((shuffle[i] == 0)){
+            //cout << "Top 1" << endl;
+            if(((*c->top) != NULL)){
+                //cout << "Top 2" << endl;
+                if(insideCondition((*c->top))){
+                    //cout << "Top 3" << endl;
+                    if(((*c->top)->getType() == 1)){
+                        //cout << "Top 4" << endl;
+                        //if((!(*(*c->top)->top)->isVisited())){
+                            //cout << "Top 5" << endl;
+                            //tempCell = (Corridor*)c->top;
+                            //cout << "Escolheu lado cima." << endl;
+                            tempCell = copyToCorridor(*c->top);
+
+                            map[tempCell->getX()][tempCell->getY()] = tempCell;
+                            (*tempCell->top)->setVisited(true);
+                            map[tempCell->getX()-1][tempCell->getY()] = (*tempCell->top);
+
+                            return (*tempCell->top);
+                        //}
+                    }
+                }
+            }
+        } 
+        else if((shuffle[i] == 1))
         {
-            //tempCell = (Corridor*)c->top;
-            cout << "Escolheu lado cima." << endl;
-            tempCell = new Corridor(c->top->getX(), c->top->getY());
-            tempCell->setVisited(true);
-            tempCell->top = c->top->top;
-            tempCell->bottom = c->top->bottom;
-            tempCell->left = c->top->left;
-            tempCell->right = c->top->right;
-            map[tempCell->getX()][tempCell->getY()] = tempCell;
-            tempCell->top->setVisited(true);
-            map[tempCell->getX()-1][tempCell->getY()] = tempCell->top;
+            if(((*c->bottom) != NULL)){
+                //cout << "Bottom 1" << endl;
+                if(insideCondition((*c->bottom))){
+                    //cout << "Bottom 2" << endl;
+                    if((*c->bottom)->getX() < heigth-1){
+                        //cout << "Bottom 3" << endl;
+                        if((*c->bottom)->getType() ==  1){
+                            //cout << "Bottom 4" << endl;
+                            //if((!(*(*c->bottom)->bottom)->isVisited())){
+                                //cout << "Bottom 5" << endl;
+                                //tempCell = (Corridor*)c->bottom;
+                                //cout << "Escolheu lado baixo" << endl;
 
-            return tempCell->top;
-        } 
-        else if((shuffle[i] == 1) && (c->bottom != NULL) && (c->bottom->getX() < heigth-1) && (c->bottom->type() ==  1) && (!c->bottom->bottom->isVisited())){
-            //tempCell = (Corridor*)c->bottom;
-            cout << "Escolheu lado baixo" << endl;
-            
-            tempCell = new Corridor(c->bottom->getX(), c->bottom->getY());
-            tempCell->setVisited(true);
-            tempCell->top = c->bottom->top;
-            tempCell->bottom = c->bottom->bottom;
-            tempCell->left = c->bottom->left;
-            tempCell->right = c->bottom->right;
-            map[tempCell->getX()][tempCell->getY()] = tempCell;
-            tempCell->bottom->setVisited(true);
-            map[tempCell->getX()+1][tempCell->getY()] = tempCell->bottom;
-            
-            return tempCell->bottom;  
-        } 
-        else if((shuffle[i] == 2) && (c->left != NULL) && (c->left->getY() > 0) && (c->left->type() == 1) && (!c->left->left->isVisited())){
-            //tempCell = (Corridor*)c->left;
-            cout << "Escolheu lado esquerda" << endl;
-            c->setVisited(true);
-            tempCell = new Corridor(c->left->getX(), c->left->getY());
-            tempCell->setVisited(true);
-            tempCell->top = c->left->top;
-            tempCell->bottom = c->left->bottom;
-            tempCell->left = c->left->left;
-            tempCell->right = c->left->right;
-            map[tempCell->getX()][tempCell->getY()] = tempCell;
-            tempCell->left->setVisited(true);
-            map[tempCell->getX()][tempCell->getY()-1] = tempCell->left;
+                                tempCell = copyToCorridor(*c->bottom);
 
-            return tempCell->left;
+                                map[tempCell->getX()][tempCell->getY()] = tempCell;
+                                (*tempCell->bottom)->setVisited(true);
+                                map[tempCell->getX()+1][tempCell->getY()] = (*tempCell->bottom);
+                                
+                                return (*tempCell->bottom); 
+                            //}
+                        }
+                    }
+                }
+            }
+        } 
+        else if((shuffle[i] == 2))
+        {
+            if(((*c->left) != NULL)){
+                //cout << "Left 1" << endl;
+                if(insideCondition((*c->left))){
+                    //cout << "Left 2" << endl;
+                    if((*c->left)->getY() > 0){
+                        //cout << "Left 3" << endl;
+                        if((*c->left)->getType() == 1){
+                            //cout << "Left 4" << endl;
+                            //if(!(*(*c->left)->left)->isVisited()){
+                                //cout << "Left 5" << endl;
+                                //tempCell = (Corridor*)c->left;
+                                //cout << "Escolheu lado esquerda" << endl;
+                                c->setVisited(true);
+                                
+                                tempCell = copyToCorridor(*c->left);
+
+                                map[tempCell->getX()][tempCell->getY()] = tempCell;
+                                (*tempCell->left)->setVisited(true);
+                                map[tempCell->getX()][tempCell->getY()-1] = (*tempCell->left);
+
+                                return (*tempCell->left);
+                            //}
+                        } 
+                    } 
+                }
+            }
         }
-        else if((shuffle[i] == 3) &&  (c->right != NULL) && (c->right->getY() < ceil(width/2.0)) && (c->right->type() == 1) && (!c->right->right->isVisited())){
-            //tempCell = (Corridor*)c->right;
-            cout << "Escolheu lado direita" << endl;
-            c->setVisited(true);
-            tempCell = new Corridor(c->right->getX(), c->right->getY());
-            tempCell->setVisited(true);
-            tempCell->top = c->right->top;
-            tempCell->bottom = c->right->bottom;
-            tempCell->left = c->right->left;
-            tempCell->right = c->right->right;
-            map[tempCell->getX()][tempCell->getY()] = tempCell;
-            tempCell->right->setVisited(true);
-            map[tempCell->getX()][tempCell->getY()+1] = tempCell->right;
+        else if((shuffle[i] == 3)){
+            if(((*c->right) != NULL)){
+                //cout << "Right 1" << endl;
+                if(insideCondition((*c->right))){
+                    //cout << "Right 2" << endl;
+                    if(((*c->right)->getY() < ceil(width/2.0))){
+                        //cout << "Right 3" << endl;
+                        if(((*c->right)->getType() == 1)){
+                            //cout << "Right 4" << endl;
+                            //if((!(*(*c->right)->right)->isVisited())){
+                                //cout << "Right 5" << endl;
+                                //tempCell = (Corridor*)c->right;
+                                //cout << "Escolheu lado direita" << endl;
+                                c->setVisited(true);
 
-            return tempCell->right;
+                                tempCell = copyToCorridor(*c->right);
+
+                                map[tempCell->getX()][tempCell->getY()] = tempCell;
+                                (*tempCell->right)->setVisited(true);
+                                map[tempCell->getX()][tempCell->getY()+1] = (*tempCell->right);
+
+                                return (*tempCell->right);
+                            //}
+                        }
+                    }
+                }
+            }
         }
     }
-    cout << "Vou retornar NULL " << endl;
-    /*int l;
-    cin >> l;*/
+    //cout << "Vou retornar NULL " << endl;
+
     return NULL;
 }
 
@@ -345,13 +405,22 @@ void Map::test(vector<vector<Cell *> > v){
     cout << endl;
 }
 
-/*void Map::mirror(){
-    for (int i = 0; i <= heigth - 1; i++)
-        for (int j = width / 2.0 - 1; j >= 0; j--)
-            map[i].push_back(map[i][j]);
+void Map::mirror(){
+    cout << "mirror" << endl;
+
+    for (int i = 0; i <= heigth - 1; i++){
+        for (int j = floor(width / 2.0) - 1; j >= 0; j--)
+        {
+            /*cout << map[i][j]->isVisited() << " ";
+            cout << i << " " << width-j << "<-" << i << " " << j << endl;*/
+            map[i][width-j-1] = map[i][j]; 
+            //map[i].push_back();
+        }
+        //cout << endl;
+    }
 }
 
-void Map::middle(){
+/*void Map::middle(){
     int mid = floor(width / 2.0);
 
     if (width % 2 == 1) {
