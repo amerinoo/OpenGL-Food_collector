@@ -30,10 +30,6 @@ void Cell::setVisited(bool b){
     visited = b;
 }
 
-void Cell::setType(int k){
-    type = k;
-}
-
 int Cell::getType(){
     return -1;
 }
@@ -44,4 +40,8 @@ int Cell::getType(){
 
 void Cell::toString(){
     cout << getX() << getY() << endl;
+}
+
+char Cell::getSymbol(){
+    return '_';
 }

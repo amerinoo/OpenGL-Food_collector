@@ -21,10 +21,10 @@ void Map::print(){
 void Map::print(vector<vector<Cell *> > v){
     for (int i = 0; i < v.size(); i++) {
         for (int j = 0; j < v[i].size(); j++) {
-            if(v[i][j]->getType() == -1) cout << "_";
+            /*if(v[i][j]->getType() == -1) cout << "_";
             else if(v[i][j]->getType() ==  1) cout << "#";
-            else cout << "·";
-
+            else cout << "·";*/
+            cout << v[i][j]->getSymbol();
             //cout << endl;
             //cout << v[i][j]->top->getX() << " " << v[i][j]->top->getY() << endl;
             //cout << v[i][j]->bottom->getX() << " " << v[i][j]->bottom->getY() << endl;

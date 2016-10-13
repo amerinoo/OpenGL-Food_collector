@@ -11,15 +11,16 @@ class Cell{
     int getY();
 	bool isVisited();
 	void setVisited(bool b);
-	void setType(int k);
     //vector<Cell*> getNeighbours();
 	Cell **top, **left, **right, **bottom;
 
 	virtual int getType();
+	virtual char getSymbol();
+
     void toString();
 
 	protected:
-		int x, y, type;
+		int x, y;
 		bool visited;
         //vector<Cell*> neighbours;
 };

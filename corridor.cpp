@@ -7,3 +7,7 @@ Corridor::Corridor(int a, int b)
 int Corridor::getType(){
     return 0;
 }
+
+char Corridor::getSymbol(){
+    return '.';
+}

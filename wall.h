@@ -7,5 +7,6 @@ class Wall : public Cell{
  public:
 	Wall(int, int);
     int getType();
+    char getSymbol();
 };
 #endif
