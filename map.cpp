@@ -1,6 +1,7 @@
 #include "wall.h"
 #include "corridor.h"
 #include "map.h"
+#include <stack>
 using namespace std;
 
 #define LEFT  0
@@ -198,30 +199,33 @@ void Map::inside(){
 
 
     // Primeiro elemento visitado.
-    Cell *inicial = randomCellPosition(visited);
-    inicial = map[inicial->getX()][inicial->getY()];
-    inicial->setVisited(true);
+    Cell *position = randomCellPosition(visited);
+    position = map[position->getX()][position->getY()];
+    position->setVisited(true);
     int quantidadeVisitados = 1;
 
     cout << " ...:: Inicio verificando ::..." << endl;
-    cout << "Inicial : " << inicial->getX() << " " << inicial->getY() << "." << endl;
-    while(inicial != NULL)// && (quantidadeVisitados <= (h*w)))
-    {
-        inicial = randomDiscoverPath(inicial);
+    cout << "Inicial : " << position->getX() << " " << position->getY() << "." << endl;
 
-        if(inicial == NULL){
-            inicial = randomCellPosition(visited);
-            if(inicial != NULL){
-                inicial = map[inicial->getX()][inicial->getY()];
-                inicial->setVisited(true);
-                //cout << "Saiu aqui 2" << endl;
-            }
+    stack<Cell*> stack;
+
+    while(quantidadeVisitados < h*w)
+    {
+        position = randomDiscoverPath(position);
+
+        if(position == NULL){
+            position = stack.top();
+            stack.pop();
         }
         else{
-            //print();
+            position->setVisited(true);
+            stack.push(position);
+            quantidadeVisitados++;
+            print();
         }
-        quantidadeVisitados++;
+        cout << ".....: Aqui "<< quantidadeVisitados << ":......" << endl;
     }
+    cout << "fim" << endl;
 } // inside
 
 bool Map::insideCondition(Cell *c){
@@ -263,10 +267,10 @@ Cell* Map::randomDiscoverPath(Cell * c){
                     //cout << "Top 3" << endl;
                     if(((*c->top)->getType() == 1)){
                         //cout << "Top 4" << endl;
-                        //if((!(*(*c->top)->top)->isVisited())){
+                        if((!(*(*c->top)->top)->isVisited())){
                             //cout << "Top 5" << endl;
                             //tempCell = (Corridor*)c->top;
-                            //cout << "Escolheu lado cima." << endl;
+                            cout << "Escolheu lado cima." << endl;
                             tempCell = copyToCorridor(*c->top);
 
                             map[tempCell->getX()][tempCell->getY()] = tempCell;
@@ -274,7 +278,7 @@ Cell* Map::randomDiscoverPath(Cell * c){
                             map[tempCell->getX()-1][tempCell->getY()] = (*tempCell->top);
 
                             return (*tempCell->top);
-                        //}
+                        }
                     }
                 }
             }
@@ -289,10 +293,10 @@ Cell* Map::randomDiscoverPath(Cell * c){
                         //cout << "Bottom 3" << endl;
                         if((*c->bottom)->getType() ==  1){
                             //cout << "Bottom 4" << endl;
-                            //if((!(*(*c->bottom)->bottom)->isVisited())){
+                            if((!(*(*c->bottom)->bottom)->isVisited())){
                                 //cout << "Bottom 5" << endl;
                                 //tempCell = (Corridor*)c->bottom;
-                                //cout << "Escolheu lado baixo" << endl;
+                                cout << "Escolheu lado baixo" << endl;
 
                                 tempCell = copyToCorridor(*c->bottom);
 
@@ -301,7 +305,7 @@ Cell* Map::randomDiscoverPath(Cell * c){
                                 map[tempCell->getX()+1][tempCell->getY()] = (*tempCell->bottom);
                                 
                                 return (*tempCell->bottom); 
-                            //}
+                            }
                         }
                     }
                 }
@@ -317,10 +321,10 @@ Cell* Map::randomDiscoverPath(Cell * c){
                         //cout << "Left 3" << endl;
                         if((*c->left)->getType() == 1){
                             //cout << "Left 4" << endl;
-                            //if(!(*(*c->left)->left)->isVisited()){
+                            if(!(*(*c->left)->left)->isVisited()){
                                 //cout << "Left 5" << endl;
                                 //tempCell = (Corridor*)c->left;
-                                //cout << "Escolheu lado esquerda" << endl;
+                                cout << "Escolheu lado esquerda" << endl;
                                 c->setVisited(true);
                                 
                                 tempCell = copyToCorridor(*c->left);
@@ -330,7 +334,7 @@ Cell* Map::randomDiscoverPath(Cell * c){
                                 map[tempCell->getX()][tempCell->getY()-1] = (*tempCell->left);
 
                                 return (*tempCell->left);
-                            //}
+                            }
                         } 
                     } 
                 }
@@ -345,10 +349,10 @@ Cell* Map::randomDiscoverPath(Cell * c){
                         //cout << "Right 3" << endl;
                         if(((*c->right)->getType() == 1)){
                             //cout << "Right 4" << endl;
-                            //if((!(*(*c->right)->right)->isVisited())){
+                            if((!(*(*c->right)->right)->isVisited())){
                                 //cout << "Right 5" << endl;
                                 //tempCell = (Corridor*)c->right;
-                                //cout << "Escolheu lado direita" << endl;
+                                cout << "Escolheu lado direita" << endl;
                                 c->setVisited(true);
 
                                 tempCell = copyToCorridor(*c->right);
@@ -358,7 +362,7 @@ Cell* Map::randomDiscoverPath(Cell * c){
                                 map[tempCell->getX()][tempCell->getY()+1] = (*tempCell->right);
 
                                 return (*tempCell->right);
-                            //}
+                            }
                         }
                     }
                 }
