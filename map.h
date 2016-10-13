@@ -8,21 +8,19 @@ using namespace std;
 class Map{
 	int width, heigth;
 	vector<vector<Cell*> > map;
+	vector<vector<Cell *> > visited;
  public:
 	Map(int, int);
 	void generate();
 	void print();
+	void printV(vector<vector<Cell *> > v);
  private:
  	void populationCells();
  	void connectCells();
  	Cell* connect(Cell *);
 
- 	Wall* copyToWall(Cell *);
- 	Corridor* copyToCorridor(Cell *);
+ 	void changeToCorridor(Cell *);
 
-	void outside();
-
-	void putWhiteCells();
 	vector<vector<Cell *> > getWhitePositionCells();
 	Cell* randomCellPosition(vector<vector<Cell *> > visited);
 
@@ -30,12 +28,8 @@ class Map{
 	void mirror();
 	void middle();
 
-	bool insideCondition(Cell *c);
+	bool insideCondition(int, int);
 	Cell* randomDiscoverPath(Cell*);
-
-	int  getRandomDirection();
-	bool isValid(int);
+	
 	void print(vector<vector<Cell *> >);
-	void test(vector<vector<Cell *> >);
-	bool hasValidNeighbours(Cell*);
 };

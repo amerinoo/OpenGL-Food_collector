@@ -7,8 +7,8 @@ int main(int argc, char const * argv[]){
     int width;
 
     if (argc < 3) {
-        heigth = 10;
-        width  = 24;
+        heigth = 7;
+        width  = 12;
     } else {
         heigth = atoi(argv[1]);
         width  = atoi(argv[2]);
