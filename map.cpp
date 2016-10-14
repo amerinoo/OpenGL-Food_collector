@@ -32,9 +32,9 @@ void Map::print(vector<vector<Cell *> > v){
 void Map::printV(vector<vector<Cell *> > v){
     for (int i = 0; i < v.size(); i++) {
         for (int j = 0; j < v[i].size(); j++) {
-            if (v[i][j]->isVisited()){
+            if (v[i][j]->isVisited()) {
                 cout << "X";
-            }else{
+            } else {
                 cout << "O";
             }
         }
@@ -47,11 +47,9 @@ void Map::generate(){
     srand(time(NULL));
     populationCells();
     connectCells();
-    //outside();
     inside();
     mirror();
     middle();
-    print();
 }
 
 /*
@@ -71,54 +69,51 @@ void Map::populationCells(){
  */
 void Map::connectCells(){
     for (int i = 0; i < heigth; i++) {
-        for (int j = 0; j < ceil(width / 2.0); j++)
-            map[i][j] = connect(map[i][j]);
+        for (int j = 0; j < ceil(width / 2.0); j++) {
+            connect(map[i][j]);
+        }
     }
 }
 
-Cell* Map::connect(Cell *c){
-    //Top
-    if((c->getX() - 1) >= 0){
-        c->top = &map[c->getX()-1][c->getY()];
+void Map::connect(Cell * c){
+    // Top
+    if ((c->getX() - 1) >= 0) {
+        c->top = &map[c->getX() - 1][c->getY()];
     }
-    //Bottom
-    if((c->getX() + 1) <= heigth-1){
-        c->bottom = &map[c->getX()+1][c->getY()];
+    // Bottom
+    if ((c->getX() + 1) <= heigth - 1) {
+        c->bottom = &map[c->getX() + 1][c->getY()];
     }
-    //Left
-    if((c->getY() - 1) >= 0){
-        c->left = &map[c->getX()][c->getY()-1];
+    // Left
+    if ((c->getY() - 1) >= 0) {
+        c->left = &map[c->getX()][c->getY() - 1];
     }
-    //Rigth
-    if((c->getY() + 1) <= width+1){
-        c->right = &map[c->getX()][c->getY()+1];
+    // Rigth
+    if ((c->getY() + 1) <= width + 1) {
+        c->right = &map[c->getX()][c->getY() + 1];
     }
-    return c;
 }
 
-void Map::changeToCorridor(Cell *cell)
-{
-    int x,y;
+void Map::changeToCorridor(Cell * cell){
+    int x, y;
 
     x = cell->getX();
     y = cell->getY();
 
-    Cell* corredor = new Corridor(x,y);
+    Cell * corredor = new Corridor(x, y);
     corredor->setVisited(cell->isVisited());
-    corredor->top = cell->top;
+    corredor->top    = cell->top;
     corredor->bottom = cell->bottom;
-    corredor->left = cell->left;
-    corredor->right = cell->right;
-
-    map[x][y] = corredor;
+    corredor->left   = cell->left;
+    corredor->right  = cell->right;
+    map[x][y]        = corredor;
 }
-
 
 vector<vector<Cell *> > Map::getWhitePositionCells(){
     vector<vector<Cell *> > visited;
     for (int i = 1; i < heigth - 1; i += 2) {
         vector<Cell *> aux;
-        for (int j = 1; j <= floor(width / 2.0); j += 2) {
+        for (int j = 1; j < floor(width / 2.0); j += 2) {
             changeToCorridor(map[i][j]);
             aux.push_back(map[i][j]);
         }
@@ -128,20 +123,20 @@ vector<vector<Cell *> > Map::getWhitePositionCells(){
     return visited;
 }
 
-
-Cell* Map::randomCellPosition(vector<vector<Cell *> > visited){
+Cell * Map::randomCellPosition(vector<vector<Cell *> > visited){
     // Size Height and Width visited'list.
     int h = visited.size();
     int w = visited[0].size();
 
     int randX, randY;
-    randX = rand()%(w+1);
-    randY = rand()%(int)(floor((h+1)/2.0));
+
+    randX = rand() % (w + 1);
+    randY = rand() % (int) (floor((h + 1) / 2.0));
 
     int in = 0;
-    for (int i = 0; i < visited.size(); i++){
-        for (int j = 0; j < visited[0].size(); j++){
-            if(!visited[i][j]->isVisited()){
+    for (int i = 0; i < visited.size(); i++) {
+        for (int j = 0; j < visited[0].size(); j++) {
+            if (!visited[i][j]->isVisited()) {
                 return visited[i][j];
             }
         }
@@ -150,29 +145,27 @@ Cell* Map::randomCellPosition(vector<vector<Cell *> > visited){
 }
 
 void Map::inside(){
-
     visited = getWhitePositionCells();
 
     int h = visited.size();
     int w = visited[0].size();
 
-
     // Primeiro elemento visitado.
-    Cell *position = randomCellPosition(visited);
-    position->setVisited(true); 
+    Cell * position = randomCellPosition(visited);
+    position->setVisited(true);
     int quantidadeVisitados = 1;
 
-    stack<Cell*> stack;
-    while(quantidadeVisitados < h*w)
-    {
-        //printV(visited);
+    stack<Cell *> stack;
+
+    while (quantidadeVisitados < h * w) {
+        printV(visited);
         position = randomDiscoverPath(position);
 
-        if(position == NULL){
+        if (position == NULL) {
+            std::cout << "NULL" << std::endl;
             position = stack.top();
             stack.pop();
-        }
-        else if(!position->isVisited()){
+        } else if (!position->isVisited()) {
             position->setVisited(true);
             stack.push(position);
             quantidadeVisitados++;
@@ -180,56 +173,68 @@ void Map::inside(){
     }
 } // inside
 
-bool Map::insideCondition(int x, int y){
-    return (x >= 0 && x < (visited.size())) && (y >=0 && y < visited[0].size());
-}
-
-
-
-Cell* Map::randomDiscoverPath(Cell * c){
-    int roll;
-
+Cell * Map::randomDiscoverPath(Cell * c){
     vector<int> shuffle;
-    Corridor *tempCell;
-    int x,y;
+    Cell * tempCell = NULL;
+    int x, y;
 
 
-    x = floor((c->getX()-1)/2.0);
-    y = floor((c->getY()-1)/2.0);
-
-    for(int i=1;i<=4;i++) shuffle.push_back(i);
+    for (int i = 1; i <= 4; i++) shuffle.push_back(i);
     random_shuffle(shuffle.begin(), shuffle.end());
 
-
-    for (int i = 0; i < shuffle.size(); i++)
-    {
-        if((shuffle[i] == UP) && (insideCondition(x-1, y))){
+    for (int i = 0; i < shuffle.size(); i++) {
+        x = floor((c->getX() - 1) / 2.0);
+        y = floor((c->getY() - 1) / 2.0);
+        std::cout << shuffle[i] << std::endl;
+        if ((shuffle[i] == UP) && (insideCondition(x - 1, y))) { // 1
+            std::cout << "up" << std::endl;
             x--;
-            changeToCorridor(*c->top);
-        } 
-        else if((shuffle[i] == DOWN) && (insideCondition(x+1, y))){
+            tempCell = *c->top;
+        } else if ((shuffle[i] == DOWN) && (insideCondition(x + 1, y))) { // 2
+            std::cout << "down" << std::endl;
             x++;
-            changeToCorridor(*c->bottom);
-        } 
-        else if((shuffle[i] == LEFT) && (insideCondition(x, y-1))){
+            tempCell = *c->bottom;
+        } else if ((shuffle[i] == LEFT) && (insideCondition(x, y - 1))) { // 3
+            std::cout << "left" << std::endl;
             y--;
-            changeToCorridor(*c->left);
-        }
-        else if((shuffle[i] == RIGHT) && (insideCondition(x, y+1))){
+            tempCell = *c->left;
+        } else if ((shuffle[i] == RIGHT) && (insideCondition(x, y + 1))) { // 4
+            std::cout << "right" << std::endl;
             y++;
-            changeToCorridor(*c->right);
+            tempCell = *c->right;
         }
-        return visited[x][y];
+        if (!visited[x][y]->isVisited()) {
+            changeToCorridor(tempCell);
+            return visited[x][y];
+        }
     }
-
     return NULL;
+} // randomDiscoverPath
+
+void Map::check(Cell * c){
+    if (c->top == NULL) {
+        std::cout << "TOP" << std::endl;
+    }
+    if (c->bottom == NULL) {
+        std::cout << "BOTTOM" << std::endl;
+    }
+    if (c->left == NULL) {
+        std::cout << "LEFT" << std::endl;
+    }
+    if (c->right == NULL) {
+        std::cout << "RIGHT" << std::endl;
+    }
+    std::cout << std::endl;
 }
 
+bool Map::insideCondition(int x, int y){
+    return (x >= 0 && x < (visited.size())) && (y >= 0 && y < visited[0].size());
+}
 
 void Map::mirror(){
-    for (int i = 0; i <= heigth - 1; i++){
-        for (int j = floor(width / 2.0) - 1; j >= 0; j--){
-            map[i][width-j-1] = map[i][j]; 
+    for (int i = 0; i <= heigth - 1; i++) {
+        for (int j = floor(width / 2.0) - 1; j >= 0; j--) {
+            map[i][width - j - 1] = map[i][j];
         }
     }
 }

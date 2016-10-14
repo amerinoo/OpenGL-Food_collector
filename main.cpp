@@ -7,8 +7,8 @@ int main(int argc, char const * argv[]){
     int width;
 
     if (argc < 3) {
-        heigth = 7;
-        width  = 12;
+        heigth = 10;
+        width  = 22;
     } else {
         heigth = atoi(argv[1]);
         width  = atoi(argv[2]);
@@ -16,6 +16,6 @@ int main(int argc, char const * argv[]){
     Map map(heigth, width);
 
     map.generate();
-    // map.print();
+    map.print();
     return 0;
 }

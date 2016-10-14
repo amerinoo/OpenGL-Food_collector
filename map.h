@@ -6,9 +6,7 @@
 using namespace std;
 
 class Map{
-	int width, heigth;
-	vector<vector<Cell*> > map;
-	vector<vector<Cell *> > visited;
+
  public:
 	Map(int, int);
 	void generate();
@@ -17,7 +15,7 @@ class Map{
  private:
  	void populationCells();
  	void connectCells();
- 	Cell* connect(Cell *);
+ 	void connect(Cell *);
 
  	void changeToCorridor(Cell *);
 
@@ -30,6 +28,10 @@ class Map{
 
 	bool insideCondition(int, int);
 	Cell* randomDiscoverPath(Cell*);
-	
+
 	void print(vector<vector<Cell *> >);
+ protected:
+	 int width, heigth;
+	 vector<vector<Cell*> > map;
+	 vector<vector<Cell *> > visited;
 };
