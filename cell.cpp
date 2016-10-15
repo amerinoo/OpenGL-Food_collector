@@ -6,12 +6,10 @@ Cell::Cell(int a, int b){
     y       = b;
     visited = false;
 
-    //setType(-1);
-
-    top = NULL;
+    top    = NULL;
     bottom = NULL;
-    left = NULL;
-    right = NULL;
+    left   = NULL;
+    right  = NULL;
 }
 
 int Cell::getX(){
@@ -33,10 +31,6 @@ void Cell::setVisited(bool b){
 int Cell::getType(){
     return -1;
 }
-
-/*vector<Cell *> Cell::getNeighbours(){
-    return neighbours;
-}*/
 
 void Cell::toString(){
     cout << getX() << getY() << endl;

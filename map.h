@@ -8,10 +8,12 @@ using namespace std;
 class Map{
 
  public:
-	Map(int, int);
-	void generate();
-	void print();
-	void printV(vector<vector<Cell *> > v);
+    Map();
+ 	Map(int, int);
+    Map(vector<vector<Cell*> >);
+ 	void generate();
+    vector<vector<Cell*> > getMap();
+ 	void print();
  private:
  	void populationCells();
  	void connectCells();

@@ -9,10 +9,19 @@ using namespace std;
 #define LEFT  3
 #define RIGHT 4
 
+Map::Map(){ }
 
 Map::Map(int a, int b){
     heigth = a;
     width  = b;
+}
+
+Map::Map(vector<vector<Cell *> > m){
+    map = m;
+}
+
+vector<vector<Cell *> > Map::getMap(){
+    return map;
 }
 
 void Map::print(){
@@ -23,20 +32,6 @@ void Map::print(vector<vector<Cell *> > v){
     for (int i = 0; i < v.size(); i++) {
         for (int j = 0; j < v[i].size(); j++) {
             cout << v[i][j]->getSymbol();
-        }
-        cout << endl;
-    }
-    cout << endl;
-}
-
-void Map::printV(vector<vector<Cell *> > v){
-    for (int i = 0; i < v.size(); i++) {
-        for (int j = 0; j < v[i].size(); j++) {
-            if (v[i][j]->isVisited()) {
-                cout << "X";
-            } else {
-                cout << "O";
-            }
         }
         cout << endl;
     }
@@ -158,7 +153,6 @@ void Map::inside(){
     stack<Cell *> stack;
 
     while (quantidadeVisitados < h * w) {
-        printV(visited);
         position = randomDiscoverPath(position);
 
         if (position == NULL) {
@@ -185,21 +179,16 @@ Cell * Map::randomDiscoverPath(Cell * c){
     for (int i = 0; i < shuffle.size(); i++) {
         x = floor((c->getX() - 1) / 2.0);
         y = floor((c->getY() - 1) / 2.0);
-        std::cout << shuffle[i] << std::endl;
         if ((shuffle[i] == UP) && (insideCondition(x - 1, y))) { // 1
-            std::cout << "up" << std::endl;
             x--;
             tempCell = *c->top;
         } else if ((shuffle[i] == DOWN) && (insideCondition(x + 1, y))) { // 2
-            std::cout << "down" << std::endl;
             x++;
             tempCell = *c->bottom;
         } else if ((shuffle[i] == LEFT) && (insideCondition(x, y - 1))) { // 3
-            std::cout << "left" << std::endl;
             y--;
             tempCell = *c->left;
         } else if ((shuffle[i] == RIGHT) && (insideCondition(x, y + 1))) { // 4
-            std::cout << "right" << std::endl;
             y++;
             tempCell = *c->right;
         }
@@ -210,22 +199,6 @@ Cell * Map::randomDiscoverPath(Cell * c){
     }
     return NULL;
 } // randomDiscoverPath
-
-void Map::check(Cell * c){
-    if (c->top == NULL) {
-        std::cout << "TOP" << std::endl;
-    }
-    if (c->bottom == NULL) {
-        std::cout << "BOTTOM" << std::endl;
-    }
-    if (c->left == NULL) {
-        std::cout << "LEFT" << std::endl;
-    }
-    if (c->right == NULL) {
-        std::cout << "RIGHT" << std::endl;
-    }
-    std::cout << std::endl;
-}
 
 bool Map::insideCondition(int x, int y){
     return (x >= 0 && x < (visited.size())) && (y >= 0 && y < visited[0].size());

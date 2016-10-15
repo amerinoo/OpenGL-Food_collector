@@ -6,23 +6,17 @@ using namespace std;
 class Cell{
 
  public:
-	Cell(int, int);
+    Cell(int, int);
     int getX();
     int getY();
-	bool isVisited();
-	void setVisited(bool b);
-    //vector<Cell*> getNeighbours();
-	Cell **top, **left, **right, **bottom;
-
-	virtual int getType();
-	virtual char getSymbol();
-
+    bool isVisited();
+    void setVisited(bool b);
+    virtual int getType();
+    virtual char getSymbol();
     void toString();
-
-	protected:
-		int x, y;
-		bool visited;
-        //vector<Cell*> neighbours;
+    Cell **top, **left, **right, **bottom;
+ protected:
+     int x, y;
+     bool visited;
 };
-
 #endif
