@@ -8,10 +8,12 @@ using namespace std;
 class Map{
 
  public:
-	Map(int, int);
-	void generate();
-	void print();
-	void printV(vector<vector<Cell *> > v);
+    Map();
+ 	Map(int, int);
+    Map(vector<vector<Cell*> >);
+ 	void generate();
+    vector<vector<Cell*> > getMap();
+ 	void print();
  private:
  	void populationCells();
  	void connectCells();
@@ -25,20 +27,18 @@ class Map{
 	void inside();
 	void mirror();
 
-	void inferiorRandom();
-	bool randomLeftRightInferior(Cell *);
+	void inferiorRandom(); 
+	bool randomLeftRightInferior(Cell *); 
 
-	void middleRandom();
-	bool randomLeftRightMiddle(Cell * );
-
+	void middleRandom(); 
+	bool randomLeftRightMiddle(Cell * ); 
 
 	void middle();
 
-	bool insideCondition(int, int, vector<vector<Cell *> >);
+	bool insideCondition(int, int);
 	Cell* randomDiscoverPath(Cell*);
 
 	void print(vector<vector<Cell *> >);
-
  protected:
 	 int width, heigth;
 	 vector<vector<Cell*> > map;
