@@ -4,14 +4,21 @@
 #include "wall.h"
 
 using namespace std;
-
+enum Direction{
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
+};
 class Map{
 
  public:
     Map();
  	Map(int, int);
-    Map(vector<vector<Cell*> >);
+    Map(char*);
  	void generate();
+    int getHeigth();
+    int getWidth();
     vector<vector<Cell*> > getMap();
  	void print();
  private:
@@ -27,16 +34,18 @@ class Map{
 	void inside();
 	void mirror();
 
-	void inferiorRandom(); 
-	bool randomLeftRightInferior(Cell *); 
+	void inferiorRandom();
+	bool randomLeftRightInferior(Cell *);
 
-	void middleRandom(); 
-	bool randomLeftRightMiddle(Cell * ); 
+	void middleRandom();
+	bool randomLeftRightMiddle(Cell * );
 
 	void middle();
 
 	bool insideCondition(int, int);
 	Cell* randomDiscoverPath(Cell*);
+
+    void getMapFromFile(char*);
 
 	void print(vector<vector<Cell *> >);
  protected:

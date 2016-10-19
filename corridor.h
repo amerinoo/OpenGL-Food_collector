@@ -6,7 +6,7 @@
 class Corridor : public Cell{
  public:
 	Corridor(int, int);
-    int getType();
+    CellType getType();
     char getSymbol();
 };
 #endif

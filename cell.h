@@ -2,7 +2,11 @@
 #define cell_h
 #include <bits/stdc++.h>
 using namespace std;
-
+enum CellType{
+    CELL,
+    WALL,
+    CORRIDOR
+};
 class Cell{
 
  public:
@@ -11,7 +15,7 @@ class Cell{
     int getY();
     bool isVisited();
     void setVisited(bool b);
-    virtual int getType();
+    virtual CellType getType();
     virtual char getSymbol();
     void toString();
     Cell **top, **left, **right, **bottom;

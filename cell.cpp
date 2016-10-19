@@ -28,8 +28,8 @@ void Cell::setVisited(bool b){
     visited = b;
 }
 
-int Cell::getType(){
-    return -1;
+CellType Cell::getType(){
+    return CELL;
 }
 
 void Cell::toString(){

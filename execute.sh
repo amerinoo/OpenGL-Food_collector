@@ -1,3 +1,3 @@
 #!/bin/bash
 make
-./pacman
+./pacman 10 10

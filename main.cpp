@@ -2,51 +2,24 @@
 #include <GL/glut.h>
 #include "graphics.h"
 using namespace std;
-void
-init(int argc, char * argv[], int HEIGHT, int WIDTH);
-void
-display();
-
-Graphics graphics;
 
 int main(int argc, char * argv[]){
     int heigth;
     int width;
 
     if (argc < 3) {
-        heigth = 10;
-        width  = 22;
-    } else {
-        heigth = atoi(argv[1]);
-        width  = atoi(argv[2]);
+        std::cout << "Usage: " << argv[0] << " <heigth> <width>" << std::endl;
+        return -1;
     }
-    Map map(heigth, width);
+    heigth = atoi(argv[1]);
+    width  = atoi(argv[2]);
 
-    map.generate();
+    Map map(heigth, width);
     map.print();
 
-    graphics = Graphics(map);
-    init(argc, argv, graphics.getHeight(), graphics.getWidth());
+    Graphics& graphics = Graphics::getInstance();
+    graphics.setMap(map);
+    graphics.init(argc, argv);
+
     return 0;
 }
-
-void init(int argc, char * argv[], int HEIGHT, int WIDTH){
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowPosition(50, 50);
-    glutInitWindowSize(WIDTH, HEIGHT);
-    glutCreateWindow("Food collection");
-
-    glutDisplayFunc(display);
-
-    glMatrixMode(GL_PROJECTION);
-    int left   = 0;
-    int bottom = HEIGHT - 1;
-    int right  = WIDTH - 1;
-    int top    = 0;
-    gluOrtho2D(left, right, bottom, top);
-
-    glutMainLoop();
-}
-
-void display(){ graphics.display(); }

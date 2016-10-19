@@ -3,8 +3,8 @@
 Corridor::Corridor(int a, int b)
     : Cell(a, b){ }
 
-int Corridor::getType(){
-    return 0;
+CellType Corridor::getType(){
+    return CORRIDOR;
 }
 
 char Corridor::getSymbol(){

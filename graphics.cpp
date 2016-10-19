@@ -1,40 +1,56 @@
 #include <GL/glut.h>
 #include "graphics.h"
 
+using namespace std;
+
+Graphics& Graphics::getInstance(){
+    static Graphics instance;
+
+    return instance;
+}
+
 Graphics::Graphics(){ }
 
-Graphics::Graphics(Map m){
-    init(m);
+void Graphics::init(int argc, char * argv[]){
+    columns = map.getWidth();
+    rows    = map.getHeigth();
+    heigth  = map.getHeigth() * 20;
+    width   = map.getWidth() * 20;
+
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowPosition(50, 50);
+    glutInitWindowSize(width, heigth);
+    glutCreateWindow("Food collection");
+
+    glutDisplayFunc(myDisplay);
+    glutKeyboardFunc(myKeyboard);
+
+    glMatrixMode(GL_PROJECTION);
+    gluOrtho2D(0, width - 1, heigth - 1, 0);
+
+    glutMainLoop();
 }
 
-Graphics::Graphics(char * fname){
-    map = getMapFromFile(fname);
-    init(map);
-}
+void Graphics::setMap(Map m){ map = m; }
 
-void Graphics::init(Map m){
-    map     = m;
-    COLUMNS = m.getMap()[0].size();
-    ROWS    = m.getMap().size();
-    HEIGHT  = ROWS * 20;
-    WIDTH   = COLUMNS * 20;
-}
+int Graphics::getHeight(){ return heigth; }
 
-int Graphics::getHeight(){ return HEIGHT; }
-
-int Graphics::getWidth(){ return WIDTH; }
+int Graphics::getWidth(){ return width; }
 
 void Graphics::display(){
     vector<vector<Cell *> > m = map.getMap();
-    glClearColor(1, 1, 1, 1);
+
+    glClearColor(0, 0, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);
-    int a = WIDTH / COLUMNS;
-    int b = HEIGHT / ROWS;
-    for (int i = 0; i < COLUMNS; i++) {
-        for (int j = 0; j < ROWS; j++) {
-            if (m[j][i]->getSymbol() == '0') {
+    int a = width / columns;
+    int b = heigth / rows;
+
+    for (int i = 0; i < columns; i++) {
+        for (int j = 0; j < rows; j++) {
+            if (m[j][i]->getType() == CORRIDOR) {
                 glBegin(GL_QUADS);
-                glColor3f(0, 0, 1);
+                glColor3f(1, 1, 1);
 
                 glVertex2i(i * a, j * b);             // esquerra dalt
                 glVertex2i((i + 1) * a, j * b);       // dreta dalt
@@ -45,33 +61,17 @@ void Graphics::display(){
             }
         }
     }
-
     glutSwapBuffers();
 } // display
 
-Map Graphics::getMapFromFile(char * fname){
-    vector<vector<Cell *> > m;
-    string s = "";
-    string saux;
-    ifstream in(fname); // Open for reading
-    int width;
-    while (getline(in, saux)) {
-        if (s == "") width = saux.size();
-        s += saux;
+void Graphics::keyboard(unsigned char c, int x, int y){
+    if (c == 'r') {
+        Map m = Map(map.getHeigth(), map.getWidth());
+        setMap(m);
+        glutPostRedisplay();
     }
-    int heigth = s.size() / width;
-    int w      = 0;
-    for (int i = 0; i < heigth; i++) {
-        vector<Cell *> aux;
-        for (int j = 0; j < width; j++) {
-            if (s[w] == '0') {
-                aux.push_back(new Wall(i, j));
-            } else if (s[w] == '.') {
-                aux.push_back(new Corridor(i, j));
-            }
-            w++;
-        }
-        m.push_back(aux);
-    }
-    return Map(m);
 }
+
+void myDisplay(){ Graphics::getInstance().display(); }
+
+void myKeyboard(unsigned char c, int x, int y){ Graphics::getInstance().keyboard(c, x, y); }

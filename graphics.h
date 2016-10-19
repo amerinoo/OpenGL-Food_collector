@@ -1,22 +1,31 @@
+#ifndef graphics_h
+#define graphics_h
 #include <bits/stdc++.h>
 #include "map.h"
 
 using namespace std;
 
+void myDisplay();
+void myKeyboard(unsigned char, int, int);
+
 class Graphics{
 
  public:
-    Graphics();
-	Graphics(Map);
-    Graphics(char *);
-	void display();
+    static Graphics& getInstance();
+    void init(int argc, char * argv[]);
+
+    void setMap(Map);
     int getHeight();
     int getWidth();
+    void display();
+    void keyboard(unsigned char c, int x, int y);
  private:
-    Map getMapFromFile(char*);
-    void init(Map);
+     Graphics();
+     Graphics(Graphics const&);
+     Graphics& operator=(Graphics const&);
  protected:
      Map map;
-     int HEIGHT, WIDTH;
-     int COLUMNS, ROWS;
+     int heigth, width;
+     int columns, rows;
 };
+#endif
