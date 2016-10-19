@@ -5,7 +5,10 @@
 
 class Wall : public Cell{
  public:
+    // Constructors
 	Wall(int, int);
+
+    // Getters
     CellType getType();
     char getSymbol();
 };

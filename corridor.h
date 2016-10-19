@@ -5,7 +5,10 @@
 
 class Corridor : public Cell{
  public:
+    // Constructors
 	Corridor(int, int);
+
+    // Getters
     CellType getType();
     char getSymbol();
 };

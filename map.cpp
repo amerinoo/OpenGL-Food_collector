@@ -9,6 +9,7 @@ using namespace std;
 #define L 3
 #define R 4
 
+// Constructors
 Map::Map(){ }
 
 Map::Map(int a, int b){
@@ -17,32 +18,16 @@ Map::Map(int a, int b){
     generate();
 }
 
-Map::Map(char fname[]){
-    getMapFromFile(fname);
-}
+Map::Map(char fname[]){ getMapFromFile(fname); }
 
-vector<vector<Cell *> > Map::getMap(){
-    return map;
-}
-
+// Getters
 int Map::getHeigth(){ return heigth; }
 
 int Map::getWidth(){ return width; }
 
-void Map::print(){
-    print(map);
-}
+vector<vector<Cell *> > Map::getMap(){ return map; }
 
-void Map::print(vector<vector<Cell *> > v){
-    for (int i = 0; i < v.size(); i++) {
-        for (int j = 0; j < v[i].size(); j++) {
-            cout << v[i][j]->getSymbol();
-        }
-        cout << endl;
-    }
-    cout << endl;
-}
-
+// Methods
 void Map::generate(){
     srand(time(NULL));
     populationCells();
@@ -53,6 +38,9 @@ void Map::generate(){
     middleRandom();
     mirror();
 }
+
+// Print
+void Map::print(){ print(map); }
 
 /*
  * Create and put all cells in the Vector<<Vector<Cell>>
@@ -78,10 +66,136 @@ void Map::connectCells(){
 }
 
 void Map::connect(Cell * c){
-    if ((c->getX() - 1) >= 0) c->top = &map[c->getX() - 1][c->getY()];
-    if ((c->getX() + 1) <= heigth - 1) c->bottom = &map[c->getX() + 1][c->getY()];
-    if ((c->getY() - 1) >= 0) c->left = &map[c->getX()][c->getY() - 1];
-    if ((c->getY() + 1) <= width + 1) c->right = &map[c->getX()][c->getY() + 1];
+    if ((c->getX() - 1) >= 0) c->setUp(&map[c->getX() - 1][c->getY()]);
+    if ((c->getX() + 1) <= heigth - 1) c->setDown(&map[c->getX() + 1][c->getY()]);
+    if ((c->getY() - 1) >= 0) c->setLeft(&map[c->getX()][c->getY() - 1]);
+    if ((c->getY() + 1) <= width + 1) c->setRight(&map[c->getX()][c->getY() + 1]);
+}
+
+void Map::inside(){
+    visited = getWhitePositionCells();
+
+    int h = visited.size();
+    int w = visited[0].size();
+
+    // Primeiro elemento visitado.
+    Cell * position = randomCellPosition(visited);
+    position->setVisited(true);
+    int quantidadeVisitados = 1;
+
+    stack<Cell *> stack;
+
+    while (quantidadeVisitados < h * w) {
+        position = randomDiscoverPath(position);
+
+        if (position == NULL) {
+            position = stack.top();
+            stack.pop();
+        } else if (!position->isVisited()) {
+            position->setVisited(true);
+            stack.push(position);
+            quantidadeVisitados++;
+        }
+    }
+} // inside
+
+void Map::middle(){
+    int mid = floor(width / 2.0);
+
+    if (width % 2 == 1) {
+        for (int i = 1; i < heigth - 1; i++)
+            changeToCorridor(map[i][mid]);
+    }
+}
+
+void Map::inferiorRandom(){
+    if (heigth % 2 == 0) {
+        vector<Cell *> inferior = visited[visited.size() - 1];
+        vector<int> shuffle;
+        int nums = inferior.size();
+
+        for (int i = 0; i < nums; i++) shuffle.push_back(i);
+        random_shuffle(shuffle.begin(), shuffle.end());
+
+        for (int i = 0; i < (int) shuffle.size() * 0.6; i++) {
+            Cell * temp = *inferior[shuffle[i]]->getDown();
+            changeToCorridor(temp);
+            randomLeftRightInferior(temp);
+        }
+    }
+}
+
+bool Map::randomLeftRightInferior(Cell * c){
+    vector<int> shuffle;
+    Cell * tempCell = NULL;
+    int x, y;
+
+    for (int i = L; i <= R; i++) shuffle.push_back(i);
+    random_shuffle(shuffle.begin(), shuffle.end());
+
+    for (int i = 0; i < shuffle.size(); i++) {
+        if ((shuffle[i] == L) && ((*c->getLeft())->getY() >= 1)) { // 3
+            changeToCorridor(*c->getLeft());
+            return true;
+        } else if ((shuffle[i] == R) && ((*c->getRight())->getY() <= floor(width / 2))) { // 4
+            changeToCorridor(*c->getRight());
+            return true;
+        }
+    }
+    return false;
+}
+
+void Map::middleRandom(){
+    if ((width - 2) % 4 == 0) {
+        vector<Cell *> middle;
+        vector<int> shuffle;
+
+        for (int i = 0; i < visited.size(); ++i) {
+            middle.push_back(visited[i][visited[0].size() - 1]);
+        }
+
+        int nums = middle.size();
+        for (int i = 0; i < nums; i++) shuffle.push_back(i);
+        random_shuffle(shuffle.begin(), shuffle.end());
+
+        for (int i = 0; i < shuffle.size() * 0.6; ++i) {
+            Cell * temp = *middle[shuffle[i]]->getRight();
+            changeToCorridor(temp);
+            randomLeftRightMiddle(temp);
+        }
+    }
+}
+
+bool Map::randomLeftRightMiddle(Cell * c){
+    vector<int> shuffle;
+    Cell * tempCell = NULL;
+    int x, y;
+
+    for (int i = U; i <= D; i++) shuffle.push_back(i);
+    random_shuffle(shuffle.begin(), shuffle.end());
+
+    for (int i = 0; i < shuffle.size(); i++) {
+        if ((shuffle[i] == U) && ((*c->getUp())->getX() >= 1)) { // 3
+            changeToCorridor(*c->getUp());
+            return true;
+        } else if ((shuffle[i] == D) && ((*c->getDown())->getX() <= heigth - 2)) { // 4
+            changeToCorridor(*c->getDown());
+            return true;
+        }
+    }
+    return false;
+}
+
+void Map::mirror(){
+    for (int i = 0; i <= heigth - 1; i++) {
+        for (int j = floor(width / 2.0) - 1; j >= 0; j--) {
+            map[i][width - j - 1] = map[i][j];
+        }
+    }
+}
+
+bool Map::insideCondition(int x, int y){
+    return (x >= 0 && x < (visited.size())) && (y >= 0 && y < visited[0].size());
 }
 
 void Map::changeToCorridor(Cell * cell){
@@ -92,11 +206,11 @@ void Map::changeToCorridor(Cell * cell){
 
     Cell * corredor = new Corridor(x, y);
     corredor->setVisited(cell->isVisited());
-    corredor->top    = cell->top;
-    corredor->bottom = cell->bottom;
-    corredor->left   = cell->left;
-    corredor->right  = cell->right;
-    map[x][y]        = corredor;
+    corredor->setUp(cell->getUp());
+    corredor->setDown(cell->getDown());
+    corredor->setLeft(cell->getLeft());
+    corredor->setRight(cell->getRight());
+    map[x][y] = corredor;
 }
 
 vector<vector<Cell *> > Map::getWhitePositionCells(){
@@ -142,33 +256,6 @@ Cell * Map::randomCellPosition(vector<vector<Cell *> > visited){
     return NULL;
 }
 
-void Map::inside(){
-    visited = getWhitePositionCells();
-
-    int h = visited.size();
-    int w = visited[0].size();
-
-    // Primeiro elemento visitado.
-    Cell * position = randomCellPosition(visited);
-    position->setVisited(true);
-    int quantidadeVisitados = 1;
-
-    stack<Cell *> stack;
-
-    while (quantidadeVisitados < h * w) {
-        position = randomDiscoverPath(position);
-
-        if (position == NULL) {
-            position = stack.top();
-            stack.pop();
-        } else if (!position->isVisited()) {
-            position->setVisited(true);
-            stack.push(position);
-            quantidadeVisitados++;
-        }
-    }
-} // inside
-
 Cell * Map::randomDiscoverPath(Cell * c){
     vector<int> shuffle;
     Cell * tempCell = NULL;
@@ -183,16 +270,16 @@ Cell * Map::randomDiscoverPath(Cell * c){
         y = floor((c->getY() - 1) / 2.0);
         if ((shuffle[i] == U) && (insideCondition(x - 1, y))) { // 1
             x--;
-            tempCell = *c->top;
+            tempCell = *c->getUp();
         } else if ((shuffle[i] == D) && (insideCondition(x + 1, y))) { // 2
             x++;
-            tempCell = *c->bottom;
+            tempCell = *c->getDown();
         } else if ((shuffle[i] == L) && (insideCondition(x, y - 1))) { // 3
             y--;
-            tempCell = *c->left;
+            tempCell = *c->getLeft();
         } else if ((shuffle[i] == R) && (insideCondition(x, y + 1))) { // 4
             y++;
-            tempCell = *c->right;
+            tempCell = *c->getRight();
         }
         if (!visited[x][y]->isVisited()) {
             changeToCorridor(tempCell);
@@ -201,105 +288,6 @@ Cell * Map::randomDiscoverPath(Cell * c){
     }
     return NULL;
 } // randomDiscoverPath
-
-bool Map::insideCondition(int x, int y){
-    return (x >= 0 && x < (visited.size())) && (y >= 0 && y < visited[0].size());
-}
-
-void Map::mirror(){
-    for (int i = 0; i <= heigth - 1; i++) {
-        for (int j = floor(width / 2.0) - 1; j >= 0; j--) {
-            map[i][width - j - 1] = map[i][j];
-        }
-    }
-}
-
-void Map::inferiorRandom(){
-    if (heigth % 2 == 0) {
-        vector<Cell *> inferior = visited[visited.size() - 1];
-        vector<int> shuffle;
-        int nums = inferior.size();
-
-        for (int i = 0; i < nums; i++) shuffle.push_back(i);
-        random_shuffle(shuffle.begin(), shuffle.end());
-
-        for (int i = 0; i < (int) shuffle.size() * 0.6; i++) {
-            Cell * temp = *inferior[shuffle[i]]->bottom;
-            changeToCorridor(temp);
-            randomLeftRightInferior(temp);
-        }
-    }
-}
-
-bool Map::randomLeftRightInferior(Cell * c){
-    vector<int> shuffle;
-    Cell * tempCell = NULL;
-    int x, y;
-
-    for (int i = L; i <= R; i++) shuffle.push_back(i);
-    random_shuffle(shuffle.begin(), shuffle.end());
-
-    for (int i = 0; i < shuffle.size(); i++) {
-        if ((shuffle[i] == L) && ((*c->left)->getY() >= 1)) { // 3
-            changeToCorridor(*c->left);
-            return true;
-        } else if ((shuffle[i] == R) && ((*c->right)->getY() <= floor(width / 2))) { // 4
-            changeToCorridor(*c->right);
-            return true;
-        }
-    }
-    return false;
-}
-
-void Map::middleRandom(){
-    if ((width - 2) % 4 == 0) {
-        vector<Cell *> middle;
-        vector<int> shuffle;
-
-        for (int i = 0; i < visited.size(); ++i) {
-            middle.push_back(visited[i][visited[0].size() - 1]);
-        }
-
-        int nums = middle.size();
-        for (int i = 0; i < nums; i++) shuffle.push_back(i);
-        random_shuffle(shuffle.begin(), shuffle.end());
-
-        for (int i = 0; i < shuffle.size() * 0.6; ++i) {
-            Cell * temp = *middle[shuffle[i]]->right;
-            changeToCorridor(temp);
-            randomLeftRightMiddle(temp);
-        }
-    }
-}
-
-bool Map::randomLeftRightMiddle(Cell * c){
-    vector<int> shuffle;
-    Cell * tempCell = NULL;
-    int x, y;
-
-    for (int i = U; i <= D; i++) shuffle.push_back(i);
-    random_shuffle(shuffle.begin(), shuffle.end());
-
-    for (int i = 0; i < shuffle.size(); i++) {
-        if ((shuffle[i] == U) && ((*c->top)->getX() >= 1)) { // 3
-            changeToCorridor(*c->top);
-            return true;
-        } else if ((shuffle[i] == D) && ((*c->bottom)->getX() <= heigth - 2)) { // 4
-            changeToCorridor(*c->bottom);
-            return true;
-        }
-    }
-    return false;
-}
-
-void Map::middle(){
-    int mid = floor(width / 2.0);
-
-    if (width % 2 == 1) {
-        for (int i = 1; i < heigth - 1; i++)
-            changeToCorridor(map[i][mid]);
-    }
-}
 
 void Map::getMapFromFile(char * fname){
     string s = "";
@@ -324,4 +312,14 @@ void Map::getMapFromFile(char * fname){
         }
         map.push_back(aux);
     }
+}
+
+void Map::print(vector<vector<Cell *> > v){
+    for (int i = 0; i < v.size(); i++) {
+        for (int j = 0; j < v[i].size(); j++) {
+            cout << v[i][j]->getSymbol();
+        }
+        cout << endl;
+    }
+    cout << endl;
 }

@@ -1,41 +1,47 @@
 #include "cell.h"
 using namespace std;
 
+// Constructors
 Cell::Cell(int a, int b){
     x       = a;
     y       = b;
     visited = false;
 
-    top    = NULL;
-    bottom = NULL;
-    left   = NULL;
-    right  = NULL;
+    up    = NULL;
+    down  = NULL;
+    left  = NULL;
+    right = NULL;
 }
 
-int Cell::getX(){
-    return x;
-}
+// Getters
+int Cell::getX(){ return x; }
 
-int Cell::getY(){
-    return y;
-}
+int Cell::getY(){ return y; }
 
-bool Cell::isVisited(){
-    return visited;
-}
+bool Cell::isVisited(){ return visited; }
 
-void Cell::setVisited(bool b){
-    visited = b;
-}
+Cell ** Cell::getUp(){ return up; }
 
-CellType Cell::getType(){
-    return CELL;
-}
+Cell ** Cell::getDown(){ return down; }
 
-void Cell::toString(){
-    cout << getX() << getY() << endl;
-}
+Cell ** Cell::getLeft(){ return left; }
 
-char Cell::getSymbol(){
-    return '_';
-}
+Cell ** Cell::getRight(){ return right; }
+
+CellType Cell::getType(){ return CELL; }
+
+char Cell::getSymbol(){ return '_'; }
+
+// Setters
+void Cell::setVisited(bool b){ visited = b; }
+
+void Cell::setUp(Cell ** c){ up = c; }
+
+void Cell::setDown(Cell ** c){ down = c; }
+
+void Cell::setLeft(Cell ** c){ left = c; }
+
+void Cell::setRight(Cell ** c){ right = c; }
+
+// Print
+void Cell::printCell(){ cout << getX() << getY() << endl; }

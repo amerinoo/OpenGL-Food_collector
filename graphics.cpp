@@ -3,14 +3,25 @@
 
 using namespace std;
 
+// Constructors
+Graphics::Graphics(){ }
+
+// Getters
 Graphics& Graphics::getInstance(){
     static Graphics instance;
 
     return instance;
 }
 
-Graphics::Graphics(){ }
+// Getters
+int Graphics::getHeight(){ return heigth; }
 
+int Graphics::getWidth(){ return width; }
+
+// Setters
+void Graphics::setMap(Map m){ map = m; }
+
+// Methods
 void Graphics::init(int argc, char * argv[]){
     columns = map.getWidth();
     rows    = map.getHeigth();
@@ -31,12 +42,6 @@ void Graphics::init(int argc, char * argv[]){
 
     glutMainLoop();
 }
-
-void Graphics::setMap(Map m){ map = m; }
-
-int Graphics::getHeight(){ return heigth; }
-
-int Graphics::getWidth(){ return width; }
 
 void Graphics::display(){
     vector<vector<Cell *> > m = map.getMap();

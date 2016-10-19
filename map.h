@@ -1,4 +1,10 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <cstdlib>
+#include <vector>
+#include <ctime>
+#include <algorithm>
+#include <cmath>
+#include <fstream>
 #include "cell.h"
 #include "corridor.h"
 #include "wall.h"
@@ -11,42 +17,42 @@ enum Direction{
         RIGHT
 };
 class Map{
-
  public:
+    // Constructors
     Map();
  	Map(int, int);
     Map(char*);
- 	void generate();
+
+    // Getters
     int getHeigth();
     int getWidth();
     vector<vector<Cell*> > getMap();
+
+    // Methods
+    void generate();
+
+    // Print
  	void print();
  private:
  	void populationCells();
  	void connectCells();
  	void connect(Cell *);
 
- 	void changeToCorridor(Cell *);
+    void inside();
+    void middle();
+    void inferiorRandom();
+    bool randomLeftRightInferior(Cell *);
+    void middleRandom();
+    bool randomLeftRightMiddle(Cell * );
+    void mirror();
 
+    bool insideCondition(int, int);
+    void changeToCorridor(Cell *);
 	vector<vector<Cell *> > getWhitePositionCells();
 	Cell* randomCellPosition(vector<vector<Cell *> > visited);
-
-	void inside();
-	void mirror();
-
-	void inferiorRandom();
-	bool randomLeftRightInferior(Cell *);
-
-	void middleRandom();
-	bool randomLeftRightMiddle(Cell * );
-
-	void middle();
-
-	bool insideCondition(int, int);
 	Cell* randomDiscoverPath(Cell*);
 
     void getMapFromFile(char*);
-
 	void print(vector<vector<Cell *> >);
  protected:
 	 int width, heigth;
