@@ -4,11 +4,6 @@
 #include <stack>
 using namespace std;
 
-#define U 1
-#define D 2
-#define L 3
-#define R 4
-
 // Constructors
 Map::Map(){ }
 
@@ -79,7 +74,7 @@ void Map::inside(){
     int w = visited[0].size();
 
     // Primeiro elemento visitado.
-    Cell * position = randomCellPosition(visited);
+    Cell * position = visited[0][0];
     position->setVisited(true);
     int quantidadeVisitados = 1;
 
@@ -126,18 +121,20 @@ void Map::inferiorRandom(){
 }
 
 bool Map::randomLeftRightInferior(Cell * c){
-    vector<int> shuffle;
     Cell * tempCell = NULL;
     int x, y;
 
-    for (int i = L; i <= R; i++) shuffle.push_back(i);
+    vector<Direction> shuffle;
+    shuffle.push_back(LEFT);
+    shuffle.push_back(RIGHT);
+
     random_shuffle(shuffle.begin(), shuffle.end());
 
     for (int i = 0; i < shuffle.size(); i++) {
-        if ((shuffle[i] == L) && ((*c->getLeft())->getY() >= 1)) { // 3
+        if ((shuffle[i] == LEFT) && ((*c->getLeft())->getY() >= 1)) { // 3
             changeToCorridor(*c->getLeft());
             return true;
-        } else if ((shuffle[i] == R) && ((*c->getRight())->getY() <= floor(width / 2))) { // 4
+        } else if ((shuffle[i] == RIGHT) && ((*c->getRight())->getY() <= floor(width / 2))) { // 4
             changeToCorridor(*c->getRight());
             return true;
         }
@@ -167,18 +164,19 @@ void Map::middleRandom(){
 }
 
 bool Map::randomLeftRightMiddle(Cell * c){
-    vector<int> shuffle;
     Cell * tempCell = NULL;
     int x, y;
 
-    for (int i = U; i <= D; i++) shuffle.push_back(i);
+    vector<Direction> shuffle;
+    shuffle.push_back(UP);
+    shuffle.push_back(DOWN);
     random_shuffle(shuffle.begin(), shuffle.end());
 
     for (int i = 0; i < shuffle.size(); i++) {
-        if ((shuffle[i] == U) && ((*c->getUp())->getX() >= 1)) { // 3
+        if ((shuffle[i] == UP) && ((*c->getUp())->getX() >= 1)) { // 3
             changeToCorridor(*c->getUp());
             return true;
-        } else if ((shuffle[i] == D) && ((*c->getDown())->getX() <= heigth - 2)) { // 4
+        } else if ((shuffle[i] == DOWN) && ((*c->getDown())->getX() <= heigth - 2)) { // 4
             changeToCorridor(*c->getDown());
             return true;
         }
@@ -235,49 +233,32 @@ vector<vector<Cell *> > Map::getWhitePositionCells(){
     return visited;
 }
 
-Cell * Map::randomCellPosition(vector<vector<Cell *> > visited){
-    // Size Height and Width visited'list.
-    int h = visited.size();
-    int w = visited[0].size();
-
-    int randX, randY;
-
-    randX = rand() % (w + 1);
-    randY = rand() % (int) (floor((h + 1) / 2.0));
-
-    int in = 0;
-    for (int i = 0; i < visited.size(); i++) {
-        for (int j = 0; j < visited[0].size(); j++) {
-            if (!visited[i][j]->isVisited()) {
-                return visited[i][j];
-            }
-        }
-    }
-    return NULL;
-}
-
 Cell * Map::randomDiscoverPath(Cell * c){
-    vector<int> shuffle;
     Cell * tempCell = NULL;
     int x, y;
 
+    vector<Direction> shuffle;
+    shuffle.push_back(UP);
+    shuffle.push_back(DOWN);
+    shuffle.push_back(LEFT);
+    shuffle.push_back(RIGHT);
 
-    for (int i = 1; i <= 4; i++) shuffle.push_back(i);
+
     random_shuffle(shuffle.begin(), shuffle.end());
 
     for (int i = 0; i < shuffle.size(); i++) {
         x = floor((c->getX() - 1) / 2.0);
         y = floor((c->getY() - 1) / 2.0);
-        if ((shuffle[i] == U) && (insideCondition(x - 1, y))) { // 1
+        if ((shuffle[i] == UP) && (insideCondition(x - 1, y))) {
             x--;
             tempCell = *c->getUp();
-        } else if ((shuffle[i] == D) && (insideCondition(x + 1, y))) { // 2
+        } else if ((shuffle[i] == DOWN) && (insideCondition(x + 1, y))) {
             x++;
             tempCell = *c->getDown();
-        } else if ((shuffle[i] == L) && (insideCondition(x, y - 1))) { // 3
+        } else if ((shuffle[i] == LEFT) && (insideCondition(x, y - 1))) {
             y--;
             tempCell = *c->getLeft();
-        } else if ((shuffle[i] == R) && (insideCondition(x, y + 1))) { // 4
+        } else if ((shuffle[i] == RIGHT) && (insideCondition(x, y + 1))) {
             y++;
             tempCell = *c->getRight();
         }

@@ -49,7 +49,6 @@ class Map{
     bool insideCondition(int, int);
     void changeToCorridor(Cell *);
 	vector<vector<Cell *> > getWhitePositionCells();
-	Cell* randomCellPosition(vector<vector<Cell *> > visited);
 	Cell* randomDiscoverPath(Cell*);
 
     void getMapFromFile(char*);
