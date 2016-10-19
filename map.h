@@ -10,12 +10,14 @@
 #include "wall.h"
 
 using namespace std;
+
 enum Direction{
         UP,
         DOWN,
         LEFT,
         RIGHT
 };
+
 class Map{
  public:
     // Constructors
@@ -34,21 +36,20 @@ class Map{
     // Print
  	void print();
  private:
- 	void populationCells();
+ 	void initCells();
  	void connectCells();
  	void connect(Cell *);
 
     void inside();
     void middle();
     void inferiorRandom();
-    bool randomLeftRightInferior(Cell *);
     void middleRandom();
-    bool randomLeftRightMiddle(Cell * );
+    void openRandom(Cell *, vector<Direction>);
     void mirror();
 
     bool insideCondition(int, int);
     void changeToCorridor(Cell *);
-	vector<vector<Cell *> > getWhitePositionCells();
+	void initWhitePositionCells();
 	Cell* randomDiscoverPath(Cell*);
 
     void getMapFromFile(char*);
