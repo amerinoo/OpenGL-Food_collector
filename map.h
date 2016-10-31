@@ -35,27 +35,28 @@ class Map{
 
     // Print
  	void print();
- private:
- 	void initCells();
- 	void connectCells();
- 	void connect(Cell *);
 
-    void inside();
-    void middle();
-    void inferiorRandom();
-    void middleRandom();
-    void openRandom(Cell *, vector<Direction>);
-    void mirror();
+    private:
+     	void initCells();
+        void connect(Cell *);
+     	void connectCells();
+        void inside();
+        void middle();
+        void inferiorRandom();
+        void middleRandom();
+        void openRandom(Cell *, vector<Direction>);
+        void mirror();
 
-    bool insideCondition(int, int);
-    void changeToCorridor(Cell *);
-	void initWhitePositionCells();
-	Cell* randomDiscoverPath(Cell*);
+        bool insideCondition(int, int);
+        void changeToCorridor(Cell *);
+    	void initWhitePositionCells();
+    	Cell* randomDiscoverPath(Cell*);
 
-    void getMapFromFile(char*);
-	void print(vector<vector<Cell *> >);
- protected:
-	 int width, heigth;
-	 vector<vector<Cell*> > map;
-	 vector<vector<Cell *> > visited;
+        void getMapFromFile(char*);
+    	void print(vector<vector<Cell *> >);
+
+    protected:
+        int width, heigth;
+        vector<vector<Cell*> > map;
+        vector<vector<Cell *> > visited;
 };

@@ -4,7 +4,7 @@
 #include "cell.h"
 
 class Corridor : public Cell{
- public:
+ 	public:
     // Constructors
 	Corridor(int, int);
 

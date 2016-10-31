@@ -34,9 +34,10 @@ class Cell{
 
     // Print
     void printCell();
- protected:
-     Cell **up, **down, **left, **right;
-     int x, y;
-     bool visited;
+
+    protected:    
+    Cell **up, **down, **left, **right;
+    int x, y;
+    bool visited;
 };
 #endif
