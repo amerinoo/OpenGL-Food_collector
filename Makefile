@@ -8,7 +8,7 @@ CFLAGS = -lglut -lGLU -lGL -lm
 CFILES = main.cpp map.cpp cell.cpp wall.cpp corridor.cpp graphics.cpp
 
 # The build target executable:
-TARGET = pacman
+TARGET = food_collector
 
 all: $(CFILES)
 	$(CC) $(CFILES) -o $(TARGET) $(CFLAGS)

@@ -59,8 +59,8 @@ void Map::connect(Cell * c){
     if ((c->getY() + 1) <= width + 1) c->setRight(&map[c->getX()][c->getY() + 1]);
 }
 
-/* 
- * Analyze one by one the Cells use connect function. 
+/*
+ * Analyze one by one the Cells use connect function.
  */
 void Map::connectCells(){
     for (int i = 0; i < heigth; i++) {
@@ -70,13 +70,13 @@ void Map::connectCells(){
     }
 }
 
-/* 
+/*
  * Logic to put the white positions
  * Ex: 11111
-       10101
-       11111
-       10101
-       11111
+ *     10101
+ *     11111
+ *     10101
+ *     11111
  */
 void Map::initWhitePositionCells(){
     int decision;
@@ -92,7 +92,6 @@ void Map::initWhitePositionCells(){
         visited.push_back(aux);
     }
 }
-
 
 /*
  * Will random the for positions and look which position choose. (top/bottom/left/right)
@@ -163,7 +162,6 @@ void Map::inside(){
     }
 } // inside
 
-
 /*
  * If the map its odd put middle corridor.
  */
@@ -227,9 +225,8 @@ void Map::middleRandom(){
     }
 }
 
-
 /*
- * If analyze middle will be checking top and bottom if have one connection, 
+ * If analyze middle will be checking top and bottom if have one connection,
  * if analyze inferior will be checking left and right.
  */
 void Map::openRandom(Cell * c, vector<Direction> directions){
@@ -268,7 +265,6 @@ bool Map::insideCondition(int x, int y){
     return (x >= 0 && x < (visited.size())) && (y >= 0 && y < visited[0].size());
 }
 
-
 /*
  * Change to Corridor function.
  */
@@ -286,7 +282,6 @@ void Map::changeToCorridor(Cell * cell){
     corredor->setRight(cell->getRight());
     map[x][y] = corredor;
 }
-
 
 /*
  * Receive one text path and store in the variable map.

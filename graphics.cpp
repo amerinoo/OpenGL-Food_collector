@@ -1,7 +1,11 @@
-#include <GL/glut.h>
 #include "graphics.h"
 
 using namespace std;
+
+const char * Graphics::windowTitle = "Food collection - Merino&Kin";
+
+const int Graphics::cellHeigth = 20;
+const int Graphics::cellWidth  = 20;
 
 // Constructors
 Graphics::Graphics(){ }
@@ -18,21 +22,28 @@ int Graphics::getHeight(){ return heigth; }
 
 int Graphics::getWidth(){ return width; }
 
+int Graphics::getMaxHeigth(){ return glutGet(GLUT_SCREEN_HEIGHT) / Graphics::cellHeigth; }
+
+int Graphics::getMaxWidth(){ return glutGet(GLUT_SCREEN_WIDTH) / Graphics::cellWidth; }
+
 // Setters
 void Graphics::setMap(Map m){ map = m; }
 
 // Methods
 void Graphics::init(int argc, char * argv[]){
+    glutInit(&argc, argv);
+}
+
+void Graphics::start(){
     columns = map.getWidth();
     rows    = map.getHeigth();
-    heigth  = map.getHeigth() * 20;
-    width   = map.getWidth() * 20;
+    heigth  = map.getHeigth() * Graphics::cellWidth;
+    width   = map.getWidth() * Graphics::cellHeigth;
 
-    glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowPosition(50, 50);
+    glutInitWindowPosition(0, 0);
     glutInitWindowSize(width, heigth);
-    glutCreateWindow("Food collection");
+    glutCreateWindow(Graphics::windowTitle);
 
     glutDisplayFunc(myDisplay);
     glutKeyboardFunc(myKeyboard);
@@ -57,10 +68,14 @@ void Graphics::display(){
                 glBegin(GL_QUADS);
                 glColor3f(1, 1, 1);
 
-                glVertex2i(i * a, j * b);             // esquerra dalt
-                glVertex2i((i + 1) * a, j * b);       // dreta dalt
-                glVertex2i((i + 1) * a, (j + 1) * b); // dreta baix
-                glVertex2i(i * a, (j + 1) * b);       // esquerra baix
+                // left up
+                glVertex2i(i * Graphics::cellWidth, j * Graphics::cellHeigth);
+                // right up
+                glVertex2i((i + 1) * Graphics::cellWidth, j * Graphics::cellHeigth);
+                // right down
+                glVertex2i((i + 1) * Graphics::cellWidth, (j + 1) * Graphics::cellHeigth);
+                // left down
+                glVertex2i(i * Graphics::cellWidth, (j + 1) * Graphics::cellHeigth);
 
                 glEnd();
             }
@@ -73,6 +88,7 @@ void Graphics::keyboard(unsigned char c, int x, int y){
     if (c == 'r') {
         Map m = Map(map.getHeigth(), map.getWidth());
         setMap(m);
+        m.print();
         glutPostRedisplay();
     }
 }
