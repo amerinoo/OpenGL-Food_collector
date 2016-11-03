@@ -1,3 +1,9 @@
+/*
+ * Project name: Food collection
+ * Version 1
+ * Student 1: Albert Eduard Merino Pulido
+ * Student 2: Tan Kin Tat
+ */
 #ifndef graphics_h
 #define graphics_h
 #include <GL/glut.h>

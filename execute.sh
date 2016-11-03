@@ -1,3 +1,3 @@
 #!/bin/bash
 make
-./pacman 15 15
+./food_collector 15 15

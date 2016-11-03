@@ -1,3 +1,9 @@
+/*
+ * Project name: Food collection
+ * Version 1
+ * Student 1: Albert Eduard Merino Pulido
+ * Student 2: Tan Kin Tat
+ */
 #ifndef cell_h
 #define cell_h
 #include <iostream>
@@ -35,7 +41,7 @@ class Cell{
     // Print
     void printCell();
 
-    protected:    
+    protected:
     Cell **up, **down, **left, **right;
     int x, y;
     bool visited;

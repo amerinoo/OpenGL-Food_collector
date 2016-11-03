@@ -1,3 +1,8 @@
+# Project name: Food collection
+# Version 1
+# Student 1: Albert Eduard Merino Pulido
+# Student 2: Tan Kin Tat
+
 # The compiler: gcc for C program, define as g++ for C++
 CC = g++
 
