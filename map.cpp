@@ -4,10 +4,7 @@
  * Student 1: Albert Eduard Merino Pulido
  * Student 2: Tan Kin Tat
  */
-#include "wall.h"
-#include "corridor.h"
 #include "map.h"
-#include <stack>
 using namespace std;
 
 // Constructors
@@ -38,6 +35,8 @@ void Map::generate(){
     inferiorRandom();
     middleRandom();
     mirror();
+    map[1][1]->eat();
+    map[1][width-2]->eat();
 }
 
 // Print

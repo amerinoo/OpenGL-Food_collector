@@ -4,6 +4,8 @@
  * Student 1: Albert Eduard Merino Pulido
  * Student 2: Tan Kin Tat
  */
+#ifndef map_h
+#define map_h
 #include <iostream>
 #include <cstdlib>
 #include <vector>
@@ -11,6 +13,8 @@
 #include <algorithm>
 #include <cmath>
 #include <fstream>
+#include <stack>
+
 #include "cell.h"
 #include "corridor.h"
 #include "wall.h"
@@ -66,3 +70,4 @@ class Map{
         vector<vector<Cell*> > map;
         vector<vector<Cell *> > visited;
 };
+#endif

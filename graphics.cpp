@@ -10,9 +10,6 @@ using namespace std;
 
 const char * Graphics::windowTitle = "Food collection - Merino&Kin";
 
-const int Graphics::cellHeigth = 20;
-const int Graphics::cellWidth  = 20;
-
 // Constructors
 Graphics::Graphics(){ }
 
@@ -28,9 +25,9 @@ int Graphics::getHeight(){ return heigth; }
 
 int Graphics::getWidth(){ return width; }
 
-int Graphics::getMaxHeigth(){ return glutGet(GLUT_SCREEN_HEIGHT) / Graphics::cellHeigth; }
+int Graphics::getMaxHeigth(){ return glutGet(GLUT_SCREEN_HEIGHT) / Cell::cellHeigth; }
 
-int Graphics::getMaxWidth(){ return glutGet(GLUT_SCREEN_WIDTH) / Graphics::cellWidth; }
+int Graphics::getMaxWidth(){ return glutGet(GLUT_SCREEN_WIDTH) / Cell::cellWidth; }
 
 // Setters
 void Graphics::setMap(Map m){ map = m; }
@@ -43,8 +40,8 @@ void Graphics::init(int argc, char * argv[]){
 void Graphics::start(){
     columns = map.getWidth();
     rows    = map.getHeigth();
-    heigth  = map.getHeigth() * Graphics::cellWidth;
-    width   = map.getWidth() * Graphics::cellHeigth;
+    heigth  = map.getHeigth() * Cell::cellWidth;
+    width   = map.getWidth() * Cell::cellHeigth;
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowPosition(0, 0);
@@ -53,8 +50,10 @@ void Graphics::start(){
 
     glutDisplayFunc(myDisplay);
     glutKeyboardFunc(myKeyboard);
+    glutSpecialFunc(mySpecial);
 
-    glMatrixMode(GL_PROJECTION);
+    //glMatrixMode(GL_PROJECTION);
+    glMatrixMode(GL_MODELVIEW);
     gluOrtho2D(0, width - 1, heigth - 1, 0);
 
     glutMainLoop();
@@ -63,42 +62,54 @@ void Graphics::start(){
 void Graphics::display(){
     vector<vector<Cell *> > m = map.getMap();
 
-    glClearColor(0, 0, 1, 1);
+    glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
-    int a = width / columns;
-    int b = heigth / rows;
 
-    for (int i = 0; i < columns; i++) {
-        for (int j = 0; j < rows; j++) {
-            if (m[j][i]->getType() == CORRIDOR) {
-                glBegin(GL_QUADS);
-                glColor3f(1, 1, 1);
-
-                // left up
-                glVertex2i(i * Graphics::cellWidth, j * Graphics::cellHeigth);
-                // right up
-                glVertex2i((i + 1) * Graphics::cellWidth, j * Graphics::cellHeigth);
-                // right down
-                glVertex2i((i + 1) * Graphics::cellWidth, (j + 1) * Graphics::cellHeigth);
-                // left down
-                glVertex2i(i * Graphics::cellWidth, (j + 1) * Graphics::cellHeigth);
-
-                glEnd();
-            }
-        }
-    }
+    for (int i = 0; i < columns; i++) 
+        for (int j = 0; j < rows; j++) 
+            m[j][i]->draw(i,j);
+    
     glutSwapBuffers();
 } // display
 
 void Graphics::keyboard(unsigned char c, int x, int y){
-    if (c == 'r') {
+    
+    if(c == 'r'){
         Map m = Map(map.getHeigth(), map.getWidth());
         setMap(m);
         m.print();
         glutPostRedisplay();
+    }else if(c == 'w'){
+        cout << "UP" << endl;
+    }else if(c == 's'){
+        cout << "DOWN" << endl;
+    }else if(c == 'a'){
+        cout << "RIGHT" << endl;
+    }else if(c == 'd'){
+        cout << "LEFT" << endl;
+    }
+}
+
+void Graphics::special(int key, int x, int y){
+    switch(key)
+    {
+    case GLUT_KEY_UP:
+        cout << "UP" << endl;
+        break;
+    case GLUT_KEY_DOWN:
+        cout << "DOWN" << endl;
+        break;
+    case GLUT_KEY_LEFT:
+        cout << "RIGHT" << endl;
+        break;
+    case GLUT_KEY_RIGHT:
+        cout << "LEFT" << endl;
+        break;
     }
 }
 
 void myDisplay(){ Graphics::getInstance().display(); }
 
 void myKeyboard(unsigned char c, int x, int y){ Graphics::getInstance().keyboard(c, x, y); }
+
+void mySpecial(int key, int x, int y){ Graphics::getInstance().special(key, x, y); }

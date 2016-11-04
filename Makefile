@@ -10,12 +10,15 @@ CC = g++
 CFLAGS = -lglut -lGLU -lGL -lm
 
 # Files to compile
-CFILES = main.cpp map.cpp cell.cpp wall.cpp corridor.cpp graphics.cpp
+CFILES = main.cpp graphics.cpp map.cpp cell.cpp wall.cpp corridor.cpp
+
+# Files' headers
+HFILES = graphics.h map.h cell.h wall.h corridor.h 
 
 # The build target executable:
 TARGET = food_collector
 
-all: $(CFILES)
+all: $(CFILES) $(HFILES)
 	$(CC) $(CFILES) -o $(TARGET) $(CFLAGS)
 
 clean:

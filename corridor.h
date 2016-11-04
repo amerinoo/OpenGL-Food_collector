@@ -17,5 +17,10 @@ class Corridor : public Cell{
     // Getters
     CellType getType();
     char getSymbol();
+    bool hasFood();
+    void eat();
+    void draw(int, int);
+	private:
+	bool food;
 };
 #endif

@@ -7,6 +7,9 @@
 #include "cell.h"
 using namespace std;
 
+const int Cell::cellHeigth = 20;
+const int Cell::cellWidth  = 20;
+
 // Constructors
 Cell::Cell(int a, int b){
     x       = a;
@@ -51,3 +54,10 @@ void Cell::setRight(Cell ** c){ right = c; }
 
 // Print
 void Cell::printCell(){ cout << getX() << getY() << endl; }
+
+void Cell::eat(){}
+
+
+bool Cell::hasFood(){return false;}
+
+void Cell::draw(int i, int j){}

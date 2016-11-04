@@ -7,12 +7,14 @@
 #ifndef graphics_h
 #define graphics_h
 #include <GL/glut.h>
+
 #include "map.h"
 
 using namespace std;
 
 void myDisplay();
 void myKeyboard(unsigned char, int, int);
+void mySpecial(int, int, int);
 
 class Graphics{
  public:
@@ -31,6 +33,7 @@ class Graphics{
     void start();
     void display();
     void keyboard(unsigned char, int, int);
+    void special(int, int, int);
  private:
      // Constructors
      Graphics();
@@ -42,7 +45,5 @@ class Graphics{
      int columns, rows;
 
      static const char* windowTitle;
-     static const int cellHeigth;
-     static const int cellWidth;
 };
 #endif

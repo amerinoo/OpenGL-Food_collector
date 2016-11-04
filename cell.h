@@ -7,6 +7,7 @@
 #ifndef cell_h
 #define cell_h
 #include <iostream>
+#include <GL/glut.h>
 using namespace std;
 
 enum CellType{
@@ -17,6 +18,8 @@ enum CellType{
 
 class Cell{
  public:
+    static const int cellHeigth;
+    static const int cellWidth;
     // Constructors
     Cell(int, int);
 
@@ -30,6 +33,10 @@ class Cell{
     Cell** getRight();
     virtual char getSymbol();
     virtual CellType getType();
+    virtual bool hasFood();
+    virtual void eat();
+    virtual void draw(int,int);
+
 
     // Setters
     void setVisited(bool);
