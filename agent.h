@@ -7,6 +7,7 @@
 #ifndef agent_h
 #define agent_h
 #include "cell.h"
+#include "colour.h"
 using namespace std;
 
 class Agent{

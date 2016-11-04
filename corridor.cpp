@@ -28,15 +28,11 @@ void Corridor::eat(){
 }
 
 void Corridor::draw(){
-    int padding;
-
     if (hasFood()) {
-        padding = 7;
-        glColor3f(0, 1, 1);
-    } else  {
-        padding = 0;
-        glColor3f(1, 1, 1);
+        glColor3f(Colours::food.red, Colours::food.green, Colours::food.blue);
+        Cell::draw(7);
+    } else {
+        glColor3f(Colours::corridor.red, Colours::corridor.green, Colours::corridor.blue);
+        Cell::draw();
     }
-
-    Cell::draw(padding);
 }

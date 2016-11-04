@@ -20,6 +20,6 @@ char Wall::getSymbol(){
 }
 
 void Wall::draw(){
-    glColor3f(0, 0, 1);
+    glColor3f(Colours::wall.red, Colours::wall.green, Colours::wall.blue);
     Cell::draw();
 }

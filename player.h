@@ -6,7 +6,6 @@
  */
 #ifndef player_h
 #define player_h
-#include <iostream>
 #include "agent.h"
 
 class Player : public Agent{

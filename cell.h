@@ -8,6 +8,7 @@
 #define cell_h
 #include <iostream>
 #include <GL/glut.h>
+#include "colour.h"
 using namespace std;
 
 enum CellType{

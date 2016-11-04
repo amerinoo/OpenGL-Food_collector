@@ -21,6 +21,6 @@ CellType Enemy::getType(){ return ENEMY; }
 void Enemy::eat(){ }
 
 void Enemy::draw(){
-    glColor3f(1, 0, 0);
+    glColor3f(Colours::enemy.red, Colours::enemy.green, Colours::enemy.blue);
     Agent::draw();
 }

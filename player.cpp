@@ -21,7 +21,6 @@ CellType Player::getType(){ return PLAYER; }
 void Player::eat(){ }
 
 void Player::draw(){
-    glColor3f(1, 1, 0);
-
+    glColor3f(Colours::player.red, Colours::player.green, Colours::player.blue);
     Agent::draw();
 }
