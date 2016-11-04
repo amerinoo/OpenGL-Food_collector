@@ -71,7 +71,6 @@ void Graphics::keyboard(unsigned char c, int x, int y){
     
     if(c == 'r'){
         game.newMap();
-        glutPostRedisplay();
     }else if(c == 'w'){
         cout << "UP" << endl;
     }else if(c == 's'){
@@ -81,6 +80,7 @@ void Graphics::keyboard(unsigned char c, int x, int y){
     }else if(c == 'd'){
         cout << "LEFT" << endl;
     }
+    glutPostRedisplay();
 }
 
 void Graphics::special(int key, int x, int y){

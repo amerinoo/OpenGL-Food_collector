@@ -28,21 +28,20 @@ void Corridor::eat(){
 }
 
 void Corridor::draw(int i, int j){
-    glBegin(GL_QUADS);
-    int padding = 0;
     if(hasFood()){ 
-        glColor3f(0, 1, 0);
-        padding = 7;
-    }else glColor3f(1, 0, 0);
+        int padding = 7;
 
-    // left up
-    glVertex2i(i * Cell::cellWidth + padding, j * Cell::cellHeigth + padding);
-    // right up
-    glVertex2i((i + 1) * Cell::cellWidth - padding, j * Cell::cellHeigth + padding);
-    // right down
-    glVertex2i((i + 1) * Cell::cellWidth - padding, (j + 1) * Cell::cellHeigth - padding);
-    // left down
-    glVertex2i(i * Cell::cellWidth + padding, (j + 1) * Cell::cellHeigth - padding);
+        glColor3f(0, 1, 1);
+        
+        glBegin(GL_QUADS);
 
-    glEnd();
+        glVertex2i(i * Cell::cellWidth + padding, j * Cell::cellHeigth + padding);
+        glVertex2i((i + 1) * Cell::cellWidth - padding, j * Cell::cellHeigth + padding);
+        glVertex2i((i + 1) * Cell::cellWidth - padding, (j + 1) * Cell::cellHeigth - padding);
+        glVertex2i(i * Cell::cellWidth + padding, (j + 1) * Cell::cellHeigth - padding);
+
+        glEnd();
+    }
+
+
 }

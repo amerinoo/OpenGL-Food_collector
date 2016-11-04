@@ -13,6 +13,10 @@ using namespace std;
 Game::Game(){ }
 Game::Game(int heigth, int width){ 
     newMap(heigth,width);
+    player = Player();
+    player.setPosition(map.getMap()[0][0]);
+    enemy = Enemy();
+    enemy.setPosition(map.getMap()[1][width-2]);
 }
 
 
@@ -21,6 +25,9 @@ void Game::draw(){
     for (int i = 0; i < map.getWidth(); i++) 
         for (int j = 0; j < map.getHeigth(); j++) 
             m[j][i]->draw(i,j);
+    
+    //player.draw();
+    enemy.draw();
 }
 
 void Game::newMap(){

@@ -7,6 +7,8 @@
 #ifndef game_h
 #define game_h
 #include "map.h"
+#include "player.h"
+#include "enemy.h"
 
 class Game{
  public:
@@ -22,5 +24,7 @@ class Game{
     void newMap();
  protected:
  	Map map;
+ 	Player player;
+ 	Enemy enemy;
 };
 #endif

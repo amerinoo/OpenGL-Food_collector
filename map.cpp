@@ -35,7 +35,6 @@ void Map::generate(){
     inferiorRandom();
     middleRandom();
     mirror();
-    map[1][width-2]->eat();
 }
 
 // Print
