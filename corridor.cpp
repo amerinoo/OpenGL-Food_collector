@@ -27,21 +27,15 @@ void Corridor::eat(){
 	this->food = false;
 }
 
-void Corridor::draw(int i, int j){
+void Corridor::draw(){
+    int padding;
     if(hasFood()){ 
-        int padding = 7;
-
+        padding = 7;
         glColor3f(0, 1, 1);
-        
-        glBegin(GL_QUADS);
-
-        glVertex2i(i * Cell::cellWidth + padding, j * Cell::cellHeigth + padding);
-        glVertex2i((i + 1) * Cell::cellWidth - padding, j * Cell::cellHeigth + padding);
-        glVertex2i((i + 1) * Cell::cellWidth - padding, (j + 1) * Cell::cellHeigth - padding);
-        glVertex2i(i * Cell::cellWidth + padding, (j + 1) * Cell::cellHeigth - padding);
-
-        glEnd();
+    }else{
+        padding = 0;
+        glColor3f(1, 1, 1);
     }
 
-
+    Cell::draw(padding);
 }

@@ -39,7 +39,8 @@ class Cell{
     virtual CellType getType();
     virtual bool hasFood();
     virtual void eat();
-    virtual void draw(int,int);
+    virtual void draw();
+    void draw(int);
 
 
     // Setters

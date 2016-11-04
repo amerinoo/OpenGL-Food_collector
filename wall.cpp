@@ -19,14 +19,7 @@ char Wall::getSymbol(){
     return '0';
 }
 
-void Wall::draw(int i, int j){
-	glBegin(GL_QUADS);
+void Wall::draw(){
     glColor3f(0, 0, 1);
-
-    glVertex2i(i * Cell::cellWidth, j * Cell::cellHeigth);
-    glVertex2i((i + 1) * Cell::cellWidth, j * Cell::cellHeigth);
-    glVertex2i((i + 1) * Cell::cellWidth, (j + 1) * Cell::cellHeigth);
-    glVertex2i(i * Cell::cellWidth, (j + 1) * Cell::cellHeigth);
-
-    glEnd();
+    Cell::draw();
 }

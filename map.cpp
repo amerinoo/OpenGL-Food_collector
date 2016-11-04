@@ -35,6 +35,7 @@ void Map::generate(){
     inferiorRandom();
     middleRandom();
     mirror();
+    connectCells();
 }
 
 // Print
@@ -46,7 +47,7 @@ void Map::print(){ print(map); }
 void Map::initCells(){
     for (int i = 0; i < heigth; i++) {
         vector<Cell *> aux;
-        for (int j = 0; j < width; j++)
+        for (int j = 0; j < ceil(width/2.0); j++)
             aux.push_back(new Wall(i, j));
         map.push_back(aux);
     }
@@ -66,8 +67,8 @@ void Map::connect(Cell * c){
  * Analyze one by one the Cells use connect function.
  */
 void Map::connectCells(){
-    for (int i = 0; i < heigth; i++) {
-        for (int j = 0; j < ceil(width / 2.0); j++) {
+    for (unsigned int i = 0; i < map.size(); i++) {
+        for (unsigned int j = 0; j < map[0].size(); j++) {
             connect(map[i][j]);
         }
     }
@@ -110,7 +111,7 @@ Cell * Map::randomDiscoverPath(Cell * c){
     shuffle.push_back(RIGHT);
     random_shuffle(shuffle.begin(), shuffle.end());
 
-    for (int i = 0; i < shuffle.size(); i++) {
+    for (unsigned int i = 0; i < shuffle.size(); i++) {
         x = floor((c->getX() - 1) / 2.0);
         y = floor((c->getY() - 1) / 2.0);
         if ((shuffle[i] == UP) && (insideCondition(x - 1, y))) {
@@ -170,10 +171,9 @@ void Map::inside(){
  */
 void Map::middle(){
     int mid = floor(width / 2.0);
-
     if (width % 2 == 1) {
         for (int i = 1; i < heigth - 1; i++)
-            changeToCorridor(map[i][mid]);
+            changeToCorridor(new Corridor(i, mid));
     }
 }
 
@@ -212,7 +212,7 @@ void Map::middleRandom(){
         vector<Direction> directions;
         directions.push_back(UP);
         directions.push_back(DOWN);
-        for (int i = 0; i < visited.size(); ++i) {
+        for (unsigned int i = 0; i < visited.size(); ++i) {
             middle.push_back(visited[i][visited[0].size() - 1]);
         }
 
@@ -235,7 +235,7 @@ void Map::middleRandom(){
 void Map::openRandom(Cell * c, vector<Direction> directions){
     random_shuffle(directions.begin(), directions.end());
 
-    for (int i = 0; i < directions.size(); i++) {
+    for (unsigned int i = 0; i < directions.size(); i++) {
         if ((directions[i] == UP) && ((*c->getUp())->getX() >= 1)) {
             changeToCorridor(*c->getUp());
             break;
@@ -257,14 +257,21 @@ void Map::openRandom(Cell * c, vector<Direction> directions){
  */
 void Map::mirror(){
     for (int i = 0; i <= heigth - 1; i++)
-        for (int j = floor(width / 2.0) - 1; j >= 0; j--)
-            map[i][width - j - 1] = map[i][j];
+        for (int j = floor(width / 2.0) - 1; j >= 0; j--){
+            Cell* cell = map[i][j];
+
+            if(cell->getType() == CORRIDOR){
+                map[i].push_back(new Corridor(i, width-j-1));
+            }else if(cell->getType() == WALL){
+                map[i].push_back(new Wall(i, width-j-1));
+            }
+        }
 }
 
 /*
  * Function to analyze if the pointer its inside the matriz.
  */
-bool Map::insideCondition(int x, int y){
+bool Map::insideCondition(unsigned int x, unsigned int y){
     return (x >= 0 && x < (visited.size())) && (y >= 0 && y < visited[0].size());
 }
 
@@ -318,8 +325,8 @@ void Map::getMapFromFile(char * fname){
  * Print.
  */
 void Map::print(vector<vector<Cell *> > v){
-    for (int i = 0; i < v.size(); i++) {
-        for (int j = 0; j < v[i].size(); j++) {
+    for (unsigned int i = 0; i < v.size(); i++) {
+        for (unsigned int j = 0; j < v[i].size(); j++) {
             cout << v[i][j]->getSymbol();
         }
         cout << endl;

@@ -19,7 +19,7 @@ class Corridor : public Cell{
     char getSymbol();
     bool hasFood();
     void eat();
-    void draw(int, int);
+    void draw();
 	private:
 	bool food;
 };

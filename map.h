@@ -57,7 +57,7 @@ class Map{
         void openRandom(Cell *, vector<Direction>);
         void mirror();
 
-        bool insideCondition(int, int);
+        bool insideCondition(unsigned int, unsigned int);
         void changeToCorridor(Cell *);
     	void initWhitePositionCells();
     	Cell* randomDiscoverPath(Cell*);

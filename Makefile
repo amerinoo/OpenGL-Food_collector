@@ -7,7 +7,7 @@
 CC = g++
 
 # Compiler flags:
-CFLAGS = -lglut -lGLU -lGL -lm
+CFLAGS = -lglut -lGLU -lGL -lm -Wall
 
 # Files to compile
 CFILES = main.cpp graphics.cpp game.cpp map.cpp cell.cpp wall.cpp corridor.cpp agent.cpp player.cpp enemy.cpp

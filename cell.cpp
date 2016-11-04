@@ -54,11 +54,24 @@ void Cell::setLeft(Cell ** c){ left = c; }
 void Cell::setRight(Cell ** c){ right = c; }
 
 // Print
-void Cell::printCell(){ cout << getX() << getY() << endl; }
+void Cell::printCell(){ cout << getX() << " " << getY() << endl; }
 
 void Cell::eat(){}
 
 
 bool Cell::hasFood(){return false;}
 
-void Cell::draw(int i, int j){}
+void Cell::draw(){
+	draw(0);
+}
+
+void Cell::draw(int padding){
+    glBegin(GL_QUADS);
+
+    glVertex2i(getY() * Cell::cellWidth + padding, getX() * Cell::cellHeigth + padding);
+    glVertex2i((getY() + 1) * Cell::cellWidth - padding, getX() * Cell::cellHeigth + padding);
+    glVertex2i((getY() + 1) * Cell::cellWidth - padding, (getX() + 1) * Cell::cellHeigth - padding);
+    glVertex2i(getY() * Cell::cellWidth + padding, (getX() + 1) * Cell::cellHeigth - padding);
+
+    glEnd();
+}

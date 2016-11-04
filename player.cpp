@@ -25,12 +25,7 @@ void Player::eat(){}
 void Player::draw(){
 	glColor3f(1, 1, 0);
 
-	glBegin(GL_QUADS);
-	
-    glVertex2i(position->getX() * Cell::cellWidth + padding, position->getY() * Cell::cellHeigth + padding);
-    glVertex2i((position->getX() + 1) * Cell::cellWidth - padding, position->getY() * Cell::cellHeigth + padding);
-    glVertex2i((position->getX() + 1) * Cell::cellWidth - padding, (position->getY() + 1) * Cell::cellHeigth - padding);
-    glVertex2i(position->getX() * Cell::cellWidth + padding, (position->getY() + 1) * Cell::cellHeigth - padding);
+	Agent::draw();
 
-    glEnd();
+    
 }

@@ -17,6 +17,6 @@ class Wall : public Cell{
     // Getters
     CellType getType();
     char getSymbol();
-    void draw(int, int);
+    void draw();
 };
 #endif

@@ -21,7 +21,17 @@ CellType Agent::getType(){return AGENT;}
 
 void Agent::eat(){}
 
-void Agent::draw(){}
+void Agent::draw(){
+
+	glBegin(GL_QUADS);
+	
+    glVertex2i(position->getY() * Cell::cellWidth + padding, position->getX() * Cell::cellHeigth + padding);
+    glVertex2i((position->getY() + 1) * Cell::cellWidth - padding, position->getX() * Cell::cellHeigth + padding);
+    glVertex2i((position->getY() + 1) * Cell::cellWidth - padding, (position->getX() + 1) * Cell::cellHeigth - padding);
+    glVertex2i(position->getY() * Cell::cellWidth + padding, (position->getX() + 1) * Cell::cellHeigth - padding);
+
+    glEnd();
+}
 
 void Agent::setPosition(Cell* cell){
 	position = cell;
