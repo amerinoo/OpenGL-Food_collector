@@ -57,10 +57,10 @@ void Map::initCells(){
  * Connect the Cells - Top, Left, Right, Bottom.
  */
 void Map::connect(Cell * c){
-    if ((c->getX() - 1) >= 0) c->setUp(&map[c->getX() - 1][c->getY()]);
-    if ((c->getX() + 1) <= heigth - 1) c->setDown(&map[c->getX() + 1][c->getY()]);
-    if ((c->getY() - 1) >= 0) c->setLeft(&map[c->getX()][c->getY() - 1]);
-    if ((c->getY() + 1) <= width + 1) c->setRight(&map[c->getX()][c->getY() + 1]);
+    if ((c->getX() - 1) >= 0) c->setUp(map[c->getX() - 1][c->getY()]);
+    if ((c->getX() + 1) <= heigth - 1) c->setDown(map[c->getX() + 1][c->getY()]);
+    if ((c->getY() - 1) >= 0) c->setLeft(map[c->getX()][c->getY() - 1]);
+    if ((c->getY() + 1) <= width + 1) c->setRight(map[c->getX()][c->getY() + 1]);
 }
 
 /*
@@ -116,16 +116,16 @@ Cell * Map::randomDiscoverPath(Cell * c){
         y = floor((c->getY() - 1) / 2.0);
         if ((shuffle[i] == UP) && (insideCondition(x - 1, y))) {
             x--;
-            tempCell = *c->getUp();
+            tempCell = c->getUp();
         } else if ((shuffle[i] == DOWN) && (insideCondition(x + 1, y))) {
             x++;
-            tempCell = *c->getDown();
+            tempCell = c->getDown();
         } else if ((shuffle[i] == LEFT) && (insideCondition(x, y - 1))) {
             y--;
-            tempCell = *c->getLeft();
+            tempCell = c->getLeft();
         } else if ((shuffle[i] == RIGHT) && (insideCondition(x, y + 1))) {
             y++;
-            tempCell = *c->getRight();
+            tempCell = c->getRight();
         }
         if (!visited[x][y]->isVisited()) {
             changeToCorridor(tempCell);
@@ -195,7 +195,7 @@ void Map::inferiorRandom(){
         random_shuffle(shuffle.begin(), shuffle.end());
 
         for (int i = 0; i < (int) shuffle.size() * 0.6; i++) {
-            Cell * temp = *inferior[shuffle[i]]->getDown();
+            Cell * temp = inferior[shuffle[i]]->getDown();
             changeToCorridor(temp);
             openRandom(temp, directions);
         }
@@ -222,7 +222,7 @@ void Map::middleRandom(){
         random_shuffle(shuffle.begin(), shuffle.end());
 
         for (int i = 0; i < shuffle.size() * 0.6; ++i) {
-            Cell * temp = *middle[shuffle[i]]->getRight();
+            Cell * temp = middle[shuffle[i]]->getRight();
             changeToCorridor(temp);
             openRandom(temp, directions);
         }
@@ -237,17 +237,17 @@ void Map::openRandom(Cell * c, vector<Direction> directions){
     random_shuffle(directions.begin(), directions.end());
 
     for (unsigned int i = 0; i < directions.size(); i++) {
-        if ((directions[i] == UP) && ((*c->getUp())->getX() >= 1)) {
-            changeToCorridor(*c->getUp());
+        if ((directions[i] == UP) && (c->getUp()->getX() >= 1)) {
+            changeToCorridor(c->getUp());
             break;
-        } else if ((directions[i] == DOWN) && ((*c->getDown())->getX() <= heigth - 2)) {
-            changeToCorridor(*c->getDown());
+        } else if ((directions[i] == DOWN) && (c->getDown()->getX() <= heigth - 2)) {
+            changeToCorridor(c->getDown());
             break;
-        } else if ((directions[i] == LEFT) && ((*c->getLeft())->getY() >= 1)) {
-            changeToCorridor(*c->getLeft());
+        } else if ((directions[i] == LEFT) && (c->getLeft()->getY() >= 1)) {
+            changeToCorridor(c->getLeft());
             break;
-        } else if ((directions[i] == RIGHT) && ((*c->getRight())->getY() <= floor(width / 2))) {
-            changeToCorridor(*c->getRight());
+        } else if ((directions[i] == RIGHT) && (c->getRight()->getY() <= floor(width / 2))) {
+            changeToCorridor(c->getRight());
             break;
         }
     }
@@ -263,7 +263,7 @@ void Map::mirror(){
 
             if (cell->getType() == CORRIDOR) {
                 map[i].push_back(new Corridor(i, width - j - 1));
-            } else if (cell->getType() == WALL)   {
+            } else if (cell->getType() == WALL) {
                 map[i].push_back(new Wall(i, width - j - 1));
             }
         }

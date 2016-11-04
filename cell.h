@@ -32,10 +32,10 @@ class Cell{
     int getX();
     int getY();
     bool isVisited();
-    Cell** getUp();
-    Cell** getDown();
-    Cell** getLeft();
-    Cell** getRight();
+    Cell* getUp();
+    Cell* getDown();
+    Cell* getLeft();
+    Cell* getRight();
     virtual char getSymbol();
     virtual CellType getType();
     virtual bool hasFood();
@@ -46,16 +46,16 @@ class Cell{
 
     // Setters
     void setVisited(bool);
-    void setUp(Cell**);
-    void setDown(Cell**);
-    void setLeft(Cell**);
-    void setRight(Cell**);
+    void setUp(Cell*);
+    void setDown(Cell*);
+    void setLeft(Cell*);
+    void setRight(Cell*);
 
     // Print
-    void printCell();
+    void print();
 
     protected:
-    Cell **up, **down, **left, **right;
+    Cell *up, *down, *left, *right;
     int x, y;
     bool visited;
 };

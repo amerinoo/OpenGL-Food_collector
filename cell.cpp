@@ -31,13 +31,13 @@ int Cell::getY(){ return y; }
 
 bool Cell::isVisited(){ return visited; }
 
-Cell ** Cell::getUp(){ return up; }
+Cell * Cell::getUp(){ return up; }
 
-Cell ** Cell::getDown(){ return down; }
+Cell * Cell::getDown(){ return down; }
 
-Cell ** Cell::getLeft(){ return left; }
+Cell * Cell::getLeft(){ return left; }
 
-Cell ** Cell::getRight(){ return right; }
+Cell * Cell::getRight(){ return right; }
 
 CellType Cell::getType(){ return CELL; }
 
@@ -46,16 +46,16 @@ char Cell::getSymbol(){ return '_'; }
 // Setters
 void Cell::setVisited(bool b){ visited = b; }
 
-void Cell::setUp(Cell ** c){ up = c; }
+void Cell::setUp(Cell * c){ up = c; }
 
-void Cell::setDown(Cell ** c){ down = c; }
+void Cell::setDown(Cell * c){ down = c; }
 
-void Cell::setLeft(Cell ** c){ left = c; }
+void Cell::setLeft(Cell * c){ left = c; }
 
-void Cell::setRight(Cell ** c){ right = c; }
+void Cell::setRight(Cell * c){ right = c; }
 
 // Print
-void Cell::printCell(){ cout << getX() << " " << getY() << endl; }
+void Cell::print(){ cout << getX() << " " << getY() << endl; }
 
 void Cell::eat(){ }
 
