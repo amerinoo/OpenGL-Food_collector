@@ -1,14 +1,14 @@
 /*
  * Project name: Food collection
- * Version 1
+ * Version 2
  * Student 1: Albert Eduard Merino Pulido
  * Student 2: Tan Kin Tat
  */
 #include "wall.h"
 
 // Constructors
-Wall::Wall(int a, int b):
-    Cell(a, b){ }
+Wall::Wall(int a, int b)
+    : Cell(a, b){ }
 
 // Getters
 CellType Wall::getType(){

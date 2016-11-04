@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 1
+ * Version 2
  * Student 1: Albert Eduard Merino Pulido
  * Student 2: Tan Kin Tat
  */
@@ -11,7 +11,8 @@ const int Cell::cellHeigth = 20;
 const int Cell::cellWidth  = 20;
 
 // Constructors
-Cell::Cell(){}
+Cell::Cell(){ }
+
 Cell::Cell(int a, int b){
     x       = a;
     y       = b;
@@ -56,13 +57,13 @@ void Cell::setRight(Cell ** c){ right = c; }
 // Print
 void Cell::printCell(){ cout << getX() << " " << getY() << endl; }
 
-void Cell::eat(){}
+void Cell::eat(){ }
 
 
-bool Cell::hasFood(){return false;}
+bool Cell::hasFood(){ return false; }
 
 void Cell::draw(){
-	draw(0);
+    draw(0);
 }
 
 void Cell::draw(int padding){

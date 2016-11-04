@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 1
+ * Version 2
  * Student 1: Albert Eduard Merino Pulido
  * Student 2: Tan Kin Tat
  */
@@ -8,24 +8,20 @@
 using namespace std;
 
 
-    
 // Constructors
 Player::Player(){
     points = 0;
 }
 
+// Getters
+char Player::getSymbol(){ return 'p'; }
 
-// Getters 
-char Player::getSymbol(){return 'p';}
+CellType Player::getType(){ return PLAYER; }
 
-CellType Player::getType(){return PLAYER;}
-
-void Player::eat(){}
+void Player::eat(){ }
 
 void Player::draw(){
-	glColor3f(1, 1, 0);
+    glColor3f(1, 1, 0);
 
-	Agent::draw();
-
-    
+    Agent::draw();
 }

@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 1
+ * Version 2
  * Student 1: Albert Eduard Merino Pulido
  * Student 2: Tan Kin Tat
  */
@@ -8,23 +8,21 @@
 using namespace std;
 
 
-    
 // Constructors
 Agent::Agent(){
-	padding = 5;
+    padding = 5;
 }
 
-// Getters 
-char Agent::getSymbol(){return 'a';}
+// Getters
+char Agent::getSymbol(){ return 'a'; }
 
-CellType Agent::getType(){return AGENT;}
+CellType Agent::getType(){ return AGENT; }
 
-void Agent::eat(){}
+void Agent::eat(){ }
 
 void Agent::draw(){
+    glBegin(GL_QUADS);
 
-	glBegin(GL_QUADS);
-	
     glVertex2i(position->getY() * Cell::cellWidth + padding, position->getX() * Cell::cellHeigth + padding);
     glVertex2i((position->getY() + 1) * Cell::cellWidth - padding, position->getX() * Cell::cellHeigth + padding);
     glVertex2i((position->getY() + 1) * Cell::cellWidth - padding, (position->getX() + 1) * Cell::cellHeigth - padding);
@@ -33,6 +31,6 @@ void Agent::draw(){
     glEnd();
 }
 
-void Agent::setPosition(Cell* cell){
-	position = cell;
+void Agent::setPosition(Cell * cell){
+    position = cell;
 }

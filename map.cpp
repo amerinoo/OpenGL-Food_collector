@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 1
+ * Version 2
  * Student 1: Albert Eduard Merino Pulido
  * Student 2: Tan Kin Tat
  */
@@ -47,7 +47,7 @@ void Map::print(){ print(map); }
 void Map::initCells(){
     for (int i = 0; i < heigth; i++) {
         vector<Cell *> aux;
-        for (int j = 0; j < ceil(width/2.0); j++)
+        for (int j = 0; j < ceil(width / 2.0); j++)
             aux.push_back(new Wall(i, j));
         map.push_back(aux);
     }
@@ -171,6 +171,7 @@ void Map::inside(){
  */
 void Map::middle(){
     int mid = floor(width / 2.0);
+
     if (width % 2 == 1) {
         for (int i = 1; i < heigth - 1; i++)
             changeToCorridor(new Corridor(i, mid));
@@ -257,13 +258,13 @@ void Map::openRandom(Cell * c, vector<Direction> directions){
  */
 void Map::mirror(){
     for (int i = 0; i <= heigth - 1; i++)
-        for (int j = floor(width / 2.0) - 1; j >= 0; j--){
-            Cell* cell = map[i][j];
+        for (int j = floor(width / 2.0) - 1; j >= 0; j--) {
+            Cell * cell = map[i][j];
 
-            if(cell->getType() == CORRIDOR){
-                map[i].push_back(new Corridor(i, width-j-1));
-            }else if(cell->getType() == WALL){
-                map[i].push_back(new Wall(i, width-j-1));
+            if (cell->getType() == CORRIDOR) {
+                map[i].push_back(new Corridor(i, width - j - 1));
+            } else if (cell->getType() == WALL)   {
+                map[i].push_back(new Wall(i, width - j - 1));
             }
         }
 }

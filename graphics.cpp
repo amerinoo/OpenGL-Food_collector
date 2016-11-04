@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 1
+ * Version 2
  * Student 1: Albert Eduard Merino Pulido
  * Student 2: Tan Kin Tat
  */
@@ -38,8 +38,8 @@ void Graphics::init(int argc, char * argv[]){
 }
 
 void Graphics::start(){
-    heigth  = game.getMap().getHeigth() * Cell::cellWidth;
-    width   = game.getMap().getWidth() * Cell::cellHeigth;
+    heigth = game.getMap().getHeigth() * Cell::cellWidth;
+    width  = game.getMap().getWidth() * Cell::cellHeigth;
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowPosition(0, 0);
@@ -50,7 +50,7 @@ void Graphics::start(){
     glutKeyboardFunc(myKeyboard);
     glutSpecialFunc(mySpecial);
 
-    //glMatrixMode(GL_PROJECTION);
+    // glMatrixMode(GL_PROJECTION);
     glMatrixMode(GL_MODELVIEW);
     gluOrtho2D(0, width - 1, heigth - 1, 0);
 
@@ -58,46 +58,43 @@ void Graphics::start(){
 }
 
 void Graphics::display(){
-
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
     game.draw();
-    
+
     glutSwapBuffers();
 } // display
 
 void Graphics::keyboard(unsigned char c, int x, int y){
-    
-    if(c == 'r'){
+    if (c == 'r') {
         game.newMap();
-    }else if(c == 'w'){
+    } else if (c == 'w')   {
         cout << "UP" << endl;
-    }else if(c == 's'){
+    } else if (c == 's')   {
         cout << "DOWN" << endl;
-    }else if(c == 'a'){
+    } else if (c == 'a')   {
         cout << "RIGHT" << endl;
-    }else if(c == 'd'){
+    } else if (c == 'd')   {
         cout << "LEFT" << endl;
     }
     glutPostRedisplay();
 }
 
 void Graphics::special(int key, int x, int y){
-    switch(key)
-    {
-    case GLUT_KEY_UP:
-        cout << "UP" << endl;
-        break;
-    case GLUT_KEY_DOWN:
-        cout << "DOWN" << endl;
-        break;
-    case GLUT_KEY_LEFT:
-        cout << "RIGHT" << endl;
-        break;
-    case GLUT_KEY_RIGHT:
-        cout << "LEFT" << endl;
-        break;
+    switch (key) {
+        case GLUT_KEY_UP:
+            cout << "UP" << endl;
+            break;
+        case GLUT_KEY_DOWN:
+            cout << "DOWN" << endl;
+            break;
+        case GLUT_KEY_LEFT:
+            cout << "RIGHT" << endl;
+            break;
+        case GLUT_KEY_RIGHT:
+            cout << "LEFT" << endl;
+            break;
     }
 }
 

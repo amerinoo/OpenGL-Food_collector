@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 1
+ * Version 2
  * Student 1: Albert Eduard Merino Pulido
  * Student 2: Tan Kin Tat
  */
@@ -33,7 +33,7 @@ int main(int argc, char * argv[]){
         return -1;
     }
 
-    Game game(heigth,width);
+    Game game(heigth, width);
 
     graphics.setGame(game);
     graphics.start();
