@@ -8,7 +8,7 @@
 #define graphics_h
 #include <GL/glut.h>
 
-#include "map.h"
+#include "game.h"
 
 using namespace std;
 
@@ -26,7 +26,7 @@ class Graphics{
     int getMaxWidth();
 
     // Setters
-    void setMap(Map);
+    void setGame(Game);
 
     // Methods
     void init(int argc, char * argv[]);
@@ -40,9 +40,8 @@ class Graphics{
      Graphics(Graphics const&);
      Graphics& operator=(Graphics const&);
  protected:
-     Map map;
+     Game game;
      int heigth, width;
-     int columns, rows;
 
      static const char* windowTitle;
 };

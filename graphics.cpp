@@ -30,7 +30,7 @@ int Graphics::getMaxHeigth(){ return glutGet(GLUT_SCREEN_HEIGHT) / Cell::cellHei
 int Graphics::getMaxWidth(){ return glutGet(GLUT_SCREEN_WIDTH) / Cell::cellWidth; }
 
 // Setters
-void Graphics::setMap(Map m){ map = m; }
+void Graphics::setGame(Game g){ game = g; }
 
 // Methods
 void Graphics::init(int argc, char * argv[]){
@@ -38,10 +38,8 @@ void Graphics::init(int argc, char * argv[]){
 }
 
 void Graphics::start(){
-    columns = map.getWidth();
-    rows    = map.getHeigth();
-    heigth  = map.getHeigth() * Cell::cellWidth;
-    width   = map.getWidth() * Cell::cellHeigth;
+    heigth  = game.getMap().getHeigth() * Cell::cellWidth;
+    width   = game.getMap().getWidth() * Cell::cellHeigth;
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowPosition(0, 0);
@@ -60,14 +58,11 @@ void Graphics::start(){
 }
 
 void Graphics::display(){
-    vector<vector<Cell *> > m = map.getMap();
 
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    for (int i = 0; i < columns; i++) 
-        for (int j = 0; j < rows; j++) 
-            m[j][i]->draw(i,j);
+    game.draw();
     
     glutSwapBuffers();
 } // display
@@ -75,9 +70,7 @@ void Graphics::display(){
 void Graphics::keyboard(unsigned char c, int x, int y){
     
     if(c == 'r'){
-        Map m = Map(map.getHeigth(), map.getWidth());
-        setMap(m);
-        m.print();
+        game.newMap();
         glutPostRedisplay();
     }else if(c == 'w'){
         cout << "UP" << endl;

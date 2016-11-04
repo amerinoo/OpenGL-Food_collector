@@ -13,7 +13,10 @@ using namespace std;
 enum CellType{
     CELL,
     WALL,
-    CORRIDOR
+    CORRIDOR,
+    AGENT,
+    PLAYER,
+    ENEMY
 };
 
 class Cell{
@@ -21,6 +24,7 @@ class Cell{
     static const int cellHeigth;
     static const int cellWidth;
     // Constructors
+    Cell();
     Cell(int, int);
 
     // Getters

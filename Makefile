@@ -10,10 +10,10 @@ CC = g++
 CFLAGS = -lglut -lGLU -lGL -lm
 
 # Files to compile
-CFILES = main.cpp graphics.cpp map.cpp cell.cpp wall.cpp corridor.cpp
+CFILES = main.cpp graphics.cpp game.cpp map.cpp cell.cpp wall.cpp corridor.cpp agent.cpp player.cpp
 
 # Files' headers
-HFILES = graphics.h map.h cell.h wall.h corridor.h 
+HFILES = graphics.h game.h map.h cell.h wall.h corridor.h agent.h player.h
 
 # The build target executable:
 TARGET = food_collector

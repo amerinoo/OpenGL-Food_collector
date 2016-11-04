@@ -6,6 +6,7 @@
  */
 #include <iostream>
 #include "graphics.h"
+#include "game.h"
 using namespace std;
 
 bool
@@ -32,10 +33,9 @@ int main(int argc, char * argv[]){
         return -1;
     }
 
-    Map map(heigth, width);
-    map.print();
+    Game game(heigth,width);
 
-    graphics.setMap(map);
+    graphics.setGame(game);
     graphics.start();
 
     return 0;

@@ -11,6 +11,7 @@ const int Cell::cellHeigth = 20;
 const int Cell::cellWidth  = 20;
 
 // Constructors
+Cell::Cell(){}
 Cell::Cell(int a, int b){
     x       = a;
     y       = b;
