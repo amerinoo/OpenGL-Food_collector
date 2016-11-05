@@ -57,7 +57,7 @@ void Graphics::start(){
 }
 
 void Graphics::display(){
-    glClearColor(0, 0, 0, 1);
+    glClearColor(Colors::background.red, Colors::background.green, Colors::background.blue, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
     game.draw();

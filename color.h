@@ -18,13 +18,11 @@ typedef struct Color{
 
 class Colors{
  public:
-    static const Color cell;
+    static const Color background;
     static const Color wall;
     static const Color corridor;
     static const Color food;
-    static const Color agent;
     static const Color player;
     static const Color enemy;
-    static const Color unknown;
 };
 #endif
