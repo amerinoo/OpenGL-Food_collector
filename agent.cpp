@@ -7,30 +7,18 @@
 #include "agent.h"
 using namespace std;
 
-
 // Constructors
-Agent::Agent(){
-    padding = 5;
-}
+Agent::Agent(){ points = -1; }
 
-// Getters
-char Agent::getSymbol(){ return 'a'; }
-
-CellType Agent::getType(){ return AGENT; }
-
-void Agent::eat(){ }
-
-void Agent::draw(){
-    glBegin(GL_QUADS);
-
-    glVertex2i(position->getY() * Cell::cellWidth + padding, position->getX() * Cell::cellHeigth + padding);
-    glVertex2i((position->getY() + 1) * Cell::cellWidth - padding, position->getX() * Cell::cellHeigth + padding);
-    glVertex2i((position->getY() + 1) * Cell::cellWidth - padding, (position->getX() + 1) * Cell::cellHeigth - padding);
-    glVertex2i(position->getY() * Cell::cellWidth + padding, (position->getX() + 1) * Cell::cellHeigth - padding);
-
-    glEnd();
-}
+int Agent::getPoints(){ return points; }
 
 void Agent::setPosition(Cell * cell){
     position = cell;
+    if (position->getType() == FOOD)
+        eat();
+}
+
+void Agent::eat(){
+    position->eat();
+    points += 1;
 }

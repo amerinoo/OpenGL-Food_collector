@@ -11,13 +11,16 @@ using namespace std;
 // Constructors
 Game::Game(){ }
 
-Game::Game(int heigth, int width){
-    newMap(heigth, width);
-    player = Player();
-    player.setPosition(map.getMap()[1][1]);
-    enemy = Enemy();
-    enemy.setPosition(map.getMap()[1][width - 2]);
+Game::Game(int height, int width){
+    this->height = height;
+    this->width  = width;
+    newGame();
 }
+
+// Getters
+int Game::getHeight(){ return height; }
+
+int Game::getWidth(){ return width; }
 
 void Game::draw(){
     vector<vector<Cell *> > m = map.getMap();
@@ -29,13 +32,15 @@ void Game::draw(){
     enemy.draw();
 }
 
-void Game::newMap(){
-    newMap(map.getHeigth(), map.getWidth());
-}
-
-void Game::newMap(int heigth, int width){
-    map = Map(heigth, width);
+void Game::newGame(){
+    newMap();
+    player = Player();
+    player.setPosition(map.getMap()[1][1]);
+    enemy = Enemy();
+    enemy.setPosition(map.getMap()[1][width - 2]);
     map.print();
 }
 
-Map Game::getMap(){ return map; }
+void Game::newMap(){
+    map = Map(height, width);
+}

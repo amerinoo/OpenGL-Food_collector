@@ -8,25 +8,39 @@
 #define cell_h
 #include <iostream>
 #include <GL/glut.h>
-#include "colour.h"
+#include "color.h"
 using namespace std;
 
 enum CellType{
     CELL,
     WALL,
     CORRIDOR,
+    FOOD,
     AGENT,
     PLAYER,
     ENEMY
 };
 
+typedef struct CellProperties{
+    const char symbol;
+    const Color color;
+    const int padding;
+    CellProperties(const char symbol, const Color color, const int padding);
+} CellProperties;
+
 class Cell{
  public:
     static const int cellHeigth;
     static const int cellWidth;
+
+    static const CellProperties wallProperties;
+    static const CellProperties corridorProperties;
+    static const CellProperties foodProperties;
+    static const CellProperties playerProperties;
+    static const CellProperties enemyProperties;
     // Constructors
     Cell();
-    Cell(int, int);
+    Cell(int, int, CellType);
 
     // Getters
     int getX();
@@ -36,12 +50,11 @@ class Cell{
     Cell* getDown();
     Cell* getLeft();
     Cell* getRight();
-    virtual char getSymbol();
+    char getSymbol();
     virtual CellType getType();
     virtual bool hasFood();
     virtual void eat();
-    virtual void draw();
-    void draw(int);
+    void draw();
 
 
     // Setters
@@ -50,13 +63,16 @@ class Cell{
     void setDown(Cell*);
     void setLeft(Cell*);
     void setRight(Cell*);
+    void setCellType(CellType);
 
     // Print
     void print();
-
-    protected:
-    Cell *up, *down, *left, *right;
+ private:
+    CellProperties getProperties();
+ protected:
+    CellType cellType;
     int x, y;
     bool visited;
+    Cell *up, *down, *left, *right;
 };
 #endif

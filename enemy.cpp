@@ -9,18 +9,9 @@ using namespace std;
 
 
 // Constructors
-Enemy::Enemy(){
-    points = 0;
-}
+Enemy::Enemy() : Agent(){ }
 
-// Getters
-char Enemy::getSymbol(){ return 'e'; }
-
-CellType Enemy::getType(){ return ENEMY; }
-
-void Enemy::eat(){ }
-
-void Enemy::draw(){
-    glColor3f(Colours::enemy.red, Colours::enemy.green, Colours::enemy.blue);
-    Agent::draw();
+void Enemy::setPosition(Cell * cell){
+    Agent::setPosition(cell);
+    cell->setCellType(ENEMY);
 }

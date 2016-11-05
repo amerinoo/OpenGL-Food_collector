@@ -16,8 +16,8 @@
 #include <stack>
 
 #include "cell.h"
-#include "corridor.h"
-#include "wall.h"
+#include "player.h"
+#include "enemy.h"
 
 using namespace std;
 
@@ -56,9 +56,9 @@ class Map{
         void middleRandom();
         void openRandom(Cell *, vector<Direction>);
         void mirror();
+        void initMap();
 
         bool insideCondition(unsigned int, unsigned int);
-        void changeToCorridor(Cell *);
     	void initWhitePositionCells();
     	Cell* randomDiscoverPath(Cell*);
 

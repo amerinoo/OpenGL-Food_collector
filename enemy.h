@@ -6,7 +6,6 @@
  */
 #ifndef enemy_h
 #define enemy_h
-#include <iostream>
 #include "agent.h"
 
 class Enemy : public Agent{
@@ -14,11 +13,7 @@ class Enemy : public Agent{
     // Constructors
     Enemy();
 
-    // Getters
-    CellType getType();
-    char getSymbol();
-
-    void eat();
-    void draw();
+    // Setters
+    void setPosition(Cell*);
 };
 #endif

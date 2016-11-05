@@ -14,6 +14,7 @@ Map::Map(int a, int b){
     heigth = a;
     width  = b;
     generate();
+    initMap();
 }
 
 Map::Map(char fname[]){ getMapFromFile(fname); }
@@ -38,6 +39,13 @@ void Map::generate(){
     connectCells();
 }
 
+void Map::initMap(){
+    for (unsigned int i = 0; i < map.size(); i++)
+        for (unsigned int j = 0; j < map[0].size(); j++)
+            if (map[i][j]->getType() == CORRIDOR)
+                map[i][j]->setCellType(FOOD);
+}
+
 // Print
 void Map::print(){ print(map); }
 
@@ -48,7 +56,7 @@ void Map::initCells(){
     for (int i = 0; i < heigth; i++) {
         vector<Cell *> aux;
         for (int j = 0; j < ceil(width / 2.0); j++)
-            aux.push_back(new Wall(i, j));
+            aux.push_back(new Cell(i, j, WALL));
         map.push_back(aux);
     }
 }
@@ -90,7 +98,7 @@ void Map::initWhitePositionCells(){
     for (int i = 1; i < heigth - 1; i += 2) {
         vector<Cell *> aux;
         for (int j = 1; j < decision; j += 2) {
-            changeToCorridor(map[i][j]);
+            map[i][j]->setCellType(CORRIDOR);
             aux.push_back(map[i][j]);
         }
         visited.push_back(aux);
@@ -128,7 +136,7 @@ Cell * Map::randomDiscoverPath(Cell * c){
             tempCell = c->getRight();
         }
         if (!visited[x][y]->isVisited()) {
-            changeToCorridor(tempCell);
+            tempCell->setCellType(CORRIDOR);
             return visited[x][y];
         }
     }
@@ -174,7 +182,7 @@ void Map::middle(){
 
     if (width % 2 == 1) {
         for (int i = 1; i < heigth - 1; i++)
-            changeToCorridor(new Corridor(i, mid));
+            map[i][mid]->setCellType(CORRIDOR);
     }
 }
 
@@ -196,7 +204,7 @@ void Map::inferiorRandom(){
 
         for (int i = 0; i < (int) shuffle.size() * 0.6; i++) {
             Cell * temp = inferior[shuffle[i]]->getDown();
-            changeToCorridor(temp);
+            temp->setCellType(CORRIDOR);
             openRandom(temp, directions);
         }
     }
@@ -223,7 +231,7 @@ void Map::middleRandom(){
 
         for (int i = 0; i < shuffle.size() * 0.6; ++i) {
             Cell * temp = middle[shuffle[i]]->getRight();
-            changeToCorridor(temp);
+            temp->setCellType(CORRIDOR);
             openRandom(temp, directions);
         }
     }
@@ -238,16 +246,16 @@ void Map::openRandom(Cell * c, vector<Direction> directions){
 
     for (unsigned int i = 0; i < directions.size(); i++) {
         if ((directions[i] == UP) && (c->getUp()->getX() >= 1)) {
-            changeToCorridor(c->getUp());
+            c->getUp()->setCellType(CORRIDOR);
             break;
         } else if ((directions[i] == DOWN) && (c->getDown()->getX() <= heigth - 2)) {
-            changeToCorridor(c->getDown());
+            c->getDown()->setCellType(CORRIDOR);
             break;
         } else if ((directions[i] == LEFT) && (c->getLeft()->getY() >= 1)) {
-            changeToCorridor(c->getLeft());
+            c->getLeft()->setCellType(CORRIDOR);
             break;
         } else if ((directions[i] == RIGHT) && (c->getRight()->getY() <= floor(width / 2))) {
-            changeToCorridor(c->getRight());
+            c->getRight()->setCellType(CORRIDOR);
             break;
         }
     }
@@ -262,9 +270,9 @@ void Map::mirror(){
             Cell * cell = map[i][j];
 
             if (cell->getType() == CORRIDOR) {
-                map[i].push_back(new Corridor(i, width - j - 1));
+                map[i].push_back(new Cell(i, width - j - 1, CORRIDOR));
             } else if (cell->getType() == WALL) {
-                map[i].push_back(new Wall(i, width - j - 1));
+                map[i].push_back(new Cell(i, width - j - 1, WALL));
             }
         }
 }
@@ -274,24 +282,6 @@ void Map::mirror(){
  */
 bool Map::insideCondition(unsigned int x, unsigned int y){
     return (x >= 0 && x < (visited.size())) && (y >= 0 && y < visited[0].size());
-}
-
-/*
- * Change to Corridor function.
- */
-void Map::changeToCorridor(Cell * cell){
-    int x, y;
-
-    x = cell->getX();
-    y = cell->getY();
-
-    Cell * corredor = new Corridor(x, y);
-    corredor->setVisited(cell->isVisited());
-    corredor->setUp(cell->getUp());
-    corredor->setDown(cell->getDown());
-    corredor->setLeft(cell->getLeft());
-    corredor->setRight(cell->getRight());
-    map[x][y] = corredor;
 }
 
 /*
@@ -312,9 +302,9 @@ void Map::getMapFromFile(char * fname){
         vector<Cell *> aux;
         for (int j = 0; j < width; j++) {
             if (s[w] == '0') {
-                aux.push_back(new Wall(i, j));
+                aux.push_back(new Cell(i, j, WALL));
             } else if (s[w] == '.') {
-                aux.push_back(new Corridor(i, j));
+                aux.push_back(new Cell(i, j, CORRIDOR));
             }
             w++;
         }

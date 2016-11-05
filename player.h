@@ -13,11 +13,7 @@ class Player : public Agent{
     // Constructors
     Player();
 
-    // Getters
-    CellType getType();
-    char getSymbol();
-
-    void eat();
-    void draw();
+    // Setters
+    void setPosition(Cell*);
 };
 #endif

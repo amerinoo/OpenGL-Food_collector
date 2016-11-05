@@ -38,8 +38,8 @@ void Graphics::init(int argc, char * argv[]){
 }
 
 void Graphics::start(){
-    heigth = game.getMap().getHeigth() * Cell::cellWidth;
-    width  = game.getMap().getWidth() * Cell::cellHeigth;
+    heigth = game.getHeight() * Cell::cellWidth;
+    width  = game.getWidth() * Cell::cellHeigth;
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowPosition(0, 0);
@@ -50,7 +50,6 @@ void Graphics::start(){
     glutKeyboardFunc(myKeyboard);
     glutSpecialFunc(mySpecial);
 
-    // glMatrixMode(GL_PROJECTION);
     glMatrixMode(GL_MODELVIEW);
     gluOrtho2D(0, width - 1, heigth - 1, 0);
 
@@ -68,14 +67,14 @@ void Graphics::display(){
 
 void Graphics::keyboard(unsigned char c, int x, int y){
     if (c == 'r') {
-        game.newMap();
-    } else if (c == 'w')   {
+        game.newGame();
+    } else if (c == 'w') {
         cout << "UP" << endl;
-    } else if (c == 's')   {
+    } else if (c == 's') {
         cout << "DOWN" << endl;
-    } else if (c == 'a')   {
+    } else if (c == 'a') {
         cout << "RIGHT" << endl;
-    } else if (c == 'd')   {
+    } else if (c == 'd') {
         cout << "LEFT" << endl;
     }
     glutPostRedisplay();

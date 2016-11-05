@@ -7,29 +7,24 @@
 #ifndef agent_h
 #define agent_h
 #include "cell.h"
-#include "colour.h"
 using namespace std;
 
-class Agent{
+class Agent: public Cell{
  public:
-
     // Constructors
     Agent();
 
     // Getters
-    virtual char getSymbol();
-    virtual CellType getType();
-    virtual void eat();
-    virtual void draw();
-
+    int getPoints();
 
     // Setters
-    void setPosition(Cell*);
+    virtual void setPosition(Cell*);
 
-    protected:
-    int x, y;
+    //Methods
+    void eat();
+
+ protected:
     Cell* position;
     int points;
-    int padding;
 };
 #endif

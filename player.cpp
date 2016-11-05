@@ -9,18 +9,9 @@ using namespace std;
 
 
 // Constructors
-Player::Player(){
-    points = 0;
-}
+Player::Player() : Agent(){ }
 
-// Getters
-char Player::getSymbol(){ return 'p'; }
-
-CellType Player::getType(){ return PLAYER; }
-
-void Player::eat(){ }
-
-void Player::draw(){
-    glColor3f(Colours::player.red, Colours::player.green, Colours::player.blue);
-    Agent::draw();
+void Player::setPosition(Cell * cell){
+    Agent::setPosition(cell);
+    cell->setCellType(PLAYER);
 }

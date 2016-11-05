@@ -7,23 +7,26 @@
 #ifndef game_h
 #define game_h
 #include "map.h"
-#include "player.h"
-#include "enemy.h"
 
 class Game{
+
  public:
     // Constructors
     Game();
 	Game(int, int);
 
 	//Getters
-	Map getMap();
+	int getHeight();
+	int getWidth();
 
     void draw();
-    void newMap(int,int);
+    void newGame();
+ private:
     void newMap();
+
  protected:
  	Map map;
+    int width, height;
  	Player player;
  	Enemy enemy;
 };
