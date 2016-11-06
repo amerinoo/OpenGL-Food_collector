@@ -12,8 +12,8 @@ class Enemy : public Agent{
  public:
     // Constructors
     Enemy();
+    Enemy(Cell*);
 
-    // Setters
-    void setPosition(Cell*);
+    void goInitPosition();
 };
 #endif

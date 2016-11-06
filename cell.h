@@ -7,6 +7,7 @@
 #ifndef cell_h
 #define cell_h
 #include <iostream>
+#include <cmath>
 #include <GL/glut.h>
 #include "color.h"
 using namespace std;
@@ -21,17 +22,31 @@ enum CellType{
     ENEMY
 };
 
+enum ShapeType{
+    SQUARE,
+    CIRCLE
+};
+
+enum Direction{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+};
+
 typedef struct CellProperties{
     const char symbol;
     const Color color;
     const int padding;
-    CellProperties(const char symbol, const Color color, const int padding);
+    const ShapeType shape;
+    const int radius;
+    CellProperties(const char symbol, const Color color, const int padding,
+        const ShapeType,const int radius);
 } CellProperties;
 
 class Cell{
  public:
-    static const int cellHeigth;
-    static const int cellWidth;
+    static const int cellSize;
 
     static const CellProperties wallProperties;
     static const CellProperties corridorProperties;
@@ -40,21 +55,21 @@ class Cell{
     static const CellProperties enemyProperties;
     // Constructors
     Cell();
-    Cell(int, int, CellType);
+    Cell(float, float, CellType);
 
     // Getters
-    int getX();
-    int getY();
+    virtual float getX();
+    virtual float getY();
     bool isVisited();
     Cell* getUp();
     Cell* getDown();
     Cell* getLeft();
     Cell* getRight();
     char getSymbol();
-    virtual CellType getType();
+    CellType getType();
     virtual bool hasFood();
     virtual void eat();
-    void draw();
+    virtual void draw();
 
 
     // Setters
@@ -68,11 +83,14 @@ class Cell{
     // Print
     void print();
  private:
-    CellProperties getProperties();
+    float x, y;
+    void drawSquare(CellType, int, int);
+    void drawCircle(CellType, int, int);
  protected:
     CellType cellType;
-    int x, y;
     bool visited;
     Cell *up, *down, *left, *right;
+    void draw(int, int);
+    CellProperties getProperties(CellType cellType);
 };
 #endif

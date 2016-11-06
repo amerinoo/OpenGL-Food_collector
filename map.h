@@ -16,17 +16,11 @@
 #include <stack>
 
 #include "cell.h"
+#include "agent.h"
 #include "player.h"
 #include "enemy.h"
 
 using namespace std;
-
-enum Direction{
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT
-};
 
 class Map{
  public:
@@ -42,6 +36,8 @@ class Map{
 
     // Methods
     void generate();
+    Cell* initPlayer();
+    Cell* initEnemy();
 
     // Print
  	void print();

@@ -7,11 +7,15 @@
 #include "player.h"
 using namespace std;
 
-
 // Constructors
 Player::Player() : Agent(){ }
 
-void Player::setPosition(Cell * cell){
-    Agent::setPosition(cell);
+Player::Player(Cell * cell) : Agent(cell){
+    setCellType(PLAYER);
     cell->setCellType(PLAYER);
+}
+
+void Player::goInitPosition(){
+    setPosition(initPosition);
+    initPosition->setCellType(PLAYER);
 }

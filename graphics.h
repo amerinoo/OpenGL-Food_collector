@@ -15,6 +15,7 @@ using namespace std;
 void myDisplay();
 void myKeyboard(unsigned char, int, int);
 void mySpecial(int, int, int);
+void myIdle();
 
 class Graphics{
  public:
@@ -34,6 +35,7 @@ class Graphics{
     void display();
     void keyboard(unsigned char, int, int);
     void special(int, int, int);
+    void idle();
  private:
      // Constructors
      Graphics();
@@ -42,7 +44,7 @@ class Graphics{
  protected:
      Game game;
      int heigth, width;
-
+     long last_t;
      static const char* windowTitle;
 };
 #endif

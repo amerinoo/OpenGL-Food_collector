@@ -7,11 +7,15 @@
 #include "enemy.h"
 using namespace std;
 
-
 // Constructors
 Enemy::Enemy() : Agent(){ }
 
-void Enemy::setPosition(Cell * cell){
-    Agent::setPosition(cell);
+Enemy::Enemy(Cell * cell) : Agent(cell){
+    setCellType(ENEMY);
     cell->setCellType(ENEMY);
+}
+
+void Enemy::goInitPosition(){
+    setPosition(initPosition);
+    initPosition->setCellType(ENEMY);
 }

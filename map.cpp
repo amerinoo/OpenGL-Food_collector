@@ -44,6 +44,22 @@ void Map::initMap(){
         for (unsigned int j = 0; j < map[0].size(); j++)
             if (map[i][j]->getType() == CORRIDOR)
                 map[i][j]->setCellType(FOOD);
+
+    map[Agent::initX][width - 1 - Agent::initY]->setCellType(ENEMY);
+}
+
+Cell * Map::initPlayer(){
+    Cell * player = map[Agent::initX][Agent::initY];
+
+    player->setCellType(PLAYER);
+    return player;
+}
+
+Cell * Map::initEnemy(){
+    Cell * enemy = map[Agent::initX][width - 1 - Agent::initY];
+
+    enemy->setCellType(ENEMY);
+    return enemy;
 }
 
 // Print

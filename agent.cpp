@@ -7,18 +7,104 @@
 #include "agent.h"
 using namespace std;
 
+const int Agent::initX = 1;
+const int Agent::initY = 1;
+
+const int Agent::duration = 250;
+
 // Constructors
-Agent::Agent(){ points = -1; }
+Agent::Agent(){ }
+
+Agent::Agent(Cell * cell){
+    initPosition = cell;
+    state        = QUIET;
+    points       = 0;
+    setPosition(cell);
+}
+
+// Getters
+float Agent::getX(){
+    return position->getX();
+}
+
+float Agent::getY(){
+    return position->getY();
+}
 
 int Agent::getPoints(){ return points; }
 
+State Agent::getState(){ return state; }
+
+Direction Agent::getDirection(){ return direction; }
+
 void Agent::setPosition(Cell * cell){
     position = cell;
-    if (position->getType() == FOOD)
-        eat();
+}
+
+void Agent::goInitPosition(){ std::cout << "Agent - goInitPosition()" << std::endl; }
+
+void Agent::initMovement(Direction direction, int duration){
+    float widthTranslation  = 0;
+    float heightTranslation = 0;
+
+    if (direction == UP) heightTranslation = -Cell::cellSize;
+    else if (direction == DOWN) heightTranslation = Cell::cellSize;
+    else if (direction == LEFT) widthTranslation = -Cell::cellSize;
+    else if (direction == RIGHT) widthTranslation = Cell::cellSize;
+
+
+    vx = widthTranslation / duration;
+    vy = heightTranslation / duration;
+    transalationX  = 0;
+    transalationY  = 0;
+    state          = MOVE;
+    time_remaining = duration;
+}
+
+void Agent::integrate(long t){
+    if (state == MOVE && t < time_remaining) {
+        transalationX  += vx * t;
+        transalationY  += vy * t;
+        time_remaining -= t;
+    } else if (state == MOVE && t >= time_remaining) {
+        transalationX += vx * time_remaining;
+        transalationY += vy * time_remaining;
+        state          = QUIET;
+
+        position = nextPosition;
+        position->setCellType(getType());
+        move(direction);
+    }
 }
 
 void Agent::eat(){
     position->eat();
     points += 1;
 }
+
+void Agent::move(Direction direction){
+    Cell * cell;
+
+    if (direction == UP) cell = position->getUp();
+    else if (direction == DOWN) cell = position->getDown();
+    else if (direction == LEFT) cell = position->getLeft();
+    else if (direction == RIGHT) cell = position->getRight();
+
+    this->direction = direction;
+    if (cell->getType() != WALL) {
+        position->setCellType(CORRIDOR);
+        if (position->getType() == ENEMY || position->getType() == PLAYER) {
+            goInitPosition();
+            return;
+        }
+        if (cell->hasFood()) {
+            eat();
+        }
+        initMovement(direction, Agent::duration);
+        nextPosition = cell;
+    }
+} // move
+
+void Agent::draw(){
+    if (state == MOVE) Cell::draw(transalationX, transalationY);
+} // draw

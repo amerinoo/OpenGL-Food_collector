@@ -21,6 +21,8 @@ class Game{
 
     void draw();
     void newGame();
+    void integrate(long);
+    void moveAgent(CellType, Direction);
  private:
     void newMap();
 

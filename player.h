@@ -12,8 +12,8 @@ class Player : public Agent{
  public:
     // Constructors
     Player();
+    Player(Cell*);
 
-    // Setters
-    void setPosition(Cell*);
+    void goInitPosition();
 };
 #endif

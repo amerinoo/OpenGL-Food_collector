@@ -34,11 +34,22 @@ void Game::draw(){
 
 void Game::newGame(){
     newMap();
-    player = Player();
-    player.setPosition(map.getMap()[1][1]);
-    enemy = Enemy();
-    enemy.setPosition(map.getMap()[1][width - 2]);
+    player = Player(map.initPlayer());
+    enemy  = Enemy(map.initEnemy());
     map.print();
+}
+
+void Game::integrate(long t){
+    player.integrate(t);
+    enemy.integrate(t);
+}
+
+void Game::moveAgent(CellType cellType, Direction direction){
+    if (cellType == PLAYER) {
+        if (player.getDirection() != direction) player.move(direction);
+    } else if (cellType == ENEMY) {
+        if (enemy.getDirection() != direction) enemy.move(direction);
+    }
 }
 
 void Game::newMap(){

@@ -25,9 +25,9 @@ int Graphics::getHeight(){ return heigth; }
 
 int Graphics::getWidth(){ return width; }
 
-int Graphics::getMaxHeigth(){ return glutGet(GLUT_SCREEN_HEIGHT) / Cell::cellHeigth; }
+int Graphics::getMaxHeigth(){ return glutGet(GLUT_SCREEN_HEIGHT) / Cell::cellSize; }
 
-int Graphics::getMaxWidth(){ return glutGet(GLUT_SCREEN_WIDTH) / Cell::cellWidth; }
+int Graphics::getMaxWidth(){ return glutGet(GLUT_SCREEN_WIDTH) / Cell::cellSize; }
 
 // Setters
 void Graphics::setGame(Game g){ game = g; }
@@ -38,8 +38,9 @@ void Graphics::init(int argc, char * argv[]){
 }
 
 void Graphics::start(){
-    heigth = game.getHeight() * Cell::cellWidth;
-    width  = game.getWidth() * Cell::cellHeigth;
+    heigth = game.getHeight() * Cell::cellSize;
+    width  = game.getWidth() * Cell::cellSize;
+    last_t = 0;
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowPosition(0, 0);
@@ -49,6 +50,7 @@ void Graphics::start(){
     glutDisplayFunc(myDisplay);
     glutKeyboardFunc(myKeyboard);
     glutSpecialFunc(mySpecial);
+    glutIdleFunc(myIdle);
 
     glMatrixMode(GL_MODELVIEW);
     gluOrtho2D(0, width - 1, heigth - 1, 0);
@@ -66,35 +68,48 @@ void Graphics::display(){
 } // display
 
 void Graphics::keyboard(unsigned char c, int x, int y){
-    if (c == 'r') {
-        game.newGame();
-    } else if (c == 'w') {
-        cout << "UP" << endl;
-    } else if (c == 's') {
-        cout << "DOWN" << endl;
-    } else if (c == 'a') {
-        cout << "RIGHT" << endl;
-    } else if (c == 'd') {
-        cout << "LEFT" << endl;
-    }
+    CellType cellType = PLAYER;
+
+    if (c == 'r') game.newGame();
+    else if (c == 'w') game.moveAgent(cellType, UP);
+    else if (c == 's') game.moveAgent(cellType, DOWN);
+    else if (c == 'a') game.moveAgent(cellType, LEFT);
+    else if (c == 'd') game.moveAgent(cellType, RIGHT);
+
     glutPostRedisplay();
 }
 
 void Graphics::special(int key, int x, int y){
+    CellType cellType = ENEMY;
+
     switch (key) {
         case GLUT_KEY_UP:
-            cout << "UP" << endl;
+            game.moveAgent(cellType, UP);
             break;
         case GLUT_KEY_DOWN:
-            cout << "DOWN" << endl;
+            game.moveAgent(cellType, DOWN);
             break;
         case GLUT_KEY_LEFT:
-            cout << "RIGHT" << endl;
+            game.moveAgent(cellType, LEFT);
             break;
         case GLUT_KEY_RIGHT:
-            cout << "LEFT" << endl;
+            game.moveAgent(cellType, RIGHT);
             break;
     }
+    glutPostRedisplay();
+}
+
+void Graphics::idle(){
+    long t = glutGet(GLUT_ELAPSED_TIME);
+
+    if (last_t == 0) {
+        last_t = t;
+    } else {
+        game.integrate(t - last_t);
+        last_t = t;
+    }
+
+    glutPostRedisplay();
 }
 
 void myDisplay(){ Graphics::getInstance().display(); }
@@ -102,3 +117,5 @@ void myDisplay(){ Graphics::getInstance().display(); }
 void myKeyboard(unsigned char c, int x, int y){ Graphics::getInstance().keyboard(c, x, y); }
 
 void mySpecial(int key, int x, int y){ Graphics::getInstance().special(key, x, y); }
+
+void myIdle(){ Graphics::getInstance().idle(); }
