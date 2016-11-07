@@ -93,15 +93,13 @@ void Agent::move(Direction direction){
     this->direction = direction;
     if (cell->getType() != WALL) {
         position->setCellType(CORRIDOR);
-        if (position->getType() == ENEMY || position->getType() == PLAYER) {
+        nextPosition = cell;
+        if (nextPosition->getType() == ENEMY || nextPosition->getType() == PLAYER) {
             goInitPosition();
             return;
         }
-        if (cell->hasFood()) {
-            eat();
-        }
+        if (cell->hasFood()) eat();
         initMovement(direction, Agent::duration);
-        nextPosition = cell;
     }
 } // move
 
