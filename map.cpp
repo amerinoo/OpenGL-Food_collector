@@ -341,44 +341,41 @@ void Map::print(vector<vector<Cell *> > v){
     cout << endl;
 }
 
-
-
 void Map::enemyMoveIntelligence(Enemy enemy){
-    Cell* c = map[enemy.getX()][enemy.getY()];
-    list<Cell*> listPosition = nextPossiblePositions(c);
-    list<Cell*> listFoods = fieldFoods();
+    Cell * c = map[enemy.getX()][enemy.getY()];
 
+    list<Cell *> listPosition = nextPossiblePositions(c);
+    list<Cell *> listFoods    = fieldFoods();
     double bestChoose;
-    Cell* cellChoose;
+    Cell * cellChoose;
 
     bestChoose = 0;
 
-    Cell* currentPosition;
+    Cell * currentPosition;
     Cell * currentFood;
     double bestScore;
-    int i=0;
-    while(!listPosition.empty()){
+    int i = 0;
+    while (!listPosition.empty()) {
         currentPosition = listPosition.back();
         listPosition.pop_back();
 
         bestScore = 0;
         double value;
 
-        list<Cell*> listFoods = fieldFoods();
-        while(!listFoods.empty()){
+        list<Cell *> listFoods = fieldFoods();
+        while (!listFoods.empty()) {
             currentFood = listFoods.back();
             listFoods.pop_back();
 
             value = manhattanDistance(currentPosition, currentFood);
-            if(value == 0.0){
+            if (value == 0.0) {
                 bestScore += 100;
-            }
-            else{
-                bestScore += 1.0/(value*value);
+            } else {
+                bestScore += 1.0 / (value * value);
             }
         }
 
-        if(i == 0 || bestChoose < bestScore){
+        if (i == 0 || bestChoose < bestScore) {
             bestChoose = bestScore;
             cellChoose = currentPosition;
             i++;
@@ -386,65 +383,51 @@ void Map::enemyMoveIntelligence(Enemy enemy){
     }
 
     cout << "Pacman: " << endl;
-    cout << enemy.getX() << " " <<  enemy.getY() << endl;
+    enemy.print();
     cout << "Posicao escolhida: " << endl;
-    cout << cellChoose->getX() << " " <<  cellChoose->getY() << endl;
-
-    enemy.move(DOWN);
-    /*if((cellChoose->getX()-1) == enemy.getX() && cellChoose->getY() == enemy.getY()){
+    cellChoose->print();
+    std::cout << std::endl;
+    if ((cellChoose->getX() - 1) == enemy.getX() && cellChoose->getY() == enemy.getY()) {
         cout << "Entrando baixo?" << endl;
         enemy.move(DOWN);
-    }
-    else if((cellChoose->getX()+1) == enemy.getX() && cellChoose->getY() == enemy.getY()){
+    } else if ((cellChoose->getX() + 1) == enemy.getX() && cellChoose->getY() == enemy.getY()) {
         enemy.move(UP);
         cout << "Entrando cima?" << endl;
-    }
-    else if(cellChoose->getX() == enemy.getX() && (cellChoose->getY()-1) == enemy.getY()){
+    } else if (cellChoose->getX() == enemy.getX() && (cellChoose->getY() - 1) == enemy.getY()) {
         cout << "Entrando direita?" << endl;
         enemy.move(RIGHT);
-    }
-    else {
+    } else {
         cout << "Entrando esquerda?" << endl;
         enemy.move(LEFT);
-    }*/
+    }
+} // enemyMoveIntelligence
 
-    
-}
+list<Cell *> Map::fieldFoods(){
+    list<Cell *> listCell;
 
-
-list<Cell*> Map::fieldFoods(){
-    list<Cell*> listCell;
-
-    for(unsigned int i=0;i<map.size();i++)
-        for(unsigned int j=0;j<map[i].size();j++)
-            if(map[i][j]->getType() == FOOD)
+    for (unsigned int i = 0; i < map.size(); i++)
+        for (unsigned int j = 0; j < map[i].size(); j++)
+            if (map[i][j]->getType() == FOOD)
                 listCell.push_back(map[i][j]);
 
     return listCell;
 }
 
-list<Cell*> Map::nextPossiblePositions(Cell* c){
-    list<Cell*> possibPositions;
+list<Cell *> Map::nextPossiblePositions(Cell * c){
+    list<Cell *> possibPositions;
 
-    if(c->getUp()->getType() != WALL)
+    if (c->getUp()->getType() != WALL)
         possibPositions.push_back(c->getUp());
-    if(c->getDown()->getType() != WALL)
+    if (c->getDown()->getType() != WALL)
         possibPositions.push_back(c->getDown());
-    if(c->getLeft()->getType() != WALL)
+    if (c->getLeft()->getType() != WALL)
         possibPositions.push_back(c->getLeft());
-    if(c->getRight()->getType() != WALL)
+    if (c->getRight()->getType() != WALL)
         possibPositions.push_back(c->getRight());
 
     return possibPositions;
 }
 
-double Map::manhattanDistance(Cell* c1, Cell* c2){
+double Map::manhattanDistance(Cell * c1, Cell * c2){
     return abs(c2->getX() - c1->getX()) + abs(c2->getY() - c1->getY());
 }
-
-
-
-
-
-
-

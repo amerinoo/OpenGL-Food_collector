@@ -33,6 +33,8 @@ Direction Agent::getDirection(){ return direction; }
 void Agent::setPosition(Cell * cell){
     cell->setCellType(getType());
     position = cell;
+    this->setX(position->getX());
+    this->setY(position->getY());
 }
 
 void Agent::goInitPosition(){

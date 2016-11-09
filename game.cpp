@@ -37,6 +37,7 @@ void Game::newGame(){
     newMap();
     player = Player(map.initPlayer());
     enemy  = Enemy(map.initEnemy());
+    map.print();
 }
 
 void Game::integrate(long t){
@@ -55,9 +56,3 @@ void Game::moveAgent(CellType cellType, Direction direction){
 void Game::newMap(){
     map = Map(height, width);
 }
-
-
-
-
-
-
