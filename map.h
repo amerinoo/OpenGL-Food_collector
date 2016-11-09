@@ -14,11 +14,13 @@
 #include <cmath>
 #include <fstream>
 #include <stack>
+#include <list>
 
 #include "cell.h"
 #include "agent.h"
 #include "player.h"
 #include "enemy.h"
+
 
 using namespace std;
 
@@ -38,6 +40,12 @@ class Map{
     void generate();
     Cell* initPlayer();
     Cell* initEnemy();
+
+    void enemyMoveIntelligence(Enemy);
+    list<Cell*> fieldFoods();
+    list<Cell*> nextPossiblePositions(Cell*);
+    double manhattanDistance(Cell*, Cell*);
+
 
     // Print
  	void print();
@@ -65,5 +73,6 @@ class Map{
         int width, heigth;
         vector<vector<Cell*> > map;
         vector<vector<Cell *> > visited;
+
 };
 #endif

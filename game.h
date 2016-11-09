@@ -7,6 +7,7 @@
 #ifndef game_h
 #define game_h
 #include "map.h"
+#include <list>
 
 class Game{
 
@@ -23,6 +24,7 @@ class Game{
     void newGame();
     void integrate(long);
     void moveAgent(CellType, Direction);
+
  private:
     void newMap();
 

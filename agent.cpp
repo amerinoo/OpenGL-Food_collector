@@ -82,6 +82,7 @@ void Agent::eat(){
     points += 1;
 }
 
+
 void Agent::move(Direction direction){
     Cell * cell;
 
@@ -91,6 +92,7 @@ void Agent::move(Direction direction){
     else if (direction == RIGHT) cell = position->getRight();
 
     this->direction = direction;
+    cout << cell->getType() << endl;
     if (cell->getType() != WALL) {
         position->setCellType(CORRIDOR);
         nextPosition = cell;
