@@ -12,10 +12,5 @@ Enemy::Enemy() : Agent(){ }
 
 Enemy::Enemy(Cell * cell) : Agent(cell){
     setCellType(ENEMY);
-    cell->setCellType(ENEMY);
-}
-
-void Enemy::goInitPosition(){
-    setPosition(initPosition);
-    initPosition->setCellType(ENEMY);
+    goInitPosition();
 }

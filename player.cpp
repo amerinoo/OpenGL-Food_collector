@@ -12,10 +12,5 @@ Player::Player() : Agent(){ }
 
 Player::Player(Cell * cell) : Agent(cell){
     setCellType(PLAYER);
-    cell->setCellType(PLAYER);
-}
-
-void Player::goInitPosition(){
-    setPosition(initPosition);
-    initPosition->setCellType(PLAYER);
+    goInitPosition();
 }

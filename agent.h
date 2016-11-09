@@ -25,8 +25,6 @@ class Agent: public Cell{
     Agent(Cell*);
 
     // Getters
-    float getX();
-    float getY();
     int getPoints();
     State getState();
     Direction getDirection();
@@ -36,7 +34,7 @@ class Agent: public Cell{
     void setPosition(Cell*);
 
     //Methods
-    virtual void goInitPosition();
+    void goInitPosition();
     void initMovement(Direction, int);
     void integrate(long);
     void eat();

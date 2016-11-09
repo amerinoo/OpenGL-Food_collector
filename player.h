@@ -13,7 +13,5 @@ class Player : public Agent{
     // Constructors
     Player();
     Player(Cell*);
-
-    void goInitPosition();
 };
 #endif

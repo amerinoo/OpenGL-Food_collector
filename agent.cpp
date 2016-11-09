@@ -19,17 +19,10 @@ Agent::Agent(Cell * cell){
     initPosition = cell;
     state        = QUIET;
     points       = 0;
-    setPosition(cell);
 }
 
 // Getters
-float Agent::getX(){
-    return position->getX();
-}
 
-float Agent::getY(){
-    return position->getY();
-}
 
 int Agent::getPoints(){ return points; }
 
@@ -38,10 +31,14 @@ State Agent::getState(){ return state; }
 Direction Agent::getDirection(){ return direction; }
 
 void Agent::setPosition(Cell * cell){
+    cell->setCellType(getType());
     position = cell;
 }
 
-void Agent::goInitPosition(){ std::cout << "Agent - goInitPosition()" << std::endl; }
+void Agent::goInitPosition(){
+    setPosition(initPosition);
+    direction = NONE;
+}
 
 void Agent::initMovement(Direction direction, int duration){
     float widthTranslation  = 0;
@@ -82,7 +79,6 @@ void Agent::eat(){
     points += 1;
 }
 
-
 void Agent::move(Direction direction){
     Cell * cell;
 
@@ -92,8 +88,9 @@ void Agent::move(Direction direction){
     else if (direction == RIGHT) cell = position->getRight();
 
     this->direction = direction;
-    cout << cell->getType() << endl;
     if (cell->getType() != WALL) {
+        this->setX(position->getX());
+        this->setY(position->getY());
         position->setCellType(CORRIDOR);
         nextPosition = cell;
         if (nextPosition->getType() == ENEMY || nextPosition->getType() == PLAYER) {

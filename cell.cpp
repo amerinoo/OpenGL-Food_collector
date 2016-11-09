@@ -59,6 +59,10 @@ CellType Cell::getType(){ return cellType; }
 char Cell::getSymbol(){ return getProperties(cellType).symbol; }
 
 // Setters
+void Cell::setX(float x){ this->x = x; }
+
+void Cell::setY(float y){ this->y = y; }
+
 void Cell::setVisited(bool b){ visited = b; }
 
 void Cell::setUp(Cell * c){ up = c; }

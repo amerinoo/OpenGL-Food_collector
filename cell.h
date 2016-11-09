@@ -31,7 +31,8 @@ enum Direction{
     UP,
     DOWN,
     LEFT,
-    RIGHT
+    RIGHT,
+    NONE
 };
 
 typedef struct CellProperties{
@@ -53,6 +54,9 @@ class Cell{
     static const CellProperties foodProperties;
     static const CellProperties playerProperties;
     static const CellProperties enemyProperties;
+
+    float x, y;
+
     // Constructors
     Cell();
     Cell(float, float, CellType);
@@ -73,6 +77,8 @@ class Cell{
 
 
     // Setters
+    void setX(float);
+    void setY(float);
     void setVisited(bool);
     void setUp(Cell*);
     void setDown(Cell*);
@@ -83,7 +89,6 @@ class Cell{
     // Print
     void print();
  private:
-    float x, y;
     void drawSquare(CellType, int, int);
     void drawCircle(CellType, int, int);
  protected:

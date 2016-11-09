@@ -13,7 +13,5 @@ class Enemy : public Agent{
     // Constructors
     Enemy();
     Enemy(Cell*);
-
-    void goInitPosition();
 };
 #endif
