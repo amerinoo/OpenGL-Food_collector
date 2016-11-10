@@ -80,7 +80,7 @@ void Graphics::keyboard(unsigned char c, int x, int y){
 }
 
 void Graphics::special(int key, int x, int y){
-    CellType cellType = ENEMY;
+    CellType cellType = PLAYER;
 
     switch (key) {
         case GLUT_KEY_UP:

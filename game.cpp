@@ -30,7 +30,6 @@ void Game::draw(){
 
     player.draw();
     enemy.draw();
-    map.enemyMoveIntelligence(enemy);
 }
 
 void Game::newGame(){
@@ -41,15 +40,28 @@ void Game::newGame(){
 }
 
 void Game::integrate(long t){
-    player.integrate(t);
-    enemy.integrate(t);
+    if (player.integrate(t)) {
+        player.tryNextDirection();
+        player.move();
+    }
+    if (enemy.integrate(t) || enemy.getState() == QUIET) {
+        Direction d = map.getNextPosition(enemy);
+        enemy.setNextDirection(d);
+        enemy.tryNextDirection();
+        enemy.move();
+    }
 }
 
 void Game::moveAgent(CellType cellType, Direction direction){
     if (cellType == PLAYER) {
-        if (player.getDirection() != direction) player.move(direction);
+        if (player.getState() == QUIET) {
+            player.setDirection(direction);
+            player.move();
+        } else {
+            player.setNextDirection(direction);
+        }
     } else if (cellType == ENEMY) {
-        if (enemy.getDirection() != direction) enemy.move(direction);
+        enemy.setNextDirection(direction);
     }
 }
 

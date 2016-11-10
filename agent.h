@@ -32,19 +32,23 @@ class Agent: public Cell{
 
     // Setters
     void setPosition(Cell*);
+    void setDirection(Direction);
+    void setNextDirection(Direction);
 
     //Methods
     void goInitPosition();
     void initMovement(Direction, int);
-    void integrate(long);
+    bool integrate(long);
     void eat();
-    void move(Direction);
+    void move();
+    void tryNextDirection();
 
  protected:
     Cell* position;
     Cell* nextPosition;
     Cell* initPosition;
     Direction direction;
+    Direction nextDirection;
     int points;
     State state;
     float transalationX, transalationY;

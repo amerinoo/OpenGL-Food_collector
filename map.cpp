@@ -341,69 +341,83 @@ void Map::print(vector<vector<Cell *> > v){
     cout << endl;
 }
 
-void Map::enemyMoveIntelligence(Enemy enemy){
+Direction Map::getNextPosition(Enemy enemy){
     Cell * c = map[enemy.getX()][enemy.getY()];
 
-    list<Cell *> listPosition = nextPossiblePositions(c);
-    list<Cell *> listFoods    = fieldFoods();
-    double bestChoose;
-    Cell * cellChoose;
+    vector<Direction> legalActions = getLegalActions(c);
+    vector<float> scores;
 
-    bestChoose = 0;
-
-    Cell * currentPosition;
-    Cell * currentFood;
-    double bestScore;
-    int i = 0;
-    while (!listPosition.empty()) {
-        currentPosition = listPosition.back();
-        listPosition.pop_back();
-
-        bestScore = 0;
-        double value;
-
-        list<Cell *> listFoods = fieldFoods();
-        while (!listFoods.empty()) {
-            currentFood = listFoods.back();
-            listFoods.pop_back();
-
-            value = manhattanDistance(currentPosition, currentFood);
-            if (value == 0.0) {
-                bestScore += 100;
-            } else {
-                bestScore += 1.0 / (value * value);
-            }
-        }
-
-        if (i == 0 || bestChoose < bestScore) {
-            bestChoose = bestScore;
-            cellChoose = currentPosition;
-            i++;
+    for (unsigned int i = 0; i < legalActions.size(); i++) {
+        scores.push_back(evaluationFunction(c, legalActions[i]));
+    }
+    float bestScore = -99999999999999999;
+    for (unsigned int i = 0; i < scores.size(); i++) {
+        if (scores[i] > bestScore) {
+            bestScore = scores[i];
         }
     }
-
-    cout << "Pacman: " << endl;
-    enemy.print();
-    cout << "Posicao escolhida: " << endl;
-    cellChoose->print();
-    std::cout << std::endl;
-    if ((cellChoose->getX() - 1) == enemy.getX() && cellChoose->getY() == enemy.getY()) {
-        cout << "Entrando baixo?" << endl;
-        enemy.move(DOWN);
-    } else if ((cellChoose->getX() + 1) == enemy.getX() && cellChoose->getY() == enemy.getY()) {
-        enemy.move(UP);
-        cout << "Entrando cima?" << endl;
-    } else if (cellChoose->getX() == enemy.getX() && (cellChoose->getY() - 1) == enemy.getY()) {
-        cout << "Entrando direita?" << endl;
-        enemy.move(RIGHT);
-    } else {
-        cout << "Entrando esquerda?" << endl;
-        enemy.move(LEFT);
+    vector<int> bestIndices;
+    for (unsigned int i = 0; i < scores.size(); i++) {
+        if (scores[i] == bestScore) {
+            bestIndices.push_back(i);
+        }
     }
+    random_shuffle(bestIndices.begin(), bestIndices.end());
+    switch (legalActions[bestIndices[0]]) {
+        case UP:
+            std::cout << "Best: UP" << std::endl;
+            break;
+
+        case DOWN:
+            std::cout << "Best: DOWN" << std::endl;
+            break;
+
+        case LEFT:
+            std::cout << "Best: LEFT" << std::endl;
+            break;
+
+        case RIGHT:
+            std::cout << "Best: RIGHT" << std::endl;
+            break;
+    }
+    return legalActions[bestIndices[0]];
 } // enemyMoveIntelligence
 
-list<Cell *> Map::fieldFoods(){
-    list<Cell *> listCell;
+float Map::evaluationFunction(Cell * currentPosition, Direction direction){
+    float totalScore = 0.0;
+
+    vector<Cell *> food = getFood();
+    for (unsigned int i = 0; i < food.size(); i++) {
+        int d = manhattanDistance(currentPosition, food[i]);
+        if (d == 1.0) {
+            totalScore += 100;
+        } else {
+            totalScore += 1.0 / (d * d);
+        }
+    }
+    switch (direction) {
+        case UP:
+            std::cout << "UP ";
+            break;
+
+        case DOWN:
+            std::cout << "DOWN ";
+            break;
+
+        case LEFT:
+            std::cout << "LEFT ";
+            break;
+
+        case RIGHT:
+            std::cout << "RIGHT ";
+            break;
+    }
+    std::cout << totalScore << std::endl;
+    return totalScore;
+} // evaluationFunction
+
+vector<Cell *> Map::getFood(){
+    vector<Cell *> listCell;
 
     for (unsigned int i = 0; i < map.size(); i++)
         for (unsigned int j = 0; j < map[i].size(); j++)
@@ -413,19 +427,19 @@ list<Cell *> Map::fieldFoods(){
     return listCell;
 }
 
-list<Cell *> Map::nextPossiblePositions(Cell * c){
-    list<Cell *> possibPositions;
+vector<Direction> Map::getLegalActions(Cell * c){
+    vector<Direction> legalActions;
 
     if (c->getUp()->getType() != WALL)
-        possibPositions.push_back(c->getUp());
+        legalActions.push_back(UP);
     if (c->getDown()->getType() != WALL)
-        possibPositions.push_back(c->getDown());
+        legalActions.push_back(DOWN);
     if (c->getLeft()->getType() != WALL)
-        possibPositions.push_back(c->getLeft());
+        legalActions.push_back(LEFT);
     if (c->getRight()->getType() != WALL)
-        possibPositions.push_back(c->getRight());
+        legalActions.push_back(RIGHT);
 
-    return possibPositions;
+    return legalActions;
 }
 
 double Map::manhattanDistance(Cell * c1, Cell * c2){

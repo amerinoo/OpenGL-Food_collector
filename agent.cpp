@@ -37,9 +37,18 @@ void Agent::setPosition(Cell * cell){
     this->setY(position->getY());
 }
 
+void Agent::setDirection(Direction direction){
+    this->direction = direction;
+}
+
+void Agent::setNextDirection(Direction nextDirection){
+    this->nextDirection = nextDirection;
+}
+
 void Agent::goInitPosition(){
     setPosition(initPosition);
-    direction = NONE;
+    direction     = NONE;
+    nextDirection = NONE;
 }
 
 void Agent::initMovement(Direction direction, int duration){
@@ -60,7 +69,7 @@ void Agent::initMovement(Direction direction, int duration){
     time_remaining = duration;
 }
 
-void Agent::integrate(long t){
+bool Agent::integrate(long t){
     if (state == MOVE && t < time_remaining) {
         transalationX  += vx * t;
         transalationY  += vy * t;
@@ -72,8 +81,9 @@ void Agent::integrate(long t){
 
         position = nextPosition;
         position->setCellType(getType());
-        move(direction);
+        return true;
     }
+    return false;
 }
 
 void Agent::eat(){
@@ -81,20 +91,19 @@ void Agent::eat(){
     points += 1;
 }
 
-void Agent::move(Direction direction){
-    Cell * cell;
+void Agent::move(){
+    Cell * cell = NULL;
 
     if (direction == UP) cell = position->getUp();
     else if (direction == DOWN) cell = position->getDown();
     else if (direction == LEFT) cell = position->getLeft();
     else if (direction == RIGHT) cell = position->getRight();
 
-    this->direction = direction;
-    if (cell->getType() != WALL) {
+    if (cell != NULL && cell->getType() != WALL) {
         this->setX(position->getX());
         this->setY(position->getY());
         position->setCellType(CORRIDOR);
-        nextPosition = cell;
+        nextPosition = cell; /* message *//* message */
         if (nextPosition->getType() == ENEMY || nextPosition->getType() == PLAYER) {
             goInitPosition();
             return;
@@ -103,6 +112,19 @@ void Agent::move(Direction direction){
         initMovement(direction, Agent::duration);
     }
 } // move
+
+void Agent::tryNextDirection(){
+    Cell * cell = NULL;
+
+    if (nextDirection == UP) cell = position->getUp();
+    else if (nextDirection == DOWN) cell = position->getDown();
+    else if (nextDirection == LEFT) cell = position->getLeft();
+    else if (nextDirection == RIGHT) cell = position->getRight();
+    if ((cell != NULL && cell->getType() != WALL) || direction == NONE) {
+        direction     = nextDirection;
+        nextDirection = NONE;
+    }
+}
 
 void Agent::draw(){
     if (state == MOVE) Cell::draw(transalationX, transalationY);
