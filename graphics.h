@@ -7,7 +7,6 @@
 #ifndef graphics_h
 #define graphics_h
 #include <GL/glut.h>
-
 #include "game.h"
 
 using namespace std;

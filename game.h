@@ -6,7 +6,8 @@
  */
 #ifndef game_h
 #define game_h
-#include "map.h"
+#include "agent.h"
+#include "strategy.h"
 #include <list>
 
 class Game{
@@ -33,5 +34,6 @@ class Game{
     int width, height;
  	Agent player;
  	Agent enemy;
+    Strategy strategy;
 };
 #endif

@@ -9,15 +9,12 @@
 #include <iostream>
 #include <cmath>
 #include <GL/glut.h>
-#include "color.h"
 using namespace std;
 
 enum CellType{
-
     WALL,
     CORRIDOR,
     FOOD,
-    
     PLAYER,
     ENEMY
 };
@@ -34,6 +31,12 @@ enum Direction{
     RIGHT,
     NONE
 };
+typedef struct Color{
+    const GLfloat red;
+    const GLfloat green;
+    const GLfloat blue;
+    Color(const GLfloat red, const GLfloat green, const GLfloat blue);
+} Color;
 
 typedef struct CellProperties{
     const char symbol;
@@ -48,6 +51,8 @@ typedef struct CellProperties{
 class Cell{
  public:
     static const int cellSize;
+
+    static const Color background;
 
     static const CellProperties wallProperties;
     static const CellProperties corridorProperties;
@@ -88,6 +93,9 @@ class Cell{
 
     // Print
     void print();
+
+    // Methods
+    static GLfloat RGBToGlut(int);
  private:
     void drawSquare(CellType, int, int);
     void drawCircle(CellType, int, int);

@@ -7,9 +7,6 @@
 #include "agent.h"
 using namespace std;
 
-const int Agent::initX = 1;
-const int Agent::initY = 1;
-
 const int Agent::duration = 250;
 
 // Constructors
@@ -30,13 +27,15 @@ int Agent::getScore(){ return score; }
 
 State Agent::getState(){ return state; }
 
+Cell * Agent::getCurrentPosition(){ return currentPosition; }
+
 Direction Agent::getDirection(){ return direction; }
 
 void Agent::setPosition(Cell * cell){
     cell->setCellType(getType());
-    position = cell;
-    this->setX(position->getX());
-    this->setY(position->getY());
+    currentPosition = cell;
+    this->setX(currentPosition->getX());
+    this->setY(currentPosition->getY());
 }
 
 void Agent::setDirection(Direction direction){
@@ -81,28 +80,28 @@ bool Agent::integrate(long t){
         transalationY += vy * time_remaining;
         state          = QUIET;
 
-        position = nextPosition;
-        setPosition(position);
+        currentPosition = nextPosition;
+        setPosition(currentPosition);
         return true;
     }
     return false;
 }
 
 void Agent::eat(){
-    position->eat();
+    currentPosition->eat();
     score += 1;
 }
 
 void Agent::move(){
     Cell * cell = NULL;
 
-    if (direction == UP) cell = position->getUp();
-    else if (direction == DOWN) cell = position->getDown();
-    else if (direction == LEFT) cell = position->getLeft();
-    else if (direction == RIGHT) cell = position->getRight();
+    if (direction == UP) cell = currentPosition->getUp();
+    else if (direction == DOWN) cell = currentPosition->getDown();
+    else if (direction == LEFT) cell = currentPosition->getLeft();
+    else if (direction == RIGHT) cell = currentPosition->getRight();
 
     if (cell != NULL && cell->getType() != WALL) {
-        position->setCellType(CORRIDOR);
+        currentPosition->setCellType(CORRIDOR);
         nextPosition = cell; /* message *//* message */
         if (nextPosition->getType() == ENEMY || nextPosition->getType() == PLAYER) {
             goInitPosition();
@@ -116,10 +115,10 @@ void Agent::move(){
 void Agent::tryNextDirection(){
     Cell * cell = NULL;
 
-    if (nextDirection == UP) cell = position->getUp();
-    else if (nextDirection == DOWN) cell = position->getDown();
-    else if (nextDirection == LEFT) cell = position->getLeft();
-    else if (nextDirection == RIGHT) cell = position->getRight();
+    if (nextDirection == UP) cell = currentPosition->getUp();
+    else if (nextDirection == DOWN) cell = currentPosition->getDown();
+    else if (nextDirection == LEFT) cell = currentPosition->getLeft();
+    else if (nextDirection == RIGHT) cell = currentPosition->getRight();
     if ((cell != NULL && cell->getType() != WALL) || direction == NONE) {
         direction     = nextDirection;
         nextDirection = NONE;

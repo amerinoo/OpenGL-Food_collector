@@ -7,22 +7,33 @@
 #include "cell.h"
 using namespace std;
 
+Color::Color(const GLfloat red, const GLfloat green, const GLfloat blue)
+    : red(Cell::RGBToGlut(red)), green(Cell::RGBToGlut(green)),
+    blue(Cell::RGBToGlut(blue)){ }
+
+const Color Cell::background = Color(0, 0, 0);
+
+GLfloat Cell::RGBToGlut(int num){
+    return num / 255.0;
+}
+
 CellProperties::CellProperties(const char symbol, const Color color,
   const int padding, const ShapeType shape, const int radius)
-    : symbol(symbol), color(color), padding(padding), shape(shape), radius(radius){ }
+    : symbol(symbol), color(color), padding(padding), shape(shape),
+    radius(radius){ }
 
 const int Cell::cellSize = 40;
 
 const CellProperties Cell::wallProperties = CellProperties('0',
-  Colors::wall, Cell::cellSize * 0.0, SQUARE, 0);
+  Color(0, 57, 255), Cell::cellSize * 0.0, SQUARE, 0);
 const CellProperties Cell::corridorProperties = CellProperties('.',
-  Colors::corridor, Cell::cellSize * 0.0, SQUARE, 0);
+  Color(0, 0, 0), Cell::cellSize * 0.0, SQUARE, 0);
 const CellProperties Cell::foodProperties = CellProperties('*',
-  Colors::food, Cell::cellSize * 0.4, CIRCLE, Cell::cellSize * 0.15);
+  Color(224, 128, 234), Cell::cellSize * 0.43, SQUARE, Cell::cellSize * 0.15);
 const CellProperties Cell::playerProperties = CellProperties('p',
-  Colors::player, Cell::cellSize * 0.3, CIRCLE, Cell::cellSize * 0.3);
+  Color(255, 255, 0), Cell::cellSize * 0.25, CIRCLE, Cell::cellSize * 0.3);
 const CellProperties Cell::enemyProperties = CellProperties('e',
-  Colors::enemy, Cell::cellSize * 0.3, CIRCLE, Cell::cellSize * 0.3);
+  Color(255, 0, 0), Cell::cellSize * 0.25, CIRCLE, Cell::cellSize * 0.3);
 
 // Constructors
 Cell::Cell(){ }
@@ -92,7 +103,7 @@ void Cell::draw(){
 
 void Cell::draw(int transalationX, int transalationY){
     Color color     = getProperties(getType()).color;
-    ShapeType shape = getProperties(cellType).shape;
+    ShapeType shape = getProperties(getType()).shape;
 
     glColor3f(color.red, color.green, color.blue);
     if (shape == CIRCLE) {

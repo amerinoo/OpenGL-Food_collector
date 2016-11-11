@@ -7,6 +7,9 @@
 #include "map.h"
 using namespace std;
 
+const int Map::initX = 1;
+const int Map::initY = 1;
+
 // Constructors
 Map::Map(){ }
 
@@ -47,16 +50,14 @@ void Map::initMap(){
 }
 
 Cell * Map::initPlayer(){
-    Cell * player = map[Agent::initX][Agent::initY];
+    Cell * player = map[Map::initX][Map::initY];
 
-    player->setCellType(PLAYER);
     return player;
 }
 
 Cell * Map::initEnemy(){
-    Cell * enemy = map[Agent::initX][width - 1 - Agent::initY];
+    Cell * enemy = map[Map::initX][width - 1 - Map::initY];
 
-    enemy->setCellType(ENEMY);
     return enemy;
 }
 
@@ -339,54 +340,6 @@ void Map::print(vector<vector<Cell *> > v){
     cout << endl;
 }
 
-Direction Map::getNextPosition(Agent enemy){
-    Cell * c = map[enemy.getX()][enemy.getY()];
-
-    vector<Direction> legalActions = getLegalActions(c);
-    vector<float> scores;
-
-    for (unsigned int i = 0; i < legalActions.size(); i++) {
-        scores.push_back(evaluationFunction(c, legalActions[i]));
-    }
-    float bestScore = -99999999999999999;
-    for (unsigned int i = 0; i < scores.size(); i++) {
-        if (scores[i] > bestScore) {
-            bestScore = scores[i];
-        }
-    }
-    vector<int> bestIndices;
-    for (unsigned int i = 0; i < scores.size(); i++) {
-        if (scores[i] == bestScore) {
-            bestIndices.push_back(i);
-        }
-    }
-    random_shuffle(bestIndices.begin(), bestIndices.end());
-    return legalActions[bestIndices[0]];
-} // enemyMoveIntelligence
-
-float Map::evaluationFunction(Cell * currentPosition, Direction direction){
-    float totalScore    = 0.0;
-    Cell * nextPosition = getNextState(currentPosition, direction);
-
-    vector<Cell *> food = getFood();
-    for (unsigned int i = 0; i < food.size(); i++) {
-        int d = manhattanDistance(nextPosition, food[i]);
-        if (d == 0.0) {
-            totalScore += 100;
-        } else {
-            totalScore += 1.0 / (d * d);
-        }
-    }
-    return totalScore;
-} // evaluationFunction
-
-Cell * Map::getNextState(Cell * cell, Direction direction){
-    if (direction == UP) return cell->getUp();
-    else if (direction == DOWN) return cell->getDown();
-    else if (direction == LEFT) return cell->getLeft();
-    else return cell->getRight();
-}
-
 vector<Cell *> Map::getFood(){
     vector<Cell *> listCell;
 
@@ -396,23 +349,4 @@ vector<Cell *> Map::getFood(){
                 listCell.push_back(map[i][j]);
 
     return listCell;
-}
-
-vector<Direction> Map::getLegalActions(Cell * c){
-    vector<Direction> legalActions;
-
-    if (c->getUp()->getType() != WALL)
-        legalActions.push_back(UP);
-    if (c->getDown()->getType() != WALL)
-        legalActions.push_back(DOWN);
-    if (c->getLeft()->getType() != WALL)
-        legalActions.push_back(LEFT);
-    if (c->getRight()->getType() != WALL)
-        legalActions.push_back(RIGHT);
-
-    return legalActions;
-}
-
-double Map::manhattanDistance(Cell * c1, Cell * c2){
-    return abs(c2->getX() - c1->getX()) + abs(c2->getY() - c1->getY());
 }

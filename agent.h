@@ -7,7 +7,7 @@
 #ifndef agent_h
 #define agent_h
 #include <cmath>
-#include "cell.h"
+#include "map.h"
 using namespace std;
 
 enum State{
@@ -17,8 +17,6 @@ enum State{
 
 class Agent: public Cell{
  public:
-     static const int initX;
-     static const int initY;
      static const int duration;
     // Constructors
     Agent();
@@ -27,6 +25,7 @@ class Agent: public Cell{
     // Getters
     int getScore();
     State getState();
+    Cell* getCurrentPosition();
     Direction getDirection();
     void draw();
 
@@ -44,7 +43,7 @@ class Agent: public Cell{
     void tryNextDirection();
 
  protected:
-    Cell* position;
+    Cell* currentPosition;
     Cell* nextPosition;
     Cell* initPosition;
     Direction direction;

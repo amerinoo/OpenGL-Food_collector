@@ -16,13 +16,16 @@
 #include <stack>
 #include <list>
 
-#include "agent.h"
+#include "cell.h"
 
 
 using namespace std;
 
 class Map{
  public:
+     static const int initX;
+     static const int initY;
+     
     // Constructors
     Map();
  	Map(int, int);
@@ -37,14 +40,7 @@ class Map{
     void generate();
     Cell* initPlayer();
     Cell* initEnemy();
-
-    Direction getNextPosition(Agent);
-    vector<Direction> getLegalActions(Cell*);
-    float evaluationFunction(Cell*,Direction);
-    Cell * getNextState(Cell*, Direction);
     vector<Cell*> getFood();
-    double manhattanDistance(Cell*, Cell*);
-
 
     // Print
  	void print();
