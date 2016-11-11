@@ -18,13 +18,13 @@ Agent::Agent(){ }
 Agent::Agent(Cell * cell){
     initPosition = cell;
     state        = QUIET;
-    points       = 0;
+    score        = 0;
 }
 
 // Getters
 
 
-int Agent::getPoints(){ return points; }
+int Agent::getScore(){ return score; }
 
 State Agent::getState(){ return state; }
 
@@ -80,7 +80,7 @@ bool Agent::integrate(long t){
         state          = QUIET;
 
         position = nextPosition;
-        position->setCellType(getType());
+        setPosition(position);
         return true;
     }
     return false;
@@ -88,7 +88,7 @@ bool Agent::integrate(long t){
 
 void Agent::eat(){
     position->eat();
-    points += 1;
+    score += 1;
 }
 
 void Agent::move(){
@@ -100,8 +100,6 @@ void Agent::move(){
     else if (direction == RIGHT) cell = position->getRight();
 
     if (cell != NULL && cell->getType() != WALL) {
-        this->setX(position->getX());
-        this->setY(position->getY());
         position->setCellType(CORRIDOR);
         nextPosition = cell; /* message *//* message */
         if (nextPosition->getType() == ENEMY || nextPosition->getType() == PLAYER) {

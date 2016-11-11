@@ -43,7 +43,8 @@ class Map{
 
     Direction getNextPosition(Enemy);
     vector<Direction> getLegalActions(Cell*);
-    float evaluationFunction(Cell*,Direction);
+    float evaluationFunction(Enemy,Cell*,Direction);
+    Cell * getNextState(Cell*, Direction);
     vector<Cell*> getFood();
     double manhattanDistance(Cell*, Cell*);
 

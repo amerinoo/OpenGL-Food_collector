@@ -348,7 +348,7 @@ Direction Map::getNextPosition(Enemy enemy){
     vector<float> scores;
 
     for (unsigned int i = 0; i < legalActions.size(); i++) {
-        scores.push_back(evaluationFunction(c, legalActions[i]));
+        scores.push_back(evaluationFunction(enemy, c, legalActions[i]));
     }
     float bestScore = -99999999999999999;
     for (unsigned int i = 0; i < scores.size(); i++) {
@@ -363,58 +363,31 @@ Direction Map::getNextPosition(Enemy enemy){
         }
     }
     random_shuffle(bestIndices.begin(), bestIndices.end());
-    switch (legalActions[bestIndices[0]]) {
-        case UP:
-            std::cout << "Best: UP" << std::endl;
-            break;
-
-        case DOWN:
-            std::cout << "Best: DOWN" << std::endl;
-            break;
-
-        case LEFT:
-            std::cout << "Best: LEFT" << std::endl;
-            break;
-
-        case RIGHT:
-            std::cout << "Best: RIGHT" << std::endl;
-            break;
-    }
     return legalActions[bestIndices[0]];
 } // enemyMoveIntelligence
 
-float Map::evaluationFunction(Cell * currentPosition, Direction direction){
-    float totalScore = 0.0;
+float Map::evaluationFunction(Enemy enemy, Cell * currentPosition, Direction direction){
+    float totalScore    = 0.0;
+    Cell * nextPosition = getNextState(currentPosition, direction);
 
     vector<Cell *> food = getFood();
     for (unsigned int i = 0; i < food.size(); i++) {
-        int d = manhattanDistance(currentPosition, food[i]);
-        if (d == 1.0) {
+        int d = manhattanDistance(nextPosition, food[i]);
+        if (d == 0.0) {
             totalScore += 100;
         } else {
             totalScore += 1.0 / (d * d);
         }
     }
-    switch (direction) {
-        case UP:
-            std::cout << "UP ";
-            break;
-
-        case DOWN:
-            std::cout << "DOWN ";
-            break;
-
-        case LEFT:
-            std::cout << "LEFT ";
-            break;
-
-        case RIGHT:
-            std::cout << "RIGHT ";
-            break;
-    }
-    std::cout << totalScore << std::endl;
     return totalScore;
 } // evaluationFunction
+
+Cell * Map::getNextState(Cell * cell, Direction direction){
+    if (direction == UP) return cell->getUp();
+    else if (direction == DOWN) return cell->getDown();
+    else if (direction == LEFT) return cell->getLeft();
+    else return cell->getRight();
+}
 
 vector<Cell *> Map::getFood(){
     vector<Cell *> listCell;

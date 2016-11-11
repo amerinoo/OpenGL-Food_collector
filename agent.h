@@ -25,7 +25,7 @@ class Agent: public Cell{
     Agent(Cell*);
 
     // Getters
-    int getPoints();
+    int getScore();
     State getState();
     Direction getDirection();
     void draw();
@@ -49,7 +49,7 @@ class Agent: public Cell{
     Cell* initPosition;
     Direction direction;
     Direction nextDirection;
-    int points;
+    int score;
     State state;
     float transalationX, transalationY;
     float vx, vy; // Velocity vector
