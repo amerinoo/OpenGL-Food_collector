@@ -18,11 +18,11 @@ const CellProperties Cell::wallProperties = CellProperties('0',
 const CellProperties Cell::corridorProperties = CellProperties('.',
   Colors::corridor, Cell::cellSize * 0.0, SQUARE, 0);
 const CellProperties Cell::foodProperties = CellProperties('*',
-  Colors::food, Cell::cellSize * 0.4, CIRCLE, Cell::cellSize * 0.15);
+  Colors::food, Cell::cellSize * 0.43, SQUARE, Cell::cellSize * 0.15);
 const CellProperties Cell::playerProperties = CellProperties('p',
-  Colors::player, Cell::cellSize * 0.3, CIRCLE, Cell::cellSize * 0.3);
+  Colors::player, Cell::cellSize * 0.25, CIRCLE, Cell::cellSize * 0.3);
 const CellProperties Cell::enemyProperties = CellProperties('e',
-  Colors::enemy, Cell::cellSize * 0.3, CIRCLE, Cell::cellSize * 0.3);
+  Colors::enemy, Cell::cellSize * 0.25, CIRCLE, Cell::cellSize * 0.3);
 
 // Constructors
 Cell::Cell(){ }

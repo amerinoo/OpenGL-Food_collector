@@ -7,11 +7,16 @@
 #include "color.h"
 
 Color::Color(const GLfloat red, const GLfloat green, const GLfloat blue)
-    : red(red), green(green), blue(blue){ }
+    : red(Colors::convert(red)), green(Colors::convert(green)),
+    blue(Colors::convert(blue)){ }
 
-const Color Colors::background = Color(0.0, 0.0, 0.0);
-const Color Colors::wall       = Color(0.0, 0.0, 1.0);
-const Color Colors::corridor   = Color(0.0, 0.0, 0.0);
-const Color Colors::food       = Color(0.0, 1.0, 1.0);
-const Color Colors::player     = Color(1.0, 1.0, 0.0);
-const Color Colors::enemy      = Color(1.0, 0.0, 0.0);
+const Color Colors::background = Color(0, 0, 0);
+const Color Colors::wall       = Color(0, 57, 255);
+const Color Colors::corridor   = Color(0, 0, 0);
+const Color Colors::food       = Color(224, 128, 234);
+const Color Colors::player     = Color(255, 255, 0);
+const Color Colors::enemy      = Color(255, 0, 0);
+
+GLfloat Colors::convert(int num){
+    return num / 255.0;
+}

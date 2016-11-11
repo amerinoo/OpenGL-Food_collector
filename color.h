@@ -24,5 +24,7 @@ class Colors{
     static const Color food;
     static const Color player;
     static const Color enemy;
+
+    static GLfloat convert(int);
 };
 #endif
