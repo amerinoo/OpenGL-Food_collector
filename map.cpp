@@ -44,8 +44,6 @@ void Map::initMap(){
         for (unsigned int j = 0; j < map[0].size(); j++)
             if (map[i][j]->getType() == CORRIDOR)
                 map[i][j]->setCellType(FOOD);
-
-    map[Agent::initX][width - 1 - Agent::initY]->setCellType(ENEMY);
 }
 
 Cell * Map::initPlayer(){
@@ -341,14 +339,14 @@ void Map::print(vector<vector<Cell *> > v){
     cout << endl;
 }
 
-Direction Map::getNextPosition(Enemy enemy){
+Direction Map::getNextPosition(Agent enemy){
     Cell * c = map[enemy.getX()][enemy.getY()];
 
     vector<Direction> legalActions = getLegalActions(c);
     vector<float> scores;
 
     for (unsigned int i = 0; i < legalActions.size(); i++) {
-        scores.push_back(evaluationFunction(enemy, c, legalActions[i]));
+        scores.push_back(evaluationFunction(c, legalActions[i]));
     }
     float bestScore = -99999999999999999;
     for (unsigned int i = 0; i < scores.size(); i++) {
@@ -366,7 +364,7 @@ Direction Map::getNextPosition(Enemy enemy){
     return legalActions[bestIndices[0]];
 } // enemyMoveIntelligence
 
-float Map::evaluationFunction(Enemy enemy, Cell * currentPosition, Direction direction){
+float Map::evaluationFunction(Cell * currentPosition, Direction direction){
     float totalScore    = 0.0;
     Cell * nextPosition = getNextState(currentPosition, direction);
 

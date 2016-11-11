@@ -31,7 +31,7 @@ class Game{
  protected:
  	Map map;
     int width, height;
- 	Player player;
- 	Enemy enemy;
+ 	Agent player;
+ 	Agent enemy;
 };
 #endif

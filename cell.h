@@ -13,11 +13,11 @@
 using namespace std;
 
 enum CellType{
-    CELL,
+
     WALL,
     CORRIDOR,
     FOOD,
-    AGENT,
+    
     PLAYER,
     ENEMY
 };

@@ -6,7 +6,6 @@
  */
 #include <iostream>
 #include "graphics.h"
-#include "game.h"
 using namespace std;
 
 bool

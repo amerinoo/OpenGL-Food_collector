@@ -16,10 +16,7 @@
 #include <stack>
 #include <list>
 
-#include "cell.h"
 #include "agent.h"
-#include "player.h"
-#include "enemy.h"
 
 
 using namespace std;
@@ -41,9 +38,9 @@ class Map{
     Cell* initPlayer();
     Cell* initEnemy();
 
-    Direction getNextPosition(Enemy);
+    Direction getNextPosition(Agent);
     vector<Direction> getLegalActions(Cell*);
-    float evaluationFunction(Enemy,Cell*,Direction);
+    float evaluationFunction(Cell*,Direction);
     Cell * getNextState(Cell*, Direction);
     vector<Cell*> getFood();
     double manhattanDistance(Cell*, Cell*);

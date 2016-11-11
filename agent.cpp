@@ -15,10 +15,12 @@ const int Agent::duration = 250;
 // Constructors
 Agent::Agent(){ }
 
-Agent::Agent(Cell * cell){
+Agent::Agent(CellType cellType, Cell * cell){
+    setCellType(cellType);
     initPosition = cell;
     state        = QUIET;
     score        = 0;
+    goInitPosition();
 }
 
 // Getters

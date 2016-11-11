@@ -34,8 +34,8 @@ void Game::draw(){
 
 void Game::newGame(){
     newMap();
-    player = Player(map.initPlayer());
-    enemy  = Enemy(map.initEnemy());
+    player = Agent(PLAYER, map.initPlayer());
+    enemy  = Agent(ENEMY, map.initEnemy());
     map.print();
 }
 

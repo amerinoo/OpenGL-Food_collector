@@ -22,7 +22,7 @@ class Agent: public Cell{
      static const int duration;
     // Constructors
     Agent();
-    Agent(Cell*);
+    Agent(CellType,Cell*);
 
     // Getters
     int getScore();
