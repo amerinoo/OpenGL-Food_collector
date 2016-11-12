@@ -34,7 +34,7 @@ void Game::draw(){
 
 void Game::newGame(){
     newMap();
-    strategy = Strategy(map);
+    strategy = new ReflexAgent(map);
     player   = Agent(PLAYER, map.initPlayer());
     enemy    = Agent(ENEMY, map.initEnemy());
     map.print();
@@ -46,7 +46,7 @@ void Game::integrate(long t){
         player.move();
     }
     if (enemy.integrate(t) || enemy.getState() == QUIET) {
-        Direction d = strategy.getAction(enemy);
+        Direction d = strategy->getAction(enemy);
         enemy.setNextDirection(d);
         enemy.tryNextDirection();
         enemy.move();
