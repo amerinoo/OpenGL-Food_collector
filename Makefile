@@ -18,7 +18,9 @@ HFILES = graphics.h game.h strategy.h reflexAgent.h agent.h map.h cell.h
 # The build target executable:
 TARGET = food_collector
 
-all: $(CFILES) $(HFILES)
+ALL : $(TARGET)
+
+$(TARGET): $(CFILES) $(HFILES)
 	$(CC) $(CFILES) -o $(TARGET) $(CFLAGS)
 
 clean:
