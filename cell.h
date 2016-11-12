@@ -32,10 +32,20 @@ enum Direction{
     NONE
 };
 typedef struct Color{
+
+    static const Color background;
+    static const Color wall;
+    static const Color corridor;
+    static const Color food;
+    static const Color player;
+    static const Color enemy;
+
     const GLfloat red;
     const GLfloat green;
     const GLfloat blue;
     Color(const GLfloat red, const GLfloat green, const GLfloat blue);
+
+    GLfloat RGBToGlut(int);
 } Color;
 
 typedef struct CellProperties{
@@ -51,8 +61,6 @@ typedef struct CellProperties{
 class Cell{
  public:
     static const int cellSize;
-
-    static const Color background;
 
     static const CellProperties wallProperties;
     static const CellProperties corridorProperties;
@@ -95,8 +103,6 @@ class Cell{
     // Print
     void print();
 
-    // Methods
-    static GLfloat RGBToGlut(int);
  private:
     void drawSquare(CellType, int, int);
     void drawCircle(CellType, int, int);

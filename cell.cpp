@@ -8,12 +8,17 @@
 using namespace std;
 
 Color::Color(const GLfloat red, const GLfloat green, const GLfloat blue)
-    : red(Cell::RGBToGlut(red)), green(Cell::RGBToGlut(green)),
-    blue(Cell::RGBToGlut(blue)){ }
+    : red(RGBToGlut(red)), green(RGBToGlut(green)),
+    blue(RGBToGlut(blue)){ }
 
-const Color Cell::background = Color(0, 0, 0);
+const Color Color::background = Color(0, 0, 0);
+const Color Color::wall       = Color(0, 57, 255);
+const Color Color::corridor   = Color(0, 0, 0);
+const Color Color::food       = Color(224, 128, 234);
+const Color Color::player     = Color(255, 255, 0);
+const Color Color::enemy      = Color(255, 0, 0);
 
-GLfloat Cell::RGBToGlut(int num){
+GLfloat Color::RGBToGlut(int num){
     return num / 255.0;
 }
 
@@ -25,15 +30,15 @@ CellProperties::CellProperties(const char symbol, const Color color,
 const int Cell::cellSize = 40;
 
 const CellProperties Cell::wallProperties = CellProperties('0',
-  Color(0, 57, 255), Cell::cellSize * 0.0, SQUARE, 0);
+  Color::wall, Cell::cellSize * 0.0, SQUARE, 0);
 const CellProperties Cell::corridorProperties = CellProperties('.',
-  Color(0, 0, 0), Cell::cellSize * 0.0, SQUARE, 0);
+  Color::corridor, Cell::cellSize * 0.0, SQUARE, 0);
 const CellProperties Cell::foodProperties = CellProperties('*',
-  Color(224, 128, 234), Cell::cellSize * 0.43, SQUARE, Cell::cellSize * 0.15);
+  Color::food, Cell::cellSize * 0.43, SQUARE, Cell::cellSize * 0.15);
 const CellProperties Cell::playerProperties = CellProperties('p',
-  Color(255, 255, 0), Cell::cellSize * 0.25, CIRCLE, Cell::cellSize * 0.3);
+  Color::player, Cell::cellSize * 0.25, CIRCLE, Cell::cellSize * 0.3);
 const CellProperties Cell::enemyProperties = CellProperties('e',
-  Color(255, 0, 0), Cell::cellSize * 0.25, CIRCLE, Cell::cellSize * 0.3);
+  Color::enemy, Cell::cellSize * 0.25, CIRCLE, Cell::cellSize * 0.3);
 
 // Constructors
 Cell::Cell(){ }
