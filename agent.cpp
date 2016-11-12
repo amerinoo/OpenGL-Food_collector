@@ -12,16 +12,17 @@ const int Agent::duration = 250;
 // Constructors
 Agent::Agent(){ }
 
-Agent::Agent(CellType cellType, Cell * cell){
-    setCellType(cellType);
-    initPosition = cell;
+Agent::Agent(CellType cellType, Cell * initPosition, Strategy * strategy)
+    : cellType(cellType), initPosition(initPosition){
+    this->strategy = strategy;
     state        = QUIET;
     score        = 0;
+    nextPosition = initPosition;
     goInitPosition();
 }
 
 // Getters
-
+Strategy * Agent::getStrategy(){ return strategy; }
 
 int Agent::getScore(){ return score; }
 
@@ -29,37 +30,37 @@ State Agent::getState(){ return state; }
 
 Cell * Agent::getCurrentPosition(){ return currentPosition; }
 
-Direction Agent::getDirection(){ return direction; }
+Cell * Agent::getNextPosition(){ return nextPosition; }
+
+Direction Agent::getDirection(){ return currentDirection; }
 
 void Agent::setPosition(Cell * cell){
-    cell->setCellType(getType());
+    cell->setCellType(cellType);
     currentPosition = cell;
-    this->setX(currentPosition->getX());
-    this->setY(currentPosition->getY());
 }
 
-void Agent::setDirection(Direction direction){
-    this->direction = direction;
+void Agent::setDirection(Direction currentDirection){
+    this->currentDirection = currentDirection;
 }
 
 void Agent::setNextDirection(Direction nextDirection){
-    this->nextDirection = nextDirection;
+    if (nextDirection != NONE) this->nextDirection = nextDirection;
 }
 
 void Agent::goInitPosition(){
     setPosition(initPosition);
-    direction     = NONE;
-    nextDirection = NONE;
+    currentDirection = NONE;
+    nextDirection    = NONE;
 }
 
-void Agent::initMovement(Direction direction, int duration){
+void Agent::initMovement(Direction currentDirection, int duration){
     float widthTranslation  = 0;
     float heightTranslation = 0;
 
-    if (direction == UP) heightTranslation = -Cell::cellSize;
-    else if (direction == DOWN) heightTranslation = Cell::cellSize;
-    else if (direction == LEFT) widthTranslation = -Cell::cellSize;
-    else if (direction == RIGHT) widthTranslation = Cell::cellSize;
+    if (currentDirection == UP) heightTranslation = -Cell::cellSize;
+    else if (currentDirection == DOWN) heightTranslation = Cell::cellSize;
+    else if (currentDirection == LEFT) widthTranslation = -Cell::cellSize;
+    else if (currentDirection == RIGHT) widthTranslation = Cell::cellSize;
 
 
     vx = widthTranslation / duration;
@@ -79,9 +80,6 @@ bool Agent::integrate(long t){
         transalationX += vx * time_remaining;
         transalationY += vy * time_remaining;
         state          = QUIET;
-
-        currentPosition = nextPosition;
-        setPosition(currentPosition);
         return true;
     }
     return false;
@@ -95,20 +93,20 @@ void Agent::eat(){
 void Agent::move(){
     Cell * cell = NULL;
 
-    if (direction == UP) cell = currentPosition->getUp();
-    else if (direction == DOWN) cell = currentPosition->getDown();
-    else if (direction == LEFT) cell = currentPosition->getLeft();
-    else if (direction == RIGHT) cell = currentPosition->getRight();
+    if (currentDirection == UP) cell = currentPosition->getUp();
+    else if (currentDirection == DOWN) cell = currentPosition->getDown();
+    else if (currentDirection == LEFT) cell = currentPosition->getLeft();
+    else if (currentDirection == RIGHT) cell = currentPosition->getRight();
 
     if (cell != NULL && cell->getType() != WALL) {
         currentPosition->setCellType(CORRIDOR);
-        nextPosition = cell; /* message *//* message */
+        nextPosition = cell;
         if (nextPosition->getType() == ENEMY || nextPosition->getType() == PLAYER) {
             goInitPosition();
             return;
         }
         if (cell->hasFood()) eat();
-        initMovement(direction, Agent::duration);
+        initMovement(currentDirection, Agent::duration);
     }
 } // move
 
@@ -119,12 +117,16 @@ void Agent::tryNextDirection(){
     else if (nextDirection == DOWN) cell = currentPosition->getDown();
     else if (nextDirection == LEFT) cell = currentPosition->getLeft();
     else if (nextDirection == RIGHT) cell = currentPosition->getRight();
-    if ((cell != NULL && cell->getType() != WALL) || direction == NONE) {
-        direction     = nextDirection;
-        nextDirection = NONE;
+    if ((cell != NULL && cell->getType() != WALL) || currentDirection == NONE) {
+        currentDirection = nextDirection;
+        nextDirection    = NONE;
     }
 }
 
 void Agent::draw(){
-    if (state == MOVE) Cell::draw(transalationX, transalationY);
+    if (state == MOVE) {
+        currentPosition->setCellType(cellType);
+        currentPosition->draw(transalationX, transalationY);
+        currentPosition->setCellType(CORRIDOR);
+    }
 } // draw

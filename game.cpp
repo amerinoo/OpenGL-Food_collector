@@ -34,22 +34,23 @@ void Game::draw(){
 
 void Game::newGame(){
     newMap();
-    strategy = new ReflexAgent(map);
-    player   = Agent(PLAYER, map.initPlayer());
-    enemy    = Agent(ENEMY, map.initEnemy());
+    player = Agent(PLAYER, map.initPlayer(), new Strategy(map));
+    enemy  = Agent(ENEMY, map.initEnemy(), new ReflexAgent(map));
     map.print();
 }
 
 void Game::integrate(long t){
-    if (player.integrate(t)) {
-        player.tryNextDirection();
-        player.move();
-    }
-    if (enemy.integrate(t) || enemy.getState() == QUIET) {
-        Direction d = strategy->getAction(enemy);
-        enemy.setNextDirection(d);
-        enemy.tryNextDirection();
-        enemy.move();
+    integrate(&player, t);
+    integrate(&enemy, t);
+}
+
+void Game::integrate(Agent * agent, long t){
+    if (agent->integrate(t) || agent->getState() == QUIET) {
+        agent->setPosition(agent->getNextPosition());
+        Direction d = agent->getStrategy()->getAction(agent->getCurrentPosition());
+        agent->setNextDirection(d);
+        agent->tryNextDirection();
+        agent->move();
     }
 }
 

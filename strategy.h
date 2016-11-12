@@ -6,7 +6,7 @@
  */
 #ifndef strategy_h
 #define strategy_h
-#include "agent.h"
+#include "map.h"
 
 using namespace std;
 
@@ -16,7 +16,7 @@ class Strategy{
     Strategy();
     Strategy(Map);
 
-    virtual Direction getAction(Agent);
+    virtual Direction getAction(Cell*);
 protected:
     Map map;
 };

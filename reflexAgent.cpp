@@ -9,10 +9,7 @@ ReflexAgent::ReflexAgent() : Strategy(){ }
 
 ReflexAgent::ReflexAgent(Map map) : Strategy(map){ }
 
-Direction ReflexAgent::getAction(Agent agent){
-    std::cout << "ReflexAgent" << std::endl;
-    Cell * c = agent.getCurrentPosition();
-
+Direction ReflexAgent::getAction(Cell * c){
     vector<Direction> legalActions = getLegalActions(c);
     vector<float> scores;
 
@@ -57,11 +54,7 @@ float ReflexAgent::evaluationFunction(Cell * currentPosition, Direction directio
     vector<Cell *> food = map.getFood();
     for (unsigned int i = 0; i < food.size(); i++) {
         int d = manhattanDistance(nextPosition, food[i]);
-        if (d == 0.0) {
-            totalScore += 100;
-        } else {
-            totalScore += 1.0 / (d * d);
-        }
+        totalScore += (d == 0.0) ? 100 : 1.0 / (d * d);
     }
     return totalScore;
 } // evaluationFunction

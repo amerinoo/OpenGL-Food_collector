@@ -17,7 +17,7 @@ class ReflexAgent: public Strategy{
     ReflexAgent(Map);
 
     // Methods
-    Direction getAction(Agent);
+    Direction getAction(Cell*);
 private:
     vector<Direction> getLegalActions(Cell*);
     float evaluationFunction(Cell*,Direction);

@@ -67,8 +67,8 @@ class Cell{
     Cell(float, float, CellType);
 
     // Getters
-    virtual float getX();
-    virtual float getY();
+    float getX();
+    float getY();
     bool isVisited();
     Cell* getUp();
     Cell* getDown();
@@ -76,9 +76,10 @@ class Cell{
     Cell* getRight();
     char getSymbol();
     CellType getType();
-    virtual bool hasFood();
-    virtual void eat();
-    virtual void draw();
+    bool hasFood();
+    void eat();
+    void draw();
+    void draw(int, int);
 
 
     // Setters
@@ -103,7 +104,6 @@ class Cell{
     CellType cellType;
     bool visited;
     Cell *up, *down, *left, *right;
-    void draw(int, int);
     CellProperties getProperties(CellType cellType);
 };
 #endif

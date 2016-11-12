@@ -7,7 +7,7 @@
 #ifndef agent_h
 #define agent_h
 #include <cmath>
-#include "map.h"
+#include "strategy.h"
 using namespace std;
 
 enum State{
@@ -15,17 +15,19 @@ enum State{
     QUIET
 };
 
-class Agent: public Cell{
+class Agent{
  public:
      static const int duration;
     // Constructors
     Agent();
-    Agent(CellType,Cell*);
+    Agent(CellType,Cell*,Strategy*);
 
     // Getters
+    Strategy* getStrategy();
     int getScore();
     State getState();
     Cell* getCurrentPosition();
+    Cell* getNextPosition();
     Direction getDirection();
     void draw();
 
@@ -43,13 +45,16 @@ class Agent: public Cell{
     void tryNextDirection();
 
  protected:
+    Strategy* strategy;
+    CellType cellType;
+    int score;
+    Cell* initPosition;
     Cell* currentPosition;
     Cell* nextPosition;
-    Cell* initPosition;
-    Direction direction;
-    Direction nextDirection;
-    int score;
+
     State state;
+    Direction currentDirection;
+    Direction nextDirection;
     float transalationX, transalationY;
     float vx, vy; // Velocity vector
     long time_remaining;

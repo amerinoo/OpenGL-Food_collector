@@ -24,6 +24,7 @@ class Game{
     void draw();
     void newGame();
     void integrate(long);
+    void integrate(Agent*,long);
     void moveAgent(CellType, Direction);
 
  private:
@@ -34,6 +35,5 @@ class Game{
     int width, height;
  	Agent player;
  	Agent enemy;
-    Strategy* strategy;
 };
 #endif

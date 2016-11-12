@@ -9,7 +9,4 @@ Strategy::Strategy(){ }
 
 Strategy::Strategy(Map map) : map(map){ }
 
-Direction Strategy::getAction(Agent agent){
-    std::cout << "Strategy" << std::endl;
-    return NONE;
-} // getAction
+Direction Strategy::getAction(Cell * c){ return NONE; }
