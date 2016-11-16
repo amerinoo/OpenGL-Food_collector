@@ -19,6 +19,11 @@ enum CellType{
     ENEMY
 };
 
+enum State{
+    MOVE,
+    QUIET
+};
+
 enum ShapeType{
     SQUARE,
     CIRCLE

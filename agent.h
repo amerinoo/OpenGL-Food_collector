@@ -10,11 +10,6 @@
 #include "strategy.h"
 using namespace std;
 
-enum State{
-    MOVE,
-    QUIET
-};
-
 class Agent{
  public:
      static const int duration;
