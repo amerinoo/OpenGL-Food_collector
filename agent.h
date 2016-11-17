@@ -17,7 +17,6 @@ class Agent{
     // Constructors
     Agent();
     Agent(CellType,Cell*,Strategy*);
-    Agent(Agent*,CellType,Cell*,Strategy*);
 
     // Getters
     Strategy* getStrategy();
@@ -32,6 +31,7 @@ class Agent{
     void setPosition(Cell*);
     void setDirection(Direction);
     void setNextDirection(Direction);
+    void setAgent(Agent*);
 
     //Methods
     void goInitPosition();
@@ -41,8 +41,8 @@ class Agent{
     void move();
     void tryNextDirection();
 
+    Agent* agent;
  protected:
-    Agent* player;
     Drawer drawer;
     Strategy* strategy;
     CellType cellType;

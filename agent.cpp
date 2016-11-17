@@ -19,13 +19,6 @@ Agent::Agent(CellType cellType, Cell * initPosition, Strategy * strategy)
     goInitPosition();
 }
 
-Agent::Agent(Agent * player, CellType cellType, Cell * initPosition, Strategy * strategy)
-    : player(player), cellType(cellType), initPosition(initPosition){
-    this->strategy = strategy;
-    score = 0;
-    goInitPosition();
-}
-
 // Getters
 Strategy * Agent::getStrategy(){ return strategy; }
 
@@ -53,6 +46,8 @@ void Agent::setNextDirection(Direction nextDirection){
     if (nextDirection != NONE) this->nextDirection = nextDirection;
 }
 
+void Agent::setAgent(Agent * agent){ this->agent = agent; }
+
 void Agent::goInitPosition(){
     setPosition(initPosition);
     nextPosition     = initPosition;
@@ -75,18 +70,20 @@ void Agent::move(){
 
 
         if (cell->getType() != WALL) {
-            // Nothing
             if (cell->getType() == CORRIDOR) {
                 nextPosition = cell;
             } else if (cell->getType() == FOOD) {
+                agent->getCurrentPosition()->print();
                 nextPosition = cell;
                 eat();
             } else if (cell->getType() == ENEMY) {
                 currentPosition->setCellType(CORRIDOR);
                 goInitPosition();
             } else if (cell->getType() == PLAYER) {
-                player->getCurrentPosition()->setCellType(CORRIDOR);
-                player->goInitPosition();
+                nextPosition = cell;
+                agent->getCurrentPosition()->print();
+                agent->getCurrentPosition()->setCellType(CORRIDOR);
+                agent->goInitPosition();
             }
             float widthTranslation  = 0;
             float heightTranslation = 0;

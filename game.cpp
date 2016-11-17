@@ -30,12 +30,15 @@ void Game::draw(){
 
     player.draw();
     enemy.draw();
+    // std::cout << "Score: " << player.getScore() << " " << enemy.getScore() << std::endl;
 }
 
 void Game::newGame(){
     newMap();
     player = Agent(PLAYER, map.initPlayer(), new Strategy(map));
-    enemy  = Agent(&player, ENEMY, map.initEnemy(), new ReflexAgent(map));
+    enemy  = Agent(ENEMY, map.initEnemy(), new ReflexAgent(map));
+    player.setAgent(&enemy);
+    enemy.setAgent(&player);
     map.print();
 }
 
