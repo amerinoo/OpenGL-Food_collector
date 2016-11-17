@@ -19,7 +19,6 @@ class ReflexAgent: public Strategy{
     // Methods
     Direction getAction(Cell*);
 private:
-    vector<Direction> getLegalActions(Cell*);
     float evaluationFunction(Cell*,Direction);
     Cell * getNextState(Cell*, Direction);
     double manhattanDistance(Cell*, Cell*);

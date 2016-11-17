@@ -10,7 +10,7 @@ ReflexAgent::ReflexAgent() : Strategy(){ }
 ReflexAgent::ReflexAgent(Map map) : Strategy(map){ }
 
 Direction ReflexAgent::getAction(Cell * c){
-    vector<Direction> legalActions = getLegalActions(c);
+    vector<Direction> legalActions = map.getLegalActions(c);
     vector<float> scores;
 
     for (unsigned int i = 0; i < legalActions.size(); i++) {
@@ -31,21 +31,6 @@ Direction ReflexAgent::getAction(Cell * c){
     random_shuffle(bestIndices.begin(), bestIndices.end());
     return legalActions[bestIndices[0]];
 } // getAction
-
-vector<Direction> ReflexAgent::getLegalActions(Cell * c){
-    vector<Direction> legalActions;
-
-    if (c->getUp()->getType() != WALL)
-        legalActions.push_back(UP);
-    if (c->getDown()->getType() != WALL)
-        legalActions.push_back(DOWN);
-    if (c->getLeft()->getType() != WALL)
-        legalActions.push_back(LEFT);
-    if (c->getRight()->getType() != WALL)
-        legalActions.push_back(RIGHT);
-
-    return legalActions;
-}
 
 float ReflexAgent::evaluationFunction(Cell * currentPosition, Direction direction){
     float totalScore    = 0.0;

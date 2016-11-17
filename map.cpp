@@ -164,7 +164,11 @@ Cell * Map::randomDiscoverPath(Cell * c){
  */
 void Map::inside(){
     initWhitePositionCells();
-
+    vector<Direction> shuffle;
+    shuffle.push_back(UP);
+    shuffle.push_back(DOWN);
+    shuffle.push_back(LEFT);
+    shuffle.push_back(RIGHT);
     int h = visited.size();
     int w = visited[0].size();
 
@@ -180,6 +184,7 @@ void Map::inside(){
 
         if (position == NULL) {
             position = stack.top();
+            openRandom(position, shuffle);
             stack.pop();
         } else if (!position->isVisited()) {
             position->setVisited(true);
@@ -257,23 +262,32 @@ void Map::middleRandom(){
  * if analyze inferior will be checking left and right.
  */
 void Map::openRandom(Cell * c, vector<Direction> directions){
-    random_shuffle(directions.begin(), directions.end());
-
-    for (unsigned int i = 0; i < directions.size(); i++) {
+    if (directions.size() > 0) {
+        random_shuffle(directions.begin(), directions.end());
+        int i = 0;
         if ((directions[i] == UP) && (c->getUp()->getX() >= 1)) {
             c->getUp()->setCellType(CORRIDOR);
-            break;
         } else if ((directions[i] == DOWN) && (c->getDown()->getX() <= heigth - 2)) {
             c->getDown()->setCellType(CORRIDOR);
-            break;
         } else if ((directions[i] == LEFT) && (c->getLeft()->getY() >= 1)) {
             c->getLeft()->setCellType(CORRIDOR);
-            break;
-        } else if ((directions[i] == RIGHT) && (c->getRight()->getY() <= floor(width / 2))) {
-            c->getRight()->setCellType(CORRIDOR);
-            break;
         }
     }
+}
+
+vector<Direction> Map::getLegalActions(Cell * c){
+    vector<Direction> legalActions;
+
+    if (c->getUp()->getType() != WALL)
+        legalActions.push_back(UP);
+    if (c->getDown()->getType() != WALL)
+        legalActions.push_back(DOWN);
+    if (c->getLeft()->getType() != WALL)
+        legalActions.push_back(LEFT);
+    if (c->getRight()->getType() != WALL)
+        legalActions.push_back(RIGHT);
+
+    return legalActions;
 }
 
 /*

@@ -25,7 +25,7 @@ class Map{
  public:
      static const int initX;
      static const int initY;
-     
+
     // Constructors
     Map();
  	Map(int, int);
@@ -41,6 +41,7 @@ class Map{
     Cell* initPlayer();
     Cell* initEnemy();
     vector<Cell*> getFood();
+    vector<Direction> getLegalActions(Cell*);
 
     // Print
  	void print();
