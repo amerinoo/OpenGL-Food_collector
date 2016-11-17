@@ -6,20 +6,22 @@
  */
 #ifndef particle_h
 #define particle_h
-#include "cell.h"
+#include <GL/glut.h>
+#include "enums.h"
+
 class Particle {
-    float x, y;   // -- Current position
     float vx, vy; // -- Velocity vector
+    float transalationX, transalationY;
     State state;
 
     long time_remaining;
 
 public:
-
     Particle();
-    void set_position(int x, int y);
-    void init_movement(int destination_x, int destination_y, int duration);
-    bool integrate(long t);
-    void draw();
+    void init_movement(float, float, int);
+    bool integrate(long);
+    float getTranslationX();
+    float getTranslationY();
+    State getState();
 };
 #endif

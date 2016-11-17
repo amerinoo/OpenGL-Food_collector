@@ -8,6 +8,7 @@
 #define agent_h
 #include <cmath>
 #include "strategy.h"
+#include "particle.h"
 using namespace std;
 
 class Agent{
@@ -16,6 +17,7 @@ class Agent{
     // Constructors
     Agent();
     Agent(CellType,Cell*,Strategy*);
+    Agent(Agent*,CellType,Cell*,Strategy*);
 
     // Getters
     Strategy* getStrategy();
@@ -40,18 +42,17 @@ class Agent{
     void tryNextDirection();
 
  protected:
+    Agent* player;
+    Drawer drawer;
     Strategy* strategy;
     CellType cellType;
+    Particle particle;
     int score;
     Cell* initPosition;
     Cell* currentPosition;
     Cell* nextPosition;
 
-    State state;
     Direction currentDirection;
     Direction nextDirection;
-    float transalationX, transalationY;
-    float vx, vy; // Velocity vector
-    long time_remaining;
 };
 #endif

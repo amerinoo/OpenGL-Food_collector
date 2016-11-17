@@ -15,9 +15,14 @@ Agent::Agent(){ }
 Agent::Agent(CellType cellType, Cell * initPosition, Strategy * strategy)
     : cellType(cellType), initPosition(initPosition){
     this->strategy = strategy;
-    state        = QUIET;
-    score        = 0;
-    nextPosition = initPosition;
+    score = 0;
+    goInitPosition();
+}
+
+Agent::Agent(Agent * player, CellType cellType, Cell * initPosition, Strategy * strategy)
+    : player(player), cellType(cellType), initPosition(initPosition){
+    this->strategy = strategy;
+    score = 0;
     goInitPosition();
 }
 
@@ -26,7 +31,7 @@ Strategy * Agent::getStrategy(){ return strategy; }
 
 int Agent::getScore(){ return score; }
 
-State Agent::getState(){ return state; }
+State Agent::getState(){ return particle.getState(); }
 
 Cell * Agent::getCurrentPosition(){ return currentPosition; }
 
@@ -36,6 +41,7 @@ Direction Agent::getDirection(){ return currentDirection; }
 
 void Agent::setPosition(Cell * cell){
     cell->setCellType(cellType);
+
     currentPosition = cell;
 }
 
@@ -49,66 +55,51 @@ void Agent::setNextDirection(Direction nextDirection){
 
 void Agent::goInitPosition(){
     setPosition(initPosition);
+    nextPosition     = initPosition;
     currentDirection = NONE;
     nextDirection    = NONE;
 }
 
-void Agent::initMovement(Direction currentDirection, int duration){
-    float widthTranslation  = 0;
-    float heightTranslation = 0;
-
-    if (currentDirection == UP) heightTranslation = -Cell::cellSize;
-    else if (currentDirection == DOWN) heightTranslation = Cell::cellSize;
-    else if (currentDirection == LEFT) widthTranslation = -Cell::cellSize;
-    else if (currentDirection == RIGHT) widthTranslation = Cell::cellSize;
-
-
-    vx = widthTranslation / duration;
-    vy = heightTranslation / duration;
-    transalationX  = 0;
-    transalationY  = 0;
-    state          = MOVE;
-    time_remaining = duration;
-}
-
-bool Agent::integrate(long t){
-    if (state == MOVE && t < time_remaining) {
-        transalationX  += vx * t;
-        transalationY  += vy * t;
-        time_remaining -= t;
-    } else if (state == MOVE && t >= time_remaining) {
-        transalationX += vx * time_remaining;
-        transalationY += vy * time_remaining;
-        state          = QUIET;
-        return true;
-    }
-    return false;
-}
-
 void Agent::eat(){
-    currentPosition->eat();
     score += 1;
 }
 
 void Agent::move(){
     Cell * cell = NULL;
 
-    if (currentDirection == UP) cell = currentPosition->getUp();
-    else if (currentDirection == DOWN) cell = currentPosition->getDown();
-    else if (currentDirection == LEFT) cell = currentPosition->getLeft();
-    else if (currentDirection == RIGHT) cell = currentPosition->getRight();
+    if (currentDirection != NONE) {
+        if (currentDirection == UP) cell = currentPosition->getUp();
+        else if (currentDirection == DOWN) cell = currentPosition->getDown();
+        else if (currentDirection == LEFT) cell = currentPosition->getLeft();
+        else if (currentDirection == RIGHT) cell = currentPosition->getRight();
 
-    if (cell != NULL && cell->getType() != WALL) {
-        currentPosition->setCellType(CORRIDOR);
-        nextPosition = cell;
-        if (nextPosition->getType() == ENEMY || nextPosition->getType() == PLAYER) {
-            goInitPosition();
-            return;
+
+        if (cell->getType() != WALL) {
+            // Nothing
+            if (cell->getType() == CORRIDOR) {
+                nextPosition = cell;
+            } else if (cell->getType() == FOOD) {
+                nextPosition = cell;
+                eat();
+            } else if (cell->getType() == ENEMY) {
+                currentPosition->setCellType(CORRIDOR);
+                goInitPosition();
+            } else if (cell->getType() == PLAYER) {
+                player->getCurrentPosition()->setCellType(CORRIDOR);
+                player->goInitPosition();
+            }
+            float widthTranslation  = 0;
+            float heightTranslation = 0;
+
+            if (currentDirection == UP) heightTranslation = -Drawer::cellSize;
+            else if (currentDirection == DOWN) heightTranslation = Drawer::cellSize;
+            else if (currentDirection == LEFT) widthTranslation = -Drawer::cellSize;
+            else if (currentDirection == RIGHT) widthTranslation = Drawer::cellSize;
+
+            particle.init_movement(widthTranslation, heightTranslation, Agent::duration);
         }
-        if (cell->hasFood()) eat();
-        initMovement(currentDirection, Agent::duration);
-    }
-} // move
+    } // move
+}     // move
 
 void Agent::tryNextDirection(){
     Cell * cell = NULL;
@@ -123,10 +114,21 @@ void Agent::tryNextDirection(){
     }
 }
 
-void Agent::draw(){
-    if (state == MOVE) {
-        currentPosition->setCellType(cellType);
-        currentPosition->draw(transalationX, transalationY);
+bool Agent::integrate(long t){
+    if (particle.integrate(t)) {
         currentPosition->setCellType(CORRIDOR);
+        currentPosition = nextPosition;
+        currentPosition->setCellType(cellType);
+        return true;
     }
-} // draw
+    return false;
+}
+
+void Agent::draw(){
+    if (particle.getState() == MOVE) {
+        drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(),
+          particle.getTranslationX(), particle.getTranslationY());
+    } else {
+        drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(), true);
+    }
+}

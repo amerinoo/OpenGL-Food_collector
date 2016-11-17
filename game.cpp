@@ -35,7 +35,7 @@ void Game::draw(){
 void Game::newGame(){
     newMap();
     player = Agent(PLAYER, map.initPlayer(), new Strategy(map));
-    enemy  = Agent(ENEMY, map.initEnemy(), new ReflexAgent(map));
+    enemy  = Agent(&player, ENEMY, map.initEnemy(), new ReflexAgent(map));
     map.print();
 }
 

@@ -7,73 +7,13 @@
 #ifndef cell_h
 #define cell_h
 #include <iostream>
-#include <cmath>
-#include <GL/glut.h>
+#include "drawer.h"
 using namespace std;
-
-enum CellType{
-    WALL,
-    CORRIDOR,
-    FOOD,
-    PLAYER,
-    ENEMY
-};
-
-enum State{
-    MOVE,
-    QUIET
-};
-
-enum ShapeType{
-    SQUARE,
-    CIRCLE
-};
-
-enum Direction{
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    NONE
-};
-typedef struct Color{
-
-    static const Color background;
-    static const Color wall;
-    static const Color corridor;
-    static const Color food;
-    static const Color player;
-    static const Color enemy;
-
-    const GLfloat red;
-    const GLfloat green;
-    const GLfloat blue;
-    Color(const GLfloat red, const GLfloat green, const GLfloat blue);
-
-    GLfloat RGBToGlut(int);
-} Color;
-
-typedef struct CellProperties{
-    const char symbol;
-    const Color color;
-    const int padding;
-    const ShapeType shape;
-    const int radius;
-    CellProperties(const char symbol, const Color color, const int padding,
-        const ShapeType,const int radius);
-} CellProperties;
 
 class Cell{
  public:
-    static const int cellSize;
-
-    static const CellProperties wallProperties;
-    static const CellProperties corridorProperties;
-    static const CellProperties foodProperties;
-    static const CellProperties playerProperties;
-    static const CellProperties enemyProperties;
-
     float x, y;
+    Drawer drawer;
 
     // Constructors
     Cell();
@@ -92,7 +32,6 @@ class Cell{
     bool hasFood();
     void eat();
     void draw();
-    void draw(int, int);
 
 
     // Setters
@@ -107,14 +46,9 @@ class Cell{
 
     // Print
     void print();
-
- private:
-    void drawSquare(CellType, int, int);
-    void drawCircle(CellType, int, int);
  protected:
     CellType cellType;
     bool visited;
     Cell *up, *down, *left, *right;
-    CellProperties getProperties(CellType cellType);
 };
 #endif

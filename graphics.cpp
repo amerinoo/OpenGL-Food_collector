@@ -25,9 +25,9 @@ int Graphics::getHeight(){ return heigth; }
 
 int Graphics::getWidth(){ return width; }
 
-int Graphics::getMaxHeigth(){ return glutGet(GLUT_SCREEN_HEIGHT) / Cell::cellSize; }
+int Graphics::getMaxHeigth(){ return glutGet(GLUT_SCREEN_HEIGHT) / Drawer::cellSize; }
 
-int Graphics::getMaxWidth(){ return glutGet(GLUT_SCREEN_WIDTH) / Cell::cellSize; }
+int Graphics::getMaxWidth(){ return glutGet(GLUT_SCREEN_WIDTH) / Drawer::cellSize; }
 
 // Setters
 void Graphics::setGame(Game g){ game = g; }
@@ -38,8 +38,8 @@ void Graphics::init(int argc, char * argv[]){
 }
 
 void Graphics::start(){
-    heigth = game.getHeight() * Cell::cellSize;
-    width  = game.getWidth() * Cell::cellSize;
+    heigth = game.getHeight() * Drawer::cellSize;
+    width  = game.getWidth() * Drawer::cellSize;
     last_t = 0;
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
