@@ -73,7 +73,6 @@ void Agent::move(){
             if (cell->getType() == CORRIDOR) {
                 nextPosition = cell;
             } else if (cell->getType() == FOOD) {
-                agent->getCurrentPosition()->print();
                 nextPosition = cell;
                 eat();
             } else if (cell->getType() == ENEMY) {
@@ -81,7 +80,6 @@ void Agent::move(){
                 goInitPosition();
             } else if (cell->getType() == PLAYER) {
                 nextPosition = cell;
-                agent->getCurrentPosition()->print();
                 agent->getCurrentPosition()->setCellType(CORRIDOR);
                 agent->goInitPosition();
             }
