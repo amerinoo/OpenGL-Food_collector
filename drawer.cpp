@@ -1,3 +1,8 @@
+/*
+ * Project name: Food collection
+ * Version 3
+ * Student : Albert Eduard Merino Pulido
+ */
 #include "drawer.h"
 Color::Color(const GLfloat red, const GLfloat green, const GLfloat blue)
     : red(RGBToGlut(red)), green(RGBToGlut(green)),
@@ -5,7 +10,7 @@ Color::Color(const GLfloat red, const GLfloat green, const GLfloat blue)
 
 const Color Color::background = Color(0, 0, 0);
 const Color Color::wall       = Color(0, 57, 255);
-const Color Color::corridor   = Color(0, 0, 0);
+const Color Color::corridor   = Color::background;
 const Color Color::food       = Color(224, 128, 234);
 const Color Color::player     = Color(255, 255, 0);
 const Color Color::enemy      = Color(255, 0, 0);

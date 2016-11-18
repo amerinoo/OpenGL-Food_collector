@@ -1,3 +1,8 @@
+/*
+ * Project name: Food collection
+ * Version 3
+ * Student : Albert Eduard Merino Pulido
+ */
 #include "particle.h"
 
 Particle::Particle(){

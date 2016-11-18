@@ -1,14 +1,13 @@
 /*
  * Project name: Food collection
- * Version 2
- * Student 1: Albert Eduard Merino Pulido
- * Student 2: Tan Kin Tat
+ * Version 3
+ * Student : Albert Eduard Merino Pulido
  */
 #include "graphics.h"
 
 using namespace std;
 
-const char * Graphics::windowTitle = "Food collection - Merino&Kin";
+const char * Graphics::windowTitle = "Food collection - Merino";
 
 // Constructors
 Graphics::Graphics(){ }

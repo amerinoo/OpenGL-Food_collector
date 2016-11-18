@@ -1,8 +1,7 @@
 /*
  * Project name: Food collection
- * Version 2
- * Student 1: Albert Eduard Merino Pulido
- * Student 2: Tan Kin Tat
+ * Version 3
+ * Student : Albert Eduard Merino Pulido
  */
 #include "miniMaxAgent.h"
 
@@ -45,7 +44,7 @@ Cell* MinimaxAgent::result(Cell * currentPosition){
 }
 
 Cell* MinimaxAgent::max_value(Cell * agent, agent, depth){
-    if (terminalTest(gameState, depth)) 
+    if (terminalTest(gameState, depth))
         return utility(gameState);
 
     vector<Direction> legalActions = getLegalActions(c);
