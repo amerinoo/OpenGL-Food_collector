@@ -12,7 +12,6 @@ using namespace std;
 class Cell{
  public:
     float x, y;
-    Drawer drawer;
 
     // Constructors
     Cell();

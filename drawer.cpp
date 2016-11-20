@@ -28,68 +28,137 @@ const int Drawer::cellSize = 40;
 
 const CellProperties CellProperties::wall = CellProperties('0',
   Color::wall, Drawer::cellSize * 0.0, SQUARE, 0);
-const CellProperties CellProperties::corridor = CellProperties('.',
+const CellProperties CellProperties::corridor = CellProperties(' ',
   Color::corridor, Drawer::cellSize * 0.0, SQUARE, 0);
-const CellProperties CellProperties::food = CellProperties('*',
+const CellProperties CellProperties::food = CellProperties('.',
   Color::food, Drawer::cellSize * 0.43, SQUARE, Drawer::cellSize * 0.15);
 const CellProperties CellProperties::player = CellProperties('p',
   Color::player, Drawer::cellSize * 0.25, CIRCLE, Drawer::cellSize * 0.3);
 const CellProperties CellProperties::enemy = CellProperties('e',
   Color::enemy, Drawer::cellSize * 0.25, CIRCLE, Drawer::cellSize * 0.3);
 
+// Constructors
 Drawer::Drawer(){ }
 
-void Drawer::draw(CellType cellType, float x, float y, bool print){
-    if (print || (cellType != ENEMY && cellType != PLAYER)) draw(cellType, x, y, 0, 0);
+Drawer& Drawer::getInstance(){
+    static Drawer instance;
+
+    return instance;
 }
 
-void Drawer::draw(CellType cellType, float x, float y, int transalationX, int transalationY){
-    Color color     = getProperties(cellType).color;
-    ShapeType shape = getProperties(cellType).shape;
+void Drawer::setHeight(int height){
+    this->height = height;
+}
 
-    glColor3f(color.red, color.green, color.blue);
-    if (shape == CIRCLE) {
-        drawCircle(cellType, x, y, transalationX, transalationY);
-    } else if (shape == SQUARE) {
-        drawSquare(cellType, x, y, transalationX, transalationY);
+void Drawer::setWidth(int width){
+    this->width = width;
+}
+
+void Drawer::draw(CellType cellType, float x, float y, bool print, int transalationX, int transalationY){
+    glPushMatrix();
+    glTranslatef((width - y) * Drawer::cellSize - ((width + 1) * Drawer::cellSize / 2.0 + transalationX),
+      (height - x) * Drawer::cellSize - ((height + 1) * Drawer::cellSize / 2.0 + transalationY),
+      0);
+    if (print || (cellType != ENEMY && cellType != PLAYER)) {
+        switch (cellType) {
+            case WALL:
+                drawWall();
+                break;
+            case CORRIDOR:
+                drawCorridor();
+                break;
+            case FOOD:
+                drawFood();
+                break;
+            case PLAYER:
+                drawFood();
+                break;
+            case ENEMY:
+                drawFood();
+                break;
+            default:
+                break;
+        }
     }
+    drawCorridor();
+    glPopMatrix();
 } // draw
 
-void Drawer::drawCircle(CellType cellType, float x, float y, int transalationX, int transalationY){
-    int radius      = getProperties(cellType).radius;
-    int rep         = 50;
-    GLfloat twicePi = 2.0f * M_PI;
+void Drawer::drawWall(){
+    GLint x = Drawer::cellSize / 2;
+    GLint y = x;
+    GLint z = Drawer::cellSize / 5;
 
-    float x1 = ((y + 1) * Drawer::cellSize) - Drawer::cellSize / 2.0 + transalationX;
-    float y1 = ((x + 1) * Drawer::cellSize) - Drawer::cellSize / 2.0 + transalationY;
+    glColor3f(0.2, 0.2, 0.2);
+    glBegin(GL_QUADS);
+    // FRONT
+    glVertex3f(x, -y, z);
+    glVertex3i(-x, -y, z);
+    glVertex3i(-x, y, z);
+    glVertex3i(x, y, z);
 
-    glBegin(GL_TRIANGLE_FAN);
-    glVertex2f(x1, y1);
-    for (int i = 0; i < rep; i++) {
-        glVertex2f(
-          x1 + (radius * cos(i * twicePi / rep)),
-          y1 + (radius * sin(i * twicePi / rep))
-        );
-    }
+    // BACK
+    glVertex3i(x, y, -z);
+    glVertex3i(-x, y, -z);
+    glVertex3i(-x, -y, -z);
+    glVertex3i(x, -y, -z);
+
+    // RIGHT
+    glColor3f(0.3, 0.0, 0);
+    glVertex3i(x, y, z);
+    glVertex3i(x, y, -z);
+    glVertex3i(x, -y, -z);
+    glVertex3i(x, -y, z);
+
+    // LEFT
+    glVertex3i(-x, -y, z);
+    glVertex3i(-x, -y, -z);
+    glVertex3i(-x, y, -z);
+    glVertex3i(-x, y, z);
+
+    // UP
+    glVertex3i(x, -y, -z);
+    glVertex3i(-x, -y, -z);
+    glVertex3i(-x, -y, z);
+    glVertex3i(x, -y, z);
+
+    // DOWN
+    glVertex3i(x, y, z);
+    glVertex3i(-x, y, z);
+    glVertex3i(-x, y, -z);
+    glVertex3i(x, y, -z);
+
     glEnd();
-}
+} // drawWall
 
-void Drawer::drawSquare(CellType cellType, float x, float y, int transalationX, int transalationY){
-    int padding = getProperties(cellType).padding;
+void Drawer::drawCorridor(){
+    GLint x = Drawer::cellSize / 2;
+    GLint y = x;
+    GLint z = Drawer::cellSize / 5;
 
+    glColor3f(0.0, 0.0, 0.6);
     glBegin(GL_QUADS);
 
-    glVertex2i(y * Drawer::cellSize + padding + transalationX,
-      x * Drawer::cellSize + padding + transalationY);
-    glVertex2i((y + 1) * Drawer::cellSize - padding + transalationX,
-      x * Drawer::cellSize + padding + transalationY);
-    glVertex2i((y + 1) * Drawer::cellSize - padding + transalationX,
-      (x + 1) * Drawer::cellSize - padding + transalationY);
-    glVertex2i(y * Drawer::cellSize + padding + transalationX,
-      (x + 1) * Drawer::cellSize - padding + transalationY);
+    glVertex3i(x, -y, -z);
+    glVertex3i(-x, -y, -z);
+    glVertex3i(-x, y, -z);
+    glVertex3i(x, y, -z);
+
 
     glEnd();
-}
+} // drawCorridor
+
+void Drawer::drawFood(){
+    GLint r = Drawer::cellSize / 8;
+
+    glColor3f(1.0, 0.84, 0.0);
+    GLUquadric * quad = gluNewQuadric();
+
+    gluSphere(quad, r, 50, 20);
+
+    glEnd();
+    gluDeleteQuadric(quad);
+} // drawCorridor
 
 CellProperties Drawer::getProperties(CellType cellType){
     switch (cellType) {

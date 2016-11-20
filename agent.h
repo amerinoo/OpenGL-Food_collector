@@ -42,7 +42,6 @@ class Agent{
 
     Agent* agent;
  protected:
-    Drawer drawer;
     Strategy* strategy;
     CellType cellType;
     Particle particle;

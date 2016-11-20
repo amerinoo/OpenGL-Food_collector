@@ -6,8 +6,8 @@
 #ifndef drawer_h
 #define drawer_h
 #include <cmath>
-#include "enums.h"
 #include <GL/glut.h>
+#include "enums.h"
 
 typedef struct Color{
 
@@ -46,13 +46,20 @@ typedef struct CellProperties{
 class Drawer{
 public:
     static const int cellSize;
-
-    Drawer();
-    void draw(CellType, float, float, bool);
-    void draw(CellType, float, float, int, int);
+    int height, width;
+    static Drawer& getInstance();
+    void draw(CellType, float, float, bool, int=0, int=0);
     CellProperties getProperties(CellType);
+
+    void setHeight(int);
+    void setWidth(int);
 private:
-    void drawSquare(CellType, float, float, int, int);
-    void drawCircle(CellType, float, float, int, int);
+    // Constructors
+    Drawer();
+    Drawer(Drawer const&);
+    Drawer& operator=(Drawer const&);
+    void drawWall();
+    void drawCorridor();
+    void drawFood();
 };
 #endif

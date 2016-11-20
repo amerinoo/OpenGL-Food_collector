@@ -30,7 +30,8 @@ vector<vector<Cell *> > Map::getMap(){ return map; }
 
 // Methods
 void Map::generate(){
-    srand(time(NULL));
+    // srand(time(NULL));
+    srand(1);
     initCells();
     connectCells();
     inside();
@@ -346,7 +347,7 @@ void Map::getMapFromFile(char * fname){
 void Map::print(vector<vector<Cell *> > v){
     for (unsigned int i = 0; i < v.size(); i++) {
         for (unsigned int j = 0; j < v[i].size(); j++) {
-            cout << v[i][j]->getSymbol();
+            cout << v[i][j]->getSymbol() << " ";
         }
         cout << endl;
     }

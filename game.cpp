@@ -23,9 +23,9 @@ int Game::getWidth(){ return width; }
 
 void Game::draw(){
     vector<vector<Cell *> > m = map.getMap();
-    for (int i = 0; i < map.getWidth(); i++)
-        for (int j = 0; j < map.getHeigth(); j++)
-            m[j][i]->draw();
+    for (int i = 0; i < map.getHeigth(); i++)
+        for (int j = 0; j < map.getWidth(); j++)
+            m[i][j]->draw();
 
     player.draw();
     enemy.draw();

@@ -119,9 +119,11 @@ bool Agent::integrate(long t){
 }
 
 void Agent::draw(){
+    Drawer& drawer = Drawer::getInstance();
+
     if (particle.getState() == MOVE) {
         drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(),
-          particle.getTranslationX(), particle.getTranslationY());
+          true, particle.getTranslationX(), particle.getTranslationY());
     } else {
         drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(), true);
     }

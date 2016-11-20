@@ -5,6 +5,7 @@
  */
 #include <iostream>
 #include "graphics.h"
+#include "drawer.h"
 using namespace std;
 
 bool
@@ -32,6 +33,10 @@ int main(int argc, char * argv[]){
     }
 
     Game game(heigth, width);
+
+    Drawer& drawer = Drawer::getInstance();
+    drawer.setHeight(heigth);
+    drawer.setWidth(width);
 
     graphics.setGame(game);
     graphics.start();

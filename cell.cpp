@@ -38,7 +38,11 @@ Cell * Cell::getRight(){ return right; }
 
 CellType Cell::getType(){ return cellType; }
 
-char Cell::getSymbol(){ return drawer.getProperties(cellType).symbol; }
+char Cell::getSymbol(){
+    Drawer& drawer = Drawer::getInstance();
+
+    return drawer.getProperties(cellType).symbol;
+}
 
 // Setters
 void Cell::setX(float x){ this->x = x; }
@@ -65,5 +69,7 @@ void Cell::print(){ cout << getX() << " " << getY() << endl; }
 bool Cell::hasFood(){ return cellType == FOOD; }
 
 void Cell::draw(){
+    Drawer& drawer = Drawer::getInstance();
+
     drawer.draw(getType(), getX(), getY(), false);
 }

@@ -37,11 +37,15 @@ void Graphics::init(int argc, char * argv[]){
 }
 
 void Graphics::start(){
-    heigth = game.getHeight() * Drawer::cellSize;
-    width  = game.getWidth() * Drawer::cellSize;
-    last_t = 0;
+    // Drawer::height = game.getHeight();
+    // Drawer::width  = game.getWidth();
+    heigth     = game.getHeight() * Drawer::cellSize;
+    width      = game.getWidth() * Drawer::cellSize;
+    last_t     = 0;
+    anglealpha = 90;
+    anglebeta  = -45;
 
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(0, 0);
     glutInitWindowSize(width, heigth);
     glutCreateWindow(Graphics::windowTitle);
@@ -51,20 +55,66 @@ void Graphics::start(){
     glutSpecialFunc(mySpecial);
     glutIdleFunc(myIdle);
 
-    glMatrixMode(GL_MODELVIEW);
-    gluOrtho2D(0, width - 1, heigth - 1, 0);
+    glEnable(GL_DEPTH_TEST);
 
     glutMainLoop();
 }
 
 void Graphics::display(){
     glClearColor(Color::background.red, Color::background.green, Color::background.blue, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    positionObserver(anglealpha, anglebeta, 450);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(width * 0.5, -width * 0.5, -heigth * 0.5, heigth * 0.5, 50, 2000);
+
+    glMatrixMode(GL_MODELVIEW);
+
+    glPolygonMode(GL_FRONT, GL_FILL);
+    glPolygonMode(GL_BACK, GL_LINE);
 
     game.draw();
 
     glutSwapBuffers();
 } // display
+
+void Graphics::positionObserver(float alpha, float beta, int radi){
+    float x, y, z;
+    float upx, upy, upz;
+    float modul;
+
+    x = (float) radi * cos(alpha * 2 * M_PI / 360.0) * cos(beta * 2 * M_PI / 360.0);
+    y = (float) radi * sin(beta * 2 * M_PI / 360.0);
+    z = (float) radi * sin(alpha * 2 * M_PI / 360.0) * cos(beta * 2 * M_PI / 360.0);
+
+    if (beta > 0) {
+        upx = -x;
+        upz = -z;
+        upy = (x * x + z * z) / y;
+    } else if (beta == 0) {
+        upx = 0;
+        upy = 1;
+        upz = 0;
+    } else {
+        upx = x;
+        upz = z;
+        upy = -(x * x + z * z) / y;
+    }
+
+
+    modul = sqrt(upx * upx + upy * upy + upz * upz);
+
+    upx = upx / modul;
+    upy = upy / modul;
+    upz = upz / modul;
+
+    gluLookAt(x, y, z, 0.0, 0.0, 0.0, upx, upy, upz);
+}
 
 void Graphics::keyboard(unsigned char c, int x, int y){
     CellType cellType = PLAYER;
@@ -74,6 +124,11 @@ void Graphics::keyboard(unsigned char c, int x, int y){
     else if (c == 's') game.moveAgent(cellType, DOWN);
     else if (c == 'a') game.moveAgent(cellType, LEFT);
     else if (c == 'd') game.moveAgent(cellType, RIGHT);
+
+    else if (c == 'i' && anglebeta <= (90 - 4)) anglebeta = (anglebeta + 3);
+    else if (c == 'k' && anglebeta >= (-90 + 4)) anglebeta = anglebeta - 3;
+    else if (c == 'j') anglealpha = (anglealpha + 3) % 360;
+    else if (c == 'l') anglealpha = (anglealpha - 3 + 360) % 360;
 
     glutPostRedisplay();
 }
