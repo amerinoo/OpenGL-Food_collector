@@ -101,7 +101,7 @@ void display(){
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-WIDTH * 0.6, WIDTH * 0.6, -HEIGHT * 0.9, HEIGHT * 0.6, 10, 2000);
+    glOrtho(-WIDTH * 0.5, WIDTH * 0.5, -HEIGHT * 0.5, HEIGHT * 0.5, 10, 2000);
 
     glMatrixMode(GL_MODELVIEW);
 
@@ -125,42 +125,32 @@ void display(){
     glVertex3i(-x, y, z);
     glVertex3i(-x, -y, z);
     glVertex3i(x, -y, z);
-    glEnd();
 
     // glColor3f(0.0, 0.0, 1.0);
-    glBegin(GL_QUADS);
     glVertex3i(x, -y, z);
     glVertex3i(x, -y, -z);
     glVertex3i(x, y, -z);
     glVertex3i(x, y, z);
-    glEnd();
 
     // glColor3f(1.0, 1.0, 0.0);
-    glBegin(GL_QUADS);
     glVertex3i(x, -y, -z);
     glVertex3i(-x, -y, -z);
     glVertex3i(-x, y, -z);
     glVertex3i(x, y, -z);
-    glEnd();
 
     // glColor3f(0.0, 1.0, 0.0);
-    glBegin(GL_QUADS);
     glVertex3i(-x, y, z);
     glVertex3i(-x, y, -z);
     glVertex3i(-x, -y, -z);
     glVertex3i(-x, -y, z);
-    glEnd();
 
     // glColor3f(0.0, 0.0, 0.0);
-    glBegin(GL_QUADS);
     glVertex3i(x, y, -z);
     glVertex3i(-x, y, -z);
     glVertex3i(-x, y, z);
     glVertex3i(x, y, z);
-    glEnd();
 
     // glColor3f(0.75, 0.2, 0.75);
-    glBegin(GL_QUADS);
     glVertex3i(x, -y, z);
     glVertex3i(-x, -y, z);
     glVertex3i(-x, -y, -z);
