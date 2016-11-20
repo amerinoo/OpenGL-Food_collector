@@ -7,11 +7,16 @@
 #define drawer_h
 #include <cmath>
 #include <GL/glut.h>
+#include <string>
+#include <sstream>
 #include "enums.h"
+
+using namespace std;
 
 typedef struct Color{
 
     static const Color background;
+    static const Color text;
     static const Color wall;
     static const Color corridor;
     static const Color food;
@@ -53,6 +58,8 @@ public:
 
     void setHeight(int);
     void setWidth(int);
+    void printScore(int, int);
+    void printLevel(int);
 private:
     // Constructors
     Drawer();
@@ -61,5 +68,6 @@ private:
     void drawWall();
     void drawCorridor();
     void drawFood();
+    void printText(float, float, string);
 };
 #endif

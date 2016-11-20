@@ -40,6 +40,8 @@ class Map{
     Cell* initPlayer();
     Cell* initEnemy();
     vector<Cell*> getFood();
+    bool hasFood();
+    void eat();
     vector<Direction> getLegalActions(Cell*);
 
     // Print
@@ -68,6 +70,7 @@ class Map{
         int width, heigth;
         vector<vector<Cell*> > map;
         vector<vector<Cell *> > visited;
+        int totalFood;
 
 };
 #endif

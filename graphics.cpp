@@ -43,7 +43,7 @@ void Graphics::start(){
     width      = game.getWidth() * Drawer::cellSize;
     last_t     = 0;
     anglealpha = 90;
-    anglebeta  = -45;
+    anglebeta  = -45; // -45
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(0, 0);
@@ -71,7 +71,7 @@ void Graphics::display(){
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(width * 0.5, -width * 0.5, -heigth * 0.5, heigth * 0.5, 50, 2000);
+    glOrtho(-width * 0.5, width * 0.5, -heigth * 0.5, heigth * 0.5, 50, 2000);
 
     glMatrixMode(GL_MODELVIEW);
 
@@ -119,7 +119,7 @@ void Graphics::positionObserver(float alpha, float beta, int radi){
 void Graphics::keyboard(unsigned char c, int x, int y){
     CellType cellType = PLAYER;
 
-    if (c == 'r') game.newGame();
+    if (c == 'r') game.resetGame();
     else if (c == 'w') game.moveAgent(cellType, UP);
     else if (c == 's') game.moveAgent(cellType, DOWN);
     else if (c == 'a') game.moveAgent(cellType, LEFT);

@@ -13,7 +13,7 @@ Game::Game(){ }
 Game::Game(int height, int width){
     this->height = height;
     this->width  = width;
-    newGame();
+    resetGame();
 }
 
 // Getters
@@ -29,11 +29,19 @@ void Game::draw(){
 
     player.draw();
     enemy.draw();
-    // std::cout << "Score: " << player.getScore() << " " << enemy.getScore() << std::endl;
+    Drawer& drawer = Drawer::getInstance();
+    drawer.printScore(player.getScore(), enemy.getScore());
+    drawer.printLevel(level);
+}
+
+void Game::resetGame(){
+    level = 0;
+    newGame();
 }
 
 void Game::newGame(){
     newMap();
+    level += 1;
     player = Agent(PLAYER, map.initPlayer(), new Strategy(map));
     enemy  = Agent(ENEMY, map.initEnemy(), new ReflexAgent(map));
     player.setAgent(&enemy);
@@ -42,8 +50,14 @@ void Game::newGame(){
 }
 
 void Game::integrate(long t){
-    integrate(&player, t);
-    integrate(&enemy, t);
+    if (map.hasFood()) {
+        integrate(&player, t);
+        integrate(&enemy, t);
+    } else {
+        if (player.getScore() > enemy.getScore()) {
+            newGame();
+        } else { resetGame(); }
+    }
 }
 
 void Game::integrate(Agent * agent, long t){
@@ -52,7 +66,7 @@ void Game::integrate(Agent * agent, long t){
         Direction d = agent->getStrategy()->getAction(agent->getCurrentPosition());
         agent->setNextDirection(d);
         agent->tryNextDirection();
-        agent->move();
+        if (agent->move()) map.eat();
     }
 }
 
@@ -60,7 +74,7 @@ void Game::moveAgent(CellType cellType, Direction direction){
     if (cellType == PLAYER) {
         if (player.getState() == QUIET) {
             player.setDirection(direction);
-            player.move();
+            if (player.move()) map.eat();
         } else {
             player.setNextDirection(direction);
         }

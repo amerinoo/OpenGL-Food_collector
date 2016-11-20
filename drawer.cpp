@@ -9,6 +9,7 @@ Color::Color(const GLfloat red, const GLfloat green, const GLfloat blue)
     blue(RGBToGlut(blue)){ }
 
 const Color Color::background = Color(0, 0, 0);
+const Color Color::text       = Color(0, 150, 0);
 const Color Color::wall       = Color(0, 57, 255);
 const Color Color::corridor   = Color::background;
 const Color Color::food       = Color(224, 128, 234);
@@ -56,7 +57,7 @@ void Drawer::setWidth(int width){
 
 void Drawer::draw(CellType cellType, float x, float y, bool print, int transalationX, int transalationY){
     glPushMatrix();
-    glTranslatef((width - y) * Drawer::cellSize - ((width + 1) * Drawer::cellSize / 2.0 + transalationX),
+    glTranslatef(-(width - y) * Drawer::cellSize + ((width + 1) * Drawer::cellSize / 2.0 + transalationX),
       (height - x) * Drawer::cellSize - ((height + 1) * Drawer::cellSize / 2.0 + transalationY),
       0);
     if (print || (cellType != ENEMY && cellType != PLAYER)) {
@@ -92,41 +93,41 @@ void Drawer::drawWall(){
     glColor3f(0.2, 0.2, 0.2);
     glBegin(GL_QUADS);
     // FRONT
-    glVertex3f(x, -y, z);
-    glVertex3i(-x, -y, z);
+    glVertex3f(x, y, z);
     glVertex3i(-x, y, z);
-    glVertex3i(x, y, z);
+    glVertex3i(-x, -y, z);
+    glVertex3i(x, -y, z);
 
     // BACK
-    glVertex3i(x, y, -z);
-    glVertex3i(-x, y, -z);
-    glVertex3i(-x, -y, -z);
     glVertex3i(x, -y, -z);
+    glVertex3i(-x, -y, -z);
+    glVertex3i(-x, y, -z);
+    glVertex3i(x, y, -z);
 
     // RIGHT
     glColor3f(0.3, 0.0, 0);
-    glVertex3i(x, y, z);
-    glVertex3i(x, y, -z);
-    glVertex3i(x, -y, -z);
     glVertex3i(x, -y, z);
+    glVertex3i(x, -y, -z);
+    glVertex3i(x, y, -z);
+    glVertex3i(x, y, z);
 
     // LEFT
-    glVertex3i(-x, -y, z);
-    glVertex3i(-x, -y, -z);
-    glVertex3i(-x, y, -z);
     glVertex3i(-x, y, z);
+    glVertex3i(-x, y, -z);
+    glVertex3i(-x, -y, -z);
+    glVertex3i(-x, -y, z);
 
     // UP
-    glVertex3i(x, -y, -z);
-    glVertex3i(-x, -y, -z);
-    glVertex3i(-x, -y, z);
-    glVertex3i(x, -y, z);
+    glVertex3i(x, y, -z);
+    glVertex3i(-x, y, -z);
+    glVertex3i(-x, y, z);
+    glVertex3i(x, y, z);
 
     // DOWN
-    glVertex3i(x, y, z);
-    glVertex3i(-x, y, z);
-    glVertex3i(-x, y, -z);
-    glVertex3i(x, y, -z);
+    glVertex3i(x, -y, z);
+    glVertex3i(-x, -y, z);
+    glVertex3i(-x, -y, -z);
+    glVertex3i(x, -y, -z);
 
     glEnd();
 } // drawWall
@@ -139,10 +140,10 @@ void Drawer::drawCorridor(){
     glColor3f(0.0, 0.0, 0.6);
     glBegin(GL_QUADS);
 
-    glVertex3i(x, -y, -z);
-    glVertex3i(-x, -y, -z);
-    glVertex3i(-x, y, -z);
     glVertex3i(x, y, -z);
+    glVertex3i(-x, y, -z);
+    glVertex3i(-x, -y, -z);
+    glVertex3i(x, -y, -z);
 
 
     glEnd();
@@ -178,4 +179,36 @@ CellProperties Drawer::getProperties(CellType cellType){
             return CellProperties::enemy;
     }
     return CellProperties::wall;
+}
+
+void Drawer::printScore(int playerScore, int enemyScore){
+    ostringstream playerLabel;
+    ostringstream enemyLabel;
+
+    playerLabel << "Player: " << playerScore;
+    enemyLabel << "Enemy: " << enemyScore;
+
+    printText(width - 0.5, height - 0.5, playerLabel.str());
+    printText(width - 0.5, height - 2, enemyLabel.str());
+}
+
+void Drawer::printLevel(int level){
+    ostringstream levelLabel;
+
+    levelLabel << "Level: " << level;
+
+    printText(width * 0.35 - width, height - 1.5, levelLabel.str());
+}
+
+void Drawer::printText(float x, float y, string text){
+    Color color = Color::text;
+
+    glPushMatrix();
+    glTranslatef(-x * Drawer::cellSize / 2.0, y * Drawer::cellSize / 1.5, 0);
+    glColor3f(color.red, color.green, color.blue);
+    glScalef(width / 100.0, height / 100.0, 0);
+    for (unsigned int i = 0; i < text.size(); i++) {
+        glutStrokeCharacter(GLUT_STROKE_ROMAN, text[i]);
+    }
+    glPopMatrix();
 }

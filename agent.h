@@ -15,7 +15,7 @@ class Agent{
      static const int duration;
     // Constructors
     Agent();
-    Agent(CellType,Cell*,Strategy*);
+    Agent(CellType, Cell*, Strategy*);
 
     // Getters
     Strategy* getStrategy();
@@ -37,7 +37,7 @@ class Agent{
     void initMovement(Direction, int);
     bool integrate(long);
     void eat();
-    void move();
+    bool move();
     void tryNextDirection();
 
     Agent* agent;

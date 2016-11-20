@@ -21,6 +21,7 @@ class Game{
 	int getWidth();
 
     void draw();
+    void resetGame();
     void newGame();
     void integrate(long);
     void integrate(Agent*,long);
@@ -28,11 +29,11 @@ class Game{
 
  private:
     void newMap();
-
  protected:
  	Map map;
     int width, height;
  	Agent player;
  	Agent enemy;
+    int level;
 };
 #endif

@@ -58,8 +58,9 @@ void Agent::eat(){
     score += 1;
 }
 
-void Agent::move(){
+bool Agent::move(){
     Cell * cell = NULL;
+    bool eat    = false;
 
     if (currentDirection != NONE) {
         if (currentDirection == UP) cell = currentPosition->getUp();
@@ -73,7 +74,8 @@ void Agent::move(){
                 nextPosition = cell;
             } else if (cell->getType() == FOOD) {
                 nextPosition = cell;
-                eat();
+                this->eat();
+                eat = true;
             } else if (cell->getType() == ENEMY) {
                 currentPosition->setCellType(CORRIDOR);
                 goInitPosition();
@@ -92,8 +94,9 @@ void Agent::move(){
 
             particle.init_movement(widthTranslation, heightTranslation, Agent::duration);
         }
-    } // move
-}     // move
+    }
+    return eat;
+} // move
 
 void Agent::tryNextDirection(){
     Cell * cell = NULL;

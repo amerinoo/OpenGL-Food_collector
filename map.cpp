@@ -13,8 +13,9 @@ const int Map::initY = 1;
 Map::Map(){ }
 
 Map::Map(int a, int b){
-    heigth = a;
-    width  = b;
+    heigth    = a;
+    width     = b;
+    totalFood = -2;
     generate();
     initMap();
 }
@@ -30,8 +31,7 @@ vector<vector<Cell *> > Map::getMap(){ return map; }
 
 // Methods
 void Map::generate(){
-    // srand(time(NULL));
-    srand(1);
+    srand(time(NULL));
     initCells();
     connectCells();
     inside();
@@ -45,8 +45,10 @@ void Map::generate(){
 void Map::initMap(){
     for (unsigned int i = 0; i < map.size(); i++)
         for (unsigned int j = 0; j < map[0].size(); j++)
-            if (map[i][j]->getType() == CORRIDOR)
+            if (map[i][j]->getType() == CORRIDOR) {
                 map[i][j]->setCellType(FOOD);
+                totalFood += 1;
+            }
 }
 
 Cell * Map::initPlayer(){
@@ -363,4 +365,10 @@ vector<Cell *> Map::getFood(){
                 listCell.push_back(map[i][j]);
 
     return listCell;
+}
+
+bool Map::hasFood(){ return totalFood != 0; }
+
+void Map::eat(){
+    totalFood -= 1;
 }
