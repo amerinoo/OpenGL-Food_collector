@@ -23,10 +23,14 @@ typedef struct Color{
     static const Color player;
     static const Color enemy;
 
-    const GLfloat red;
-    const GLfloat green;
-    const GLfloat blue;
-    Color(const GLfloat red, const GLfloat green, const GLfloat blue);
+    const GLfloat red1;
+    const GLfloat green1;
+    const GLfloat blue1;
+    const GLfloat red2;
+    const GLfloat green2;
+    const GLfloat blue2;
+    Color(const GLfloat red1, const GLfloat green1, const GLfloat blue1,
+      const GLfloat red2=0, const GLfloat green2=0, const GLfloat blue2=0);
 
     GLfloat RGBToGlut(int);
 } Color;
@@ -41,16 +45,16 @@ typedef struct CellProperties{
 
     const char symbol;
     const Color color;
-    const int padding;
-    const ShapeType shape;
-    const int radius;
-    CellProperties(const char symbol, const Color color, const int padding,
-        const ShapeType,const int radius);
+    CellProperties(const char symbol, const Color color);
 } CellProperties;
 
 class Drawer{
 public:
     static const int cellSize;
+    static const GLfloat x;
+    static const GLfloat y;
+    static const GLfloat z;
+    static const GLdouble r;
     int height, width;
     static Drawer& getInstance();
     void draw(CellType, float, float, bool, int=0, int=0);
@@ -68,6 +72,8 @@ private:
     void drawWall();
     void drawCorridor();
     void drawFood();
+    void drawTank(CellType);
+    void drawCube(CellProperties);
     void printText(float, float, string);
 };
 #endif

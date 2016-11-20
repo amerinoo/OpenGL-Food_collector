@@ -37,8 +37,6 @@ void Graphics::init(int argc, char * argv[]){
 }
 
 void Graphics::start(){
-    // Drawer::height = game.getHeight();
-    // Drawer::width  = game.getWidth();
     heigth     = game.getHeight() * Drawer::cellSize;
     width      = game.getWidth() * Drawer::cellSize;
     last_t     = 0;
@@ -61,7 +59,7 @@ void Graphics::start(){
 }
 
 void Graphics::display(){
-    glClearColor(Color::background.red, Color::background.green, Color::background.blue, 1);
+    glClearColor(Color::background.red1, Color::background.green1, Color::background.blue1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);
