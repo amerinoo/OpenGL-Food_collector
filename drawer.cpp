@@ -201,12 +201,13 @@ void Drawer::printLevel(int level){
 }
 
 void Drawer::printText(float x, float y, string text){
-    Color color = Color::text;
+    Color color   = Color::text;
+    GLfloat scale = 0.005 * Drawer::cellSize - 0.05;
 
     glPushMatrix();
     glTranslatef(-x * Drawer::cellSize / 2.0, y * Drawer::cellSize / 1.5, 0);
     glColor3f(color.red, color.green, color.blue);
-    glScalef(width / 100.0, height / 100.0, 0);
+    glScalef(scale, scale, 0);
     for (unsigned int i = 0; i < text.size(); i++) {
         glutStrokeCharacter(GLUT_STROKE_ROMAN, text[i]);
     }
