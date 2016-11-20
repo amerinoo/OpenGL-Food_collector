@@ -50,23 +50,23 @@ void Game::newGame(){
 }
 
 void Game::integrate(long t){
-    if (map.hasFood()) {
-        integrate(&player, t);
-        integrate(&enemy, t);
-    } else {
-        if (player.getScore() > enemy.getScore()) {
-            newGame();
-        } else { resetGame(); }
-    }
+    integrate(&player, t);
+    integrate(&enemy, t);
 }
 
 void Game::integrate(Agent * agent, long t){
     if (agent->integrate(t) || agent->getState() == QUIET) {
-        agent->setPosition(agent->getNextPosition());
-        Direction d = agent->getStrategy()->getAction(agent->getCurrentPosition());
-        agent->setNextDirection(d);
-        agent->tryNextDirection();
-        if (agent->move()) map.eat();
+        if (map.hasFood()) {
+            agent->setPosition(agent->getNextPosition());
+            Direction d = agent->getStrategy()->getAction(agent->getCurrentPosition());
+            agent->setNextDirection(d);
+            agent->tryNextDirection();
+            if (agent->move()) map.eat();
+        } else {
+            if (player.getScore() > enemy.getScore()) {
+                newGame();
+            } else { resetGame(); }
+        }
     }
 }
 
