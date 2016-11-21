@@ -22,8 +22,5 @@ ALL : $(TARGET)
 $(TARGET): $(CFILES) $(HFILES)
 	$(CC) $(CFILES) -o $(TARGET) $(CFLAGS)
 
-tank : tank.cpp
-	$(CC) tank.cpp -o tank $(CFLAGS)
-
 clean:
 	$(RM) $(TARGET)
