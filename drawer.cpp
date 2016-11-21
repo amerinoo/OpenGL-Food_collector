@@ -16,6 +16,7 @@ const Color Color::corridor   = Color(0, 0, 80);
 const Color Color::food       = Color(255, 214, 0);
 const Color Color::player     = Color(255, 255, 0);
 const Color Color::enemy      = Color(255, 0, 0);
+const Color Color::tank       = Color(153, 153, 153, 51, 51, 51);
 
 GLfloat Color::RGBToGlut(int num){
     return num / 255.0;
@@ -53,37 +54,38 @@ void Drawer::setWidth(int width){
     this->width = width;
 }
 
-void Drawer::draw(CellType cellType, float x, float y, bool print, int transalationX, int transalationY){
+void Drawer::draw(CellType cellType, float x, float y, bool print,
+  Direction direction, int transalationX, int transalationY){
     glPushMatrix();
     glTranslatef(-(width - y) * Drawer::cellSize + ((width + 1) * Drawer::cellSize / 2.0 + transalationX),
-      (height - x) * Drawer::cellSize - ((height + 1) * Drawer::cellSize / 2.0 + transalationY), 0);
+      (height - x) * Drawer::cellSize - ((height + 1) * Drawer::cellSize / 2.0 + transalationY),
+      0);
     if (print || (cellType != ENEMY && cellType != PLAYER)) {
         switch (cellType) {
             case WALL:
                 drawWall();
                 break;
             case CORRIDOR:
-                drawCorridor();
                 break;
             case FOOD:
                 drawFood();
                 break;
             case PLAYER:
             case ENEMY:
-                drawTank(cellType);
+                drawTank(cellType, direction);
                 break;
             default:
                 break;
         }
     }
-    drawCorridor();
+    if (!print) drawCorridor();
     glPopMatrix();
 } // draw
 
 void Drawer::drawWall(){
     CellProperties properties = getProperties(WALL);
 
-    drawCube(properties);
+    drawCube(properties.color);
 } // drawWall
 
 void Drawer::drawCorridor(){
@@ -101,7 +103,6 @@ void Drawer::drawCorridor(){
     glVertex3f(-x, -y, -z);
     glVertex3f(x, -y, -z);
 
-
     glEnd();
 } // drawCorridor
 
@@ -115,23 +116,75 @@ void Drawer::drawFood(){
 
     gluSphere(quad, r, 10, 5);
 
-    glEnd();
     gluDeleteQuadric(quad);
+    glEnd();
 } // drawFood
 
-void Drawer::drawTank(CellType cellType){
-    CellProperties properties = getProperties(cellType);
+void Drawer::drawTank(CellType cellType, Direction direction){
+    Color color = getProperties(cellType).color;
+    GLfloat x   = Drawer::x / 6.0;
+    GLdouble wheelSeparation = 1.8;
+    GLdouble s;
+    GLdouble h;
+    GLfloat rotate = 0;
 
-    drawFood();
-}
+    glRotatef(90, 1, 0, 0); // Don't touch it.
+    if (direction == UP) {
+        glTranslatef(0, 10, -Drawer::cellSize / 2.5);
+        glRotatef(0 + rotate, 0, 1, 0); // UP
+    } else if (direction == LEFT) {
+        glTranslatef(-Drawer::cellSize / 2.5, 10, 0);
+        glRotatef(90 + rotate, 0, 1, 0); // LEFT
+    } else if (direction == DOWN) {
+        glTranslatef(0, 10, Drawer::cellSize / 2.5);
+        glRotatef(180 + rotate, 0, 1, 0); // DOWN
+    } else if (direction == RIGHT) {
+        glTranslatef(Drawer::cellSize / 2.5, 10, 0);
+        glRotatef(270 + rotate, 0, 1, 0); // RIGHT
+    }
+    s = x / 2.0;
+    h = x * 5.0;
+    drawCylinder(s, h, Color::tank);
+    drawHead(Color::tank);
+    // Dibuixa cos
 
-void Drawer::drawCube(CellProperties properties){
-    Color color = properties.color;
-    GLfloat x   = Drawer::x;
-    GLfloat y   = Drawer::y;
-    GLfloat z   = Drawer::z;
+
+    s = x * 2;
+    h = s * 1.5;
+    glTranslatef(0, -x * 2.5, -s / 1.2);
+    drawCylinder(s, h, color);
+
+    // Dibuixa roda dreta
+    s = x * 1.5;
+    h = s * 5;
+    glTranslatef(s * wheelSeparation, -s, -s * 3.5);
+    drawCylinder(s, h, color);
+
+    // Dibuixa roda esquerra
+    glTranslatef(-s * wheelSeparation * 2, 0, -s * 5);
+    drawCylinder(s, h, color);
+} // drawTank
+
+void Drawer::drawCylinder(GLdouble s, GLdouble h, Color color){
+    GLUquadric * quad = gluNewQuadric();
 
     glColor3f(color.red1, color.green1, color.blue1);
+    gluCylinder(quad, s, s, h, 10, 5);
+    glColor3f(color.red2, color.green2, color.blue2);
+    gluSphere(quad, s, 10, 5);
+    glTranslatef(0, 0, h);
+    gluSphere(quad, s, 10, 5);
+
+    gluDeleteQuadric(quad);
+    glEnd();
+}
+
+void Drawer::drawHead(Color color){
+    GLfloat x = Drawer::x / 6.0;
+    GLfloat y = x;
+    GLfloat z = x;
+
+    glColor3f(color.red2, color.green2, color.blue2);
     glBegin(GL_QUADS);
     // FRONT
     glVertex3f(x, y, z);
@@ -147,6 +200,53 @@ void Drawer::drawCube(CellProperties properties){
 
     // RIGHT
     glColor3f(color.red2, color.green2, color.blue2);
+    glVertex3f(x, -y, z);
+    glVertex3f(x, -y, -z);
+    glVertex3f(x, y, -z);
+    glVertex3f(x, y, z);
+
+    // LEFT
+    glVertex3f(-x, y, z);
+    glVertex3f(-x, y, -z);
+    glVertex3f(-x, -y, -z);
+    glVertex3f(-x, -y, z);
+
+    // UP
+    glVertex3f(x, y, -z);
+    glVertex3f(-x, y, -z);
+    glVertex3f(-x, y, z);
+    glVertex3f(x, y, z);
+
+    // DOWN
+    glVertex3f(x, -y, z);
+    glVertex3f(-x, -y, z);
+    glVertex3f(-x, -y, -z);
+    glVertex3f(x, -y, -z);
+
+    glEnd();
+} // drawHead
+
+void Drawer::drawCube(Color color){
+    GLfloat x = Drawer::x;
+    GLfloat y = Drawer::y;
+    GLfloat z = Drawer::z;
+
+    glColor3f(color.red1, color.green1, color.blue1);
+    glBegin(GL_QUADS);
+    // FRONT
+    glVertex3f(x, y, z);
+    glVertex3f(-x, y, z);
+    glVertex3f(-x, -y, z);
+    glVertex3f(x, -y, z);
+
+    glColor3f(color.red2, color.green2, color.blue2);
+    // BACK
+    glVertex3f(x, -y, -z);
+    glVertex3f(-x, -y, -z);
+    glVertex3f(-x, y, -z);
+    glVertex3f(x, y, -z);
+
+    // RIGHT
     glVertex3f(x, -y, z);
     glVertex3f(x, -y, -z);
     glVertex3f(x, y, -z);
@@ -189,6 +289,8 @@ CellProperties Drawer::getProperties(CellType cellType){
 
         case ENEMY:
             return CellProperties::enemy;
+
+        default: break;
     }
     return CellProperties::wall;
 }

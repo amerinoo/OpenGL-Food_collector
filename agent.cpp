@@ -38,6 +38,9 @@ void Agent::setPosition(Cell * cell){
 }
 
 void Agent::setDirection(Direction currentDirection){
+    if (currentDirection != NONE) {
+        lastDirection = this->currentDirection;
+    }
     this->currentDirection = currentDirection;
 }
 
@@ -50,6 +53,7 @@ void Agent::setAgent(Agent * agent){ this->agent = agent; }
 void Agent::goInitPosition(){
     setPosition(initPosition);
     nextPosition     = initPosition;
+    lastDirection    = DOWN;
     currentDirection = NONE;
     nextDirection    = NONE;
 }
@@ -106,8 +110,8 @@ void Agent::tryNextDirection(){
     else if (nextDirection == LEFT) cell = currentPosition->getLeft();
     else if (nextDirection == RIGHT) cell = currentPosition->getRight();
     if ((cell != NULL && cell->getType() != WALL) || currentDirection == NONE) {
-        currentDirection = nextDirection;
-        nextDirection    = NONE;
+        setDirection(nextDirection);
+        nextDirection = NONE;
     }
 }
 
@@ -122,12 +126,19 @@ bool Agent::integrate(long t){
 }
 
 void Agent::draw(){
+    Direction direction;
+
+    if (currentDirection != NONE) {
+        direction = currentDirection;
+    } else {
+        direction = lastDirection;
+    }
     Drawer& drawer = Drawer::getInstance();
 
     if (particle.getState() == MOVE) {
         drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(),
-          true, particle.getTranslationX(), particle.getTranslationY());
+          true, direction, particle.getTranslationX(), particle.getTranslationY());
     } else {
-        drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(), true);
+        drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(), true, direction);
     }
 }

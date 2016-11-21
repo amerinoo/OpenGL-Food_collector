@@ -50,6 +50,7 @@ class Agent{
     Cell* currentPosition;
     Cell* nextPosition;
 
+    Direction lastDirection;
     Direction currentDirection;
     Direction nextDirection;
 };
