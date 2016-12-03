@@ -12,7 +12,7 @@ using namespace std;
 
 class Agent{
  public:
-     static const int duration;
+     static int duration;
     // Constructors
     Agent();
     Agent(CellType, Cell*, Strategy*);

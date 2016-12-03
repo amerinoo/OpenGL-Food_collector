@@ -30,6 +30,8 @@ const GLfloat Drawer::x    = Drawer::cellSize / 2.0;
 const GLfloat Drawer::y    = Drawer::x;
 const GLfloat Drawer::z    = Drawer::cellSize / 5.0;
 const GLdouble Drawer::r   = Drawer::cellSize / 8;
+const GLint Drawer::slices = 10;
+const GLint Drawer::stacks = 5;
 
 const CellProperties CellProperties::wall     = CellProperties('0', Color::wall);
 const CellProperties CellProperties::corridor = CellProperties(' ', Color::corridor);
@@ -114,7 +116,7 @@ void Drawer::drawFood(){
     glColor3f(color.red1, color.green1, color.blue1);
     GLUquadric * quad = gluNewQuadric();
 
-    gluSphere(quad, r, 10, 5);
+    gluSphere(quad, r, Drawer::slices, Drawer::stacks);
 
     gluDeleteQuadric(quad);
     glEnd();
@@ -146,9 +148,8 @@ void Drawer::drawTank(CellType cellType, Direction direction){
     h = x * 5.0;
     drawCylinder(s, h, Color::tank);
     drawHead(Color::tank);
+
     // Dibuixa cos
-
-
     s = x * 2;
     h = s * 1.5;
     glTranslatef(0, -x * 2.5, -s / 1.2);
@@ -169,11 +170,11 @@ void Drawer::drawCylinder(GLdouble s, GLdouble h, Color color){
     GLUquadric * quad = gluNewQuadric();
 
     glColor3f(color.red1, color.green1, color.blue1);
-    gluCylinder(quad, s, s, h, 10, 5);
+    gluCylinder(quad, s, s, h, Drawer::slices, Drawer::stacks);
     glColor3f(color.red2, color.green2, color.blue2);
-    gluSphere(quad, s, 10, 5);
+    gluSphere(quad, s, Drawer::slices, Drawer::stacks);
     glTranslatef(0, 0, h);
-    gluSphere(quad, s, 10, 5);
+    gluSphere(quad, s, Drawer::slices, Drawer::stacks);
 
     gluDeleteQuadric(quad);
     glEnd();

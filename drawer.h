@@ -56,6 +56,8 @@ public:
     static const GLfloat y;
     static const GLfloat z;
     static const GLdouble r;
+    static const GLint slices;
+    static const GLint stacks;
     int height, width;
     static Drawer& getInstance();
     void draw(CellType, float, float, bool,Direction=NONE, int=0, int=0);

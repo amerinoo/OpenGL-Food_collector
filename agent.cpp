@@ -6,7 +6,7 @@
 #include "agent.h"
 using namespace std;
 
-const int Agent::duration = 250;
+int Agent::duration = 250;
 
 // Constructors
 Agent::Agent(){ }
@@ -65,12 +65,23 @@ void Agent::eat(){
 bool Agent::move(){
     Cell * cell = NULL;
     bool eat    = false;
+    float widthTranslation  = 0;
+    float heightTranslation = 0;
 
     if (currentDirection != NONE) {
-        if (currentDirection == UP) cell = currentPosition->getUp();
-        else if (currentDirection == DOWN) cell = currentPosition->getDown();
-        else if (currentDirection == LEFT) cell = currentPosition->getLeft();
-        else if (currentDirection == RIGHT) cell = currentPosition->getRight();
+        if (currentDirection == UP) {
+            cell = currentPosition->getUp();
+            heightTranslation = -Drawer::cellSize;
+        } else if (currentDirection == DOWN) {
+            cell = currentPosition->getDown();
+            heightTranslation = Drawer::cellSize;
+        } else if (currentDirection == LEFT) {
+            cell = currentPosition->getLeft();
+            widthTranslation = -Drawer::cellSize;
+        }    else if (currentDirection == RIGHT) {
+            cell = currentPosition->getRight();
+            widthTranslation = Drawer::cellSize;
+        }
 
 
         if (cell->getType() != WALL) {
@@ -88,13 +99,6 @@ bool Agent::move(){
                 agent->getCurrentPosition()->setCellType(CORRIDOR);
                 agent->goInitPosition();
             }
-            float widthTranslation  = 0;
-            float heightTranslation = 0;
-
-            if (currentDirection == UP) heightTranslation = -Drawer::cellSize;
-            else if (currentDirection == DOWN) heightTranslation = Drawer::cellSize;
-            else if (currentDirection == LEFT) widthTranslation = -Drawer::cellSize;
-            else if (currentDirection == RIGHT) widthTranslation = Drawer::cellSize;
 
             particle.init_movement(widthTranslation, heightTranslation, Agent::duration);
         }
