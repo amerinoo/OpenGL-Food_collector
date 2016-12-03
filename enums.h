@@ -14,6 +14,7 @@ enum CellType{
 };
 
 enum State{
+    ROTATE,
     MOVE,
     QUIET
 };
@@ -24,10 +25,17 @@ enum ShapeType{
 };
 
 enum Direction{
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    NONE
+    UP=0,
+    LEFT=90,
+    DOWN=180,
+    RIGHT=270,
+    NONE=360
 };
+/*enum Direction{
+    UP = 0,
+    DOWN = 180,
+    LEFT = 90,
+    RIGHT = 270,
+    NONE = 0
+};*/
 #endif

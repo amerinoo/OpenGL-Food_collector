@@ -49,6 +49,7 @@ class Agent{
     Cell* initPosition;
     Cell* currentPosition;
     Cell* nextPosition;
+    bool needRotate;
 
     Direction lastDirection;
     Direction currentDirection;

@@ -33,7 +33,6 @@ Direction Agent::getDirection(){ return currentDirection; }
 
 void Agent::setPosition(Cell * cell){
     cell->setCellType(cellType);
-
     currentPosition = cell;
 }
 
@@ -41,6 +40,7 @@ void Agent::setDirection(Direction currentDirection){
     if (currentDirection != NONE) {
         lastDirection = this->currentDirection;
     }
+    needRotate = this->currentDirection != currentDirection;
     this->currentDirection = currentDirection;
 }
 
@@ -53,7 +53,7 @@ void Agent::setAgent(Agent * agent){ this->agent = agent; }
 void Agent::goInitPosition(){
     setPosition(initPosition);
     nextPosition     = initPosition;
-    lastDirection    = DOWN;
+    lastDirection    = NONE;
     currentDirection = NONE;
     nextDirection    = NONE;
 }
@@ -83,8 +83,13 @@ bool Agent::move(){
             widthTranslation = Drawer::cellSize;
         }
 
-
-        if (cell->getType() != WALL) {
+        if (needRotate) {
+            float r = currentDirection - lastDirection;
+            if (r > 180) r -= 360;
+            else if (r < -180) r += 360;
+            particle.init_rotation(r, Agent::duration);
+            needRotate = false;
+        } else if (cell->getType() != WALL) {
             if (cell->getType() == CORRIDOR) {
                 nextPosition = cell;
             } else if (cell->getType() == FOOD) {
@@ -141,8 +146,12 @@ void Agent::draw(){
 
     if (particle.getState() == MOVE) {
         drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(),
-          true, direction, particle.getTranslationX(), particle.getTranslationY());
+          true, direction, 0, particle.getTranslationX(), particle.getTranslationY());
+    } else if (particle.getState() == ROTATE) {
+        drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(),
+          true, lastDirection, particle.getRotation());
     } else {
-        drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(), true, direction);
+        drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(),
+          true, direction);
     }
 }

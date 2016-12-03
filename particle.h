@@ -9,18 +9,22 @@
 #include "enums.h"
 
 class Particle {
-    float vx, vy; // -- Velocity vector
-    float transalationX, transalationY;
+    float vx, vy, vr; // -- Velocity vector
+    float transalationX, transalationY, rotation;
     State state;
 
     long time_remaining;
 
 public:
     Particle();
+    void init_rotation(float, int);
     void init_movement(float, float, int);
     bool integrate(long);
+    bool integrate_move(long);
+    bool integrate_rotate(long);
     float getTranslationX();
     float getTranslationY();
+    float getRotation();
     State getState();
 };
 #endif

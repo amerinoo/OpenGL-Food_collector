@@ -60,7 +60,7 @@ public:
     static const GLint stacks;
     int height, width;
     static Drawer& getInstance();
-    void draw(CellType, float, float, bool,Direction=NONE, int=0, int=0);
+    void draw(CellType, float, float, bool,Direction=NONE,int=0, int=0, int=0);
     CellProperties getProperties(CellType);
 
     void setHeight(int);
@@ -75,7 +75,7 @@ private:
     void drawWall();
     void drawCorridor();
     void drawFood();
-    void drawTank(CellType,Direction);
+    void drawTank(CellType,Direction,float);
     void drawCylinder(GLdouble, GLdouble, Color);
     void drawHead(Color);
     void drawCube(Color);

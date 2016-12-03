@@ -57,7 +57,7 @@ void Drawer::setWidth(int width){
 }
 
 void Drawer::draw(CellType cellType, float x, float y, bool print,
-  Direction direction, int transalationX, int transalationY){
+  Direction direction, int rotation, int transalationX, int transalationY){
     glPushMatrix();
     glTranslatef(-(width - y) * Drawer::cellSize + ((width + 1) * Drawer::cellSize / 2.0 + transalationX),
       (height - x) * Drawer::cellSize - ((height + 1) * Drawer::cellSize / 2.0 + transalationY),
@@ -74,7 +74,7 @@ void Drawer::draw(CellType cellType, float x, float y, bool print,
                 break;
             case PLAYER:
             case ENEMY:
-                drawTank(cellType, direction);
+                drawTank(cellType, direction, rotation);
                 break;
             default:
                 break;
@@ -122,13 +122,12 @@ void Drawer::drawFood(){
     glEnd();
 } // drawFood
 
-void Drawer::drawTank(CellType cellType, Direction direction){
+void Drawer::drawTank(CellType cellType, Direction direction, float rotate){
     Color color = getProperties(cellType).color;
     GLfloat x   = Drawer::x / 6.0;
     GLdouble wheelSeparation = 1.8;
     GLdouble s;
     GLdouble h;
-    GLfloat rotate = 0;
 
     glRotatef(90, 1, 0, 0); // Don't touch it.
     if (direction == UP) {
