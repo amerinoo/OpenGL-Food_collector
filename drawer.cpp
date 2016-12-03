@@ -80,7 +80,7 @@ void Drawer::draw(CellType cellType, float x, float y, bool print,
                 break;
         }
     }
-    if (!print) drawCorridor();
+    if (!print && cellType != WALL) drawCorridor();
     glPopMatrix();
 } // draw
 
