@@ -16,6 +16,7 @@ class Cell{
     // Constructors
     Cell();
     Cell(float, float, CellType);
+    bool operator==(Cell*);
 
     // Getters
     float getX();

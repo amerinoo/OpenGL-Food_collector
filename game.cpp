@@ -27,10 +27,10 @@ void Game::draw(){
         for (int j = 0; j < map.getWidth(); j++)
             m[i][j]->draw();
 
-    player.draw();
-    enemy.draw();
+    player->draw();
+    enemy->draw();
     Drawer& drawer = Drawer::getInstance();
-    drawer.printScore(player.getScore(), enemy.getScore());
+    drawer.printScore(player->getScore(), enemy->getScore());
     drawer.printLevel(level);
 }
 
@@ -43,10 +43,10 @@ void Game::resetGame(){
 void Game::newGame(){
     newMap();
     level += 1;
-    player = Agent(PLAYER, map.initPlayer(), new Strategy(map));
-    enemy  = Agent(ENEMY, map.initEnemy(), new ReflexAgent(map));
-    player.setAgent(&enemy);
-    enemy.setAgent(&player);
+    player = new Agent(PLAYER, map.initPlayer(), new Strategy(map));
+    enemy  = new Agent(ENEMY, map.initEnemy(), new ReflexAgent(map));
+    player->setAgent(enemy);
+    enemy->setAgent(player);
     map.print();
 }
 
@@ -56,8 +56,8 @@ void Game::pauseGame(){
 
 void Game::integrate(long t){
     if (!pause) {
-        integrate(&player, t);
-        integrate(&enemy, t);
+        integrate(player, t);
+        integrate(enemy, t);
     }
 }
 
@@ -70,7 +70,7 @@ void Game::integrate(Agent * agent, long t){
             agent->tryNextDirection();
             if (agent->move()) map.eat();
         } else {
-            if (player.getScore() > enemy.getScore()) {
+            if (player->getScore() > enemy->getScore()) {
                 newGame();
             } else { resetGame(); }
         }
@@ -79,14 +79,14 @@ void Game::integrate(Agent * agent, long t){
 
 void Game::moveAgent(CellType cellType, Direction direction){
     if (cellType == PLAYER) {
-        if (player.getState() == QUIET) {
-            player.setDirection(direction);
-            if (player.move()) map.eat();
+        if (player->getState() == QUIET) {
+            player->setDirection(direction);
+            if (player->move()) map.eat();
         } else {
-            player.setNextDirection(direction);
+            player->setNextDirection(direction);
         }
     } else if (cellType == ENEMY) {
-        enemy.setNextDirection(direction);
+        enemy->setNextDirection(direction);
     }
 }
 

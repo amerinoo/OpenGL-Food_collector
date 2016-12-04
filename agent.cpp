@@ -83,6 +83,11 @@ bool Agent::move(){
             widthTranslation = Drawer::cellSize;
         }
 
+        bool crash = cellType == ENEMY &&
+          (cell == agent->getNextPosition() ||
+          currentPosition == agent->getNextPosition() ||
+          cell == agent->getCurrentPosition());
+
         if (needRotate) {
             float r = currentDirection - lastDirection;
             if (r > 180) r -= 360;
@@ -96,13 +101,13 @@ bool Agent::move(){
                 nextPosition = cell;
                 this->eat();
                 eat = true;
-            } else if (cell->getType() == ENEMY) {
-                currentPosition->setCellType(CORRIDOR);
-                goInitPosition();
-            } else if (cell->getType() == PLAYER) {
+            } else if (crash) {
                 nextPosition = cell;
                 agent->getCurrentPosition()->setCellType(CORRIDOR);
                 agent->goInitPosition();
+            } else if (cell->getType() == ENEMY || currentPosition->getType() == ENEMY) {
+                currentPosition->setCellType(CORRIDOR);
+                goInitPosition();
             }
 
             particle.init_movement(widthTranslation, heightTranslation, Agent::duration);

@@ -33,8 +33,8 @@ class Game{
  protected:
  	Map map;
     int width, height;
- 	Agent player;
- 	Agent enemy;
+ 	Agent* player;
+ 	Agent* enemy;
     int level;
     bool pause;
 };

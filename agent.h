@@ -13,6 +13,7 @@ using namespace std;
 class Agent{
  public:
      static int duration;
+     Agent* agent;
     // Constructors
     Agent();
     Agent(CellType, Cell*, Strategy*);
@@ -39,8 +40,6 @@ class Agent{
     void eat();
     bool move();
     void tryNextDirection();
-
-    Agent* agent;
  protected:
     Strategy* strategy;
     CellType cellType;

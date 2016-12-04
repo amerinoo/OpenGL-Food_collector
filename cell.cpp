@@ -21,6 +21,10 @@ Cell::Cell(float x, float y, CellType cellType){
     right = NULL;
 }
 
+bool Cell::operator == (Cell * c){
+    return getX() == c->getX() && getY() == c->getY();
+}
+
 // Getters
 float Cell::getX(){ return x; }
 
