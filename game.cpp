@@ -36,6 +36,7 @@ void Game::draw(){
 
 void Game::resetGame(){
     level = 0;
+    pause = false;
     newGame();
 }
 
@@ -49,9 +50,15 @@ void Game::newGame(){
     map.print();
 }
 
+void Game::pauseGame(){
+    pause = !pause;
+}
+
 void Game::integrate(long t){
-    integrate(&player, t);
-    integrate(&enemy, t);
+    if (!pause) {
+        integrate(&player, t);
+        integrate(&enemy, t);
+    }
 }
 
 void Game::integrate(Agent * agent, long t){

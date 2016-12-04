@@ -117,6 +117,8 @@ void Graphics::positionObserver(float alpha, float beta, int radi){
 void Graphics::keyboard(unsigned char c, int x, int y){
     CellType cellType = PLAYER;
 
+    c = tolower(c); // Prevent upper case
+
     if (c == 'r') game.resetGame();
     else if (c == 'w') game.moveAgent(cellType, UP);
     else if (c == 's') game.moveAgent(cellType, DOWN);
@@ -130,6 +132,8 @@ void Graphics::keyboard(unsigned char c, int x, int y){
 
     else if (c == '+' && Agent::duration > 100) Agent::duration -= 50;
     else if (c == '-' && Agent::duration < 500) Agent::duration += 50;
+    else if (c == 'p') game.pauseGame();
+
 
     glutPostRedisplay();
 }

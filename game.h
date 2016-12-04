@@ -23,6 +23,7 @@ class Game{
     void draw();
     void resetGame();
     void newGame();
+    void pauseGame();
     void integrate(long);
     void integrate(Agent*,long);
     void moveAgent(CellType, Direction);
@@ -35,5 +36,6 @@ class Game{
  	Agent player;
  	Agent enemy;
     int level;
+    bool pause;
 };
 #endif
