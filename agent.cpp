@@ -6,7 +6,7 @@
 #include "agent.h"
 using namespace std;
 
-int Agent::duration = 250;
+int Agent::duration = 200;
 
 // Constructors
 Agent::Agent(){ }
