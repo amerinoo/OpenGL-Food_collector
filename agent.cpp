@@ -37,7 +37,7 @@ void Agent::setPosition(Cell * cell){
 }
 
 void Agent::setDirection(Direction currentDirection){
-    if (currentDirection != NONE) {
+    if (currentDirection != NONE && this->currentDirection != NONE) {
         lastDirection = this->currentDirection;
     }
     needRotate = this->currentDirection != currentDirection;
@@ -53,7 +53,7 @@ void Agent::setAgent(Agent * agent){ this->agent = agent; }
 void Agent::goInitPosition(){
     setPosition(initPosition);
     nextPosition     = initPosition;
-    lastDirection    = NONE;
+    lastDirection    = DOWN;
     currentDirection = NONE;
     nextDirection    = NONE;
 }
@@ -87,7 +87,7 @@ bool Agent::move(){
             float r = currentDirection - lastDirection;
             if (r > 180) r -= 360;
             else if (r < -180) r += 360;
-            particle.init_rotation(r, Agent::duration);
+            if (r != 0) particle.init_rotation(r, Agent::duration);
             needRotate = false;
         } else if (cell->getType() != WALL) {
             if (cell->getType() == CORRIDOR) {

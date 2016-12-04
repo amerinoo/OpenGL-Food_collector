@@ -130,19 +130,9 @@ void Drawer::drawTank(CellType cellType, Direction direction, float rotate){
     GLdouble h;
 
     glRotatef(90, 1, 0, 0); // Don't touch it.
-    if (direction == UP) {
-        glTranslatef(0, 10, -Drawer::cellSize / 2.5);
-        glRotatef(0 + rotate, 0, 1, 0); // UP
-    } else if (direction == LEFT) {
-        glTranslatef(-Drawer::cellSize / 2.5, 10, 0);
-        glRotatef(90 + rotate, 0, 1, 0); // LEFT
-    } else if (direction == DOWN) {
-        glTranslatef(0, 10, Drawer::cellSize / 2.5);
-        glRotatef(180 + rotate, 0, 1, 0); // DOWN
-    } else if (direction == RIGHT) {
-        glTranslatef(Drawer::cellSize / 2.5, 10, 0);
-        glRotatef(270 + rotate, 0, 1, 0); // RIGHT
-    }
+    glRotatef(direction + rotate, 0, 1, 0);
+    glTranslatef(0, 10, -Drawer::cellSize / 2.5);
+
     s = x / 2.0;
     h = x * 5.0;
     drawCylinder(s, h, Color::tank);
