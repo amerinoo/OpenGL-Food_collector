@@ -116,6 +116,10 @@ bool Agent::move(){
     return eat;
 } // move
 
+void Agent::shoot(){
+    std::cout << "SHOOT " << currentDirection << std::endl;
+}
+
 void Agent::tryNextDirection(){
     Cell * cell = NULL;
 

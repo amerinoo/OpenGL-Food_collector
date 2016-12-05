@@ -23,6 +23,7 @@ typedef struct Color{
     static const Color player;
     static const Color enemy;
     static const Color tank;
+    static const Color bullet;
 
     const GLfloat red1;
     const GLfloat green1;
@@ -43,6 +44,7 @@ typedef struct CellProperties{
     static const CellProperties food;
     static const CellProperties player;
     static const CellProperties enemy;
+    static const CellProperties bullet;
 
     const char symbol;
     const Color color;
@@ -74,7 +76,7 @@ private:
     Drawer& operator=(Drawer const&);
     void drawWall();
     void drawCorridor();
-    void drawFood();
+    void drawSphere(CellType);
     void drawTank(CellType,Direction,float);
     void drawCylinder(GLdouble, GLdouble, Color);
     void drawHead(Color);

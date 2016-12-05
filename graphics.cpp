@@ -124,6 +124,7 @@ void Graphics::keyboard(unsigned char c, int x, int y){
     else if (c == 's') game.moveAgent(cellType, DOWN);
     else if (c == 'a') game.moveAgent(cellType, LEFT);
     else if (c == 'd') game.moveAgent(cellType, RIGHT);
+    else if (c == ' ') game.shoot(cellType);
 
     else if (c == 'i' && anglebeta <= (90 - 4)) anglebeta = (anglebeta + 3);
     else if (c == 'k' && anglebeta >= (-90 + 4)) anglebeta = anglebeta - 3;

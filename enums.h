@@ -10,7 +10,8 @@ enum CellType{
     CORRIDOR,
     FOOD,
     PLAYER,
-    ENEMY
+    ENEMY,
+    BULLET
 };
 
 enum State{
@@ -31,11 +32,4 @@ enum Direction{
     RIGHT=270,
     NONE=360
 };
-/*enum Direction{
-    UP = 0,
-    DOWN = 180,
-    LEFT = 90,
-    RIGHT = 270,
-    NONE = 0
-};*/
 #endif

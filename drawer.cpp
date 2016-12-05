@@ -17,6 +17,7 @@ const Color Color::food       = Color(255, 214, 0);
 const Color Color::player     = Color(255, 255, 0);
 const Color Color::enemy      = Color(255, 0, 0);
 const Color Color::tank       = Color(153, 153, 153, 51, 51, 51);
+const Color Color::bullet     = Color(204, 0, 204);
 
 GLfloat Color::RGBToGlut(int num){
     return num / 255.0;
@@ -38,6 +39,7 @@ const CellProperties CellProperties::corridor = CellProperties(' ', Color::corri
 const CellProperties CellProperties::food     = CellProperties('.', Color::food);
 const CellProperties CellProperties::player   = CellProperties('p', Color::player);
 const CellProperties CellProperties::enemy    = CellProperties('e', Color::enemy);
+const CellProperties CellProperties::bullet   = CellProperties('o', Color::bullet);
 
 // Constructors
 Drawer::Drawer(){ }
@@ -70,11 +72,14 @@ void Drawer::draw(CellType cellType, float x, float y, bool print,
             case CORRIDOR:
                 break;
             case FOOD:
-                drawFood();
+                drawSphere(cellType);
                 break;
             case PLAYER:
             case ENEMY:
                 drawTank(cellType, direction, rotation);
+                break;
+            case BULLET:
+                drawSphere(cellType);
                 break;
             default:
                 break;
@@ -108,8 +113,8 @@ void Drawer::drawCorridor(){
     glEnd();
 } // drawCorridor
 
-void Drawer::drawFood(){
-    CellProperties properties = getProperties(FOOD);
+void Drawer::drawSphere(CellType cellType){
+    CellProperties properties = getProperties(cellType);
     Color color = properties.color;
     GLdouble r  = Drawer::r;
 

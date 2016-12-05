@@ -90,6 +90,12 @@ void Game::moveAgent(CellType cellType, Direction direction){
     }
 }
 
+void Game::shoot(CellType cellType){
+    if (cellType == PLAYER) {
+        player->shoot();
+    }
+}
+
 void Game::newMap(){
     map = Map(height, width);
 }

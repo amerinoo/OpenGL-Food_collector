@@ -39,6 +39,7 @@ class Agent{
     bool integrate(long);
     void eat();
     bool move();
+    void shoot();
     void tryNextDirection();
  protected:
     Strategy* strategy;
