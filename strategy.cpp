@@ -6,6 +6,8 @@
 #include "strategy.h"
 Strategy::Strategy(){ }
 
-Strategy::Strategy(Map map) : map(map){ }
+Strategy::Strategy(Map * map) : map(map){ }
 
 Direction Strategy::getAction(Cell * c){ return NONE; }
+
+Map * Strategy::getMap(){ return map; }

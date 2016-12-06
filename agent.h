@@ -41,7 +41,7 @@ class Agent{
     void initMovement(Direction, int);
     bool integrate(long);
     void eat();
-    bool move();
+    void move();
     Translation getTranslation(Direction);
     bool isCrash();
     void rotate();
@@ -50,6 +50,7 @@ class Agent{
     Cell* getNextPosition(Direction);
  protected:
     Strategy* strategy;
+    Map* map;
     CellType cellType;
     Particle particle;
     int score;

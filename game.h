@@ -34,7 +34,7 @@ class Game{
  private:
     void newMap();
  protected:
- 	Map map;
+ 	Map* map;
     int width, height;
  	Agent* player;
  	Agent* enemy;

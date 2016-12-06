@@ -14,6 +14,7 @@ Agent::Agent(){ }
 Agent::Agent(CellType cellType, Cell * initPosition, Strategy * strategy)
     : cellType(cellType), initPosition(initPosition){
     this->strategy = strategy;
+    map   = strategy->getMap();
     score = 0;
     goInitPosition();
 }
@@ -66,11 +67,11 @@ void Agent::goInitPosition(){
 
 void Agent::eat(){
     score += 1;
+    map->eat();
 }
 
-bool Agent::move(){
+void Agent::move(){
     Cell * cell = NULL;
-    bool eat    = false;
     Translation translation;
 
     if (currentDirection != NONE) {
@@ -85,12 +86,10 @@ bool Agent::move(){
                 agent->getCurrentPosition()->setCellType(CORRIDOR);
                 agent->goInitPosition();
             } else if (cell->hasFood()) {
-                this->eat();
-                eat = true;
+                eat();
             }
         }
     }
-    return eat;
 } // move
 
 Translation Agent::getTranslation(Direction direction){

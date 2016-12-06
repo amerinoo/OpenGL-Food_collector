@@ -6,10 +6,10 @@
 #include "reflexAgent.h"
 ReflexAgent::ReflexAgent() : Strategy(){ }
 
-ReflexAgent::ReflexAgent(Map map) : Strategy(map){ }
+ReflexAgent::ReflexAgent(Map * map) : Strategy(map){ }
 
 Direction ReflexAgent::getAction(Cell * c){
-    vector<Direction> legalActions = map.getLegalActions(c);
+    vector<Direction> legalActions = map->getLegalActions(c);
     vector<float> scores;
 
     for (unsigned int i = 0; i < legalActions.size(); i++) {
@@ -35,7 +35,7 @@ float ReflexAgent::evaluationFunction(Cell * currentPosition, Direction directio
     float totalScore    = 0.0;
     Cell * nextPosition = getNextState(currentPosition, direction);
 
-    vector<Cell *> food = map.getFood();
+    vector<Cell *> food = map->getFood();
     for (unsigned int i = 0; i < food.size(); i++) {
         int d = manhattanDistance(nextPosition, food[i]);
         totalScore += (d == 0.0) ? 100 : 1.0 / (d * d);

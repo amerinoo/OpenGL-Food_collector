@@ -13,6 +13,7 @@ Game::Game(){ }
 Game::Game(int height, int width){
     this->height = height;
     this->width  = width;
+    map = NULL;
     resetGame();
 }
 
@@ -22,9 +23,9 @@ int Game::getHeight(){ return height; }
 int Game::getWidth(){ return width; }
 
 void Game::draw(){
-    vector<vector<Cell *> > m = map.getMap();
-    for (int i = 0; i < map.getHeigth(); i++)
-        for (int j = 0; j < map.getWidth(); j++)
+    vector<vector<Cell *> > m = map->getMap();
+    for (int i = 0; i < map->getHeigth(); i++)
+        for (int j = 0; j < map->getWidth(); j++)
             m[i][j]->draw();
 
     player->draw();
@@ -43,11 +44,11 @@ void Game::resetGame(){
 void Game::newGame(){
     newMap();
     level += 1;
-    player = new Agent(PLAYER, map.initPlayer(), new Strategy(map));
-    enemy  = new Agent(ENEMY, map.initEnemy(), new ReflexAgent(map));
+    player = new Agent(PLAYER, map->initPlayer(), new Strategy(map));
+    enemy  = new Agent(ENEMY, map->initEnemy(), new ReflexAgent(map));
     player->setAgent(enemy);
     enemy->setAgent(player);
-    map.print();
+    map->print();
 }
 
 void Game::pauseGame(){
@@ -63,12 +64,12 @@ void Game::integrate(long t){
 
 void Game::integrate(Agent * agent, long t){
     if (agent->integrate(t) || agent->isQuiet()) {
-        if (map.hasFood()) {
+        if (map->hasFood()) {
             agent->setPosition(agent->getNextPosition());
             Direction d = agent->getStrategy()->getAction(agent->getCurrentPosition());
             agent->setNextDirection(d);
             agent->tryNextDirection();
-            if (agent->move()) map.eat();
+            agent->move();
         } else { finish(); }
     }
 }
@@ -94,5 +95,6 @@ void Game::shoot(CellType cellType){
 }
 
 void Game::newMap(){
-    map = Map(height, width);
+    if (map != NULL) delete map;
+    map = new Map(height, width);
 }

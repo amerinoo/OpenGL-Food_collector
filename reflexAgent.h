@@ -13,7 +13,7 @@ class ReflexAgent: public Strategy{
  public:
     // Constructors
     ReflexAgent();
-    ReflexAgent(Map);
+    ReflexAgent(Map*);
 
     // Methods
     Direction getAction(Cell*);

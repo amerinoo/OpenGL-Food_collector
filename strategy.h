@@ -13,10 +13,11 @@ class Strategy{
  public:
     // Constructors
     Strategy();
-    Strategy(Map);
+    Strategy(Map*);
 
     virtual Direction getAction(Cell*);
+    Map* getMap();
 protected:
-    Map map;
+    Map* map;
 };
 #endif
