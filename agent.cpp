@@ -71,26 +71,21 @@ void Agent::eat(){
 }
 
 void Agent::move(){
-    Cell * cell = NULL;
-    Translation translation;
-
     if (currentDirection != NONE) {
-        cell        = getNextPosition(currentDirection);
-        translation = getTranslation(currentDirection);
-        if (needRotate) {
-            rotate();
-        } else if (!cell->isWall()) {
-            nextPosition = cell;
-            particle.init_movement(translation, Agent::duration);
-            if (isCrash()) {
-                agent->getCurrentPosition()->setCellType(CORRIDOR);
-                agent->goInitPosition();
-            } else if (cell->hasFood()) {
-                eat();
-            }
-        }
-    }
+        if (needRotate) rotate();
+        else move(getNextPosition(currentDirection, currentPosition)); }
 } // move
+
+void Agent::move(Cell * cell){
+    Translation translation = getTranslation(currentDirection);
+
+    if (!cell->isWall()) {
+        nextPosition = cell;
+        particle.init_movement(translation, Agent::duration);
+        if (isCrash()) crash();
+        else if (cell->hasFood()) eat();
+    }
+}
 
 Translation Agent::getTranslation(Direction direction){
     Translation translation;
@@ -110,6 +105,11 @@ bool Agent::isCrash(){
            nextPosition == agent->getCurrentPosition() : false;
 }
 
+void Agent::crash(){
+    agent->getCurrentPosition()->setCellType(CORRIDOR);
+    agent->goInitPosition();
+}
+
 void Agent::rotate(){
     float r = currentDirection - lastDirection;
 
@@ -126,7 +126,7 @@ void Agent::shoot(){
 }
 
 void Agent::tryNextDirection(){
-    Cell * cell = getNextPosition(nextDirection);
+    Cell * cell = getNextPosition(nextDirection, currentPosition);
 
     if ((cell != NULL && !cell->isWall()) || currentDirection == NONE) {
         setDirection(nextDirection);
@@ -134,13 +134,13 @@ void Agent::tryNextDirection(){
     }
 }
 
-Cell * Agent::getNextPosition(Direction direction){
+Cell * Agent::getNextPosition(Direction direction, Cell * position){
     Cell * cell = NULL;
 
-    if (direction == UP) cell = currentPosition->getUp();
-    else if (direction == DOWN) cell = currentPosition->getDown();
-    else if (direction == LEFT) cell = currentPosition->getLeft();
-    else if (direction == RIGHT) cell = currentPosition->getRight();
+    if (direction == UP) cell = position->getUp();
+    else if (direction == DOWN) cell = position->getDown();
+    else if (direction == LEFT) cell = position->getLeft();
+    else if (direction == RIGHT) cell = position->getRight();
     return cell;
 }
 

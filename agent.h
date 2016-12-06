@@ -42,12 +42,14 @@ class Agent{
     bool integrate(long);
     void eat();
     void move();
+    void move(Cell*);
+    void crash();
     Translation getTranslation(Direction);
     bool isCrash();
     void rotate();
     void shoot();
     void tryNextDirection();
-    Cell* getNextPosition(Direction);
+    Cell* getNextPosition(Direction,Cell*);
  protected:
     Strategy* strategy;
     Map* map;
