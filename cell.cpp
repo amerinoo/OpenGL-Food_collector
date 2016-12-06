@@ -74,6 +74,8 @@ bool Cell::hasFood(){ return cellType == FOOD; }
 
 bool Cell::isWall(){ return cellType == WALL; }
 
+bool Cell::isCorridor(){ return cellType == CORRIDOR; }
+
 void Cell::draw(){
     Drawer& drawer = Drawer::getInstance();
 

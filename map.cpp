@@ -45,7 +45,7 @@ void Map::generate(){
 void Map::initMap(){
     for (unsigned int i = 0; i < map.size(); i++)
         for (unsigned int j = 0; j < map[0].size(); j++)
-            if (map[i][j]->getType() == CORRIDOR) {
+            if (map[i][j]->isCorridor()) {
                 map[i][j]->setCellType(FOOD);
                 totalFood += 1;
             }
@@ -280,14 +280,10 @@ void Map::openRandom(Cell * c, vector<Direction> directions){
 vector<Direction> Map::getLegalActions(Cell * c){
     vector<Direction> legalActions;
 
-    if (c->getUp()->getType() != WALL)
-        legalActions.push_back(UP);
-    if (c->getDown()->getType() != WALL)
-        legalActions.push_back(DOWN);
-    if (c->getLeft()->getType() != WALL)
-        legalActions.push_back(LEFT);
-    if (c->getRight()->getType() != WALL)
-        legalActions.push_back(RIGHT);
+    if (!c->getUp()->isWall()) legalActions.push_back(UP);
+    if (!c->getDown()->isWall()) legalActions.push_back(DOWN);
+    if (!c->getLeft()->isWall()) legalActions.push_back(LEFT);
+    if (!c->getRight()->isWall()) legalActions.push_back(RIGHT);
 
     return legalActions;
 }
@@ -300,9 +296,9 @@ void Map::mirror(){
         for (int j = floor(width / 2.0) - 1; j >= 0; j--) {
             Cell * cell = map[i][j];
 
-            if (cell->getType() == CORRIDOR) {
+            if (cell->isCorridor()) {
                 map[i].push_back(new Cell(i, width - j - 1, CORRIDOR));
-            } else if (cell->getType() == WALL) {
+            } else if (cell->isWall()) {
                 map[i].push_back(new Cell(i, width - j - 1, WALL));
             }
         }
@@ -361,7 +357,7 @@ vector<Cell *> Map::getFood(){
 
     for (unsigned int i = 0; i < map.size(); i++)
         for (unsigned int j = 0; j < map[i].size(); j++)
-            if (map[i][j]->getType() == FOOD)
+            if (map[i][j]->hasFood())
                 listCell.push_back(map[i][j]);
 
     return listCell;

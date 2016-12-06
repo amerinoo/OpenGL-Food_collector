@@ -100,18 +100,7 @@ Direction MinimaxAgent::reflexAgent(Cell * c){
 } // getAction
 
 vector<Direction> MinimaxAgent::getLegalActions(Cell * c){
-    vector<Direction> legalActions;
-
-    if (c->getUp()->getType() != WALL)
-        legalActions.push_back(UP);
-    if (c->getDown()->getType() != WALL)
-        legalActions.push_back(DOWN);
-    if (c->getLeft()->getType() != WALL)
-        legalActions.push_back(LEFT);
-    if (c->getRight()->getType() != WALL)
-        legalActions.push_back(RIGHT);
-
-    return legalActions;
+    return map.getLegalActions();
 }
 
 float MinimaxAgent::evaluationFunction(Cell * currentPosition, Direction direction){

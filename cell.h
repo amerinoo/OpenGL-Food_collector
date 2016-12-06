@@ -30,6 +30,7 @@ class Cell{
     CellType getType();
     bool hasFood();
     bool isWall();
+    bool isCorridor();
     void eat();
     void draw();
 
