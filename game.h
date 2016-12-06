@@ -21,6 +21,7 @@ class Game{
 	int getWidth();
 
     void draw();
+    void drawText();
     void resetGame();
     void newGame();
     void pauseGame();

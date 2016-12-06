@@ -21,7 +21,7 @@ int main(int argc, char * argv[]){
     graphics.init(argc, argv);
     int heigth    = atoi(argv[1]);
     int width     = atoi(argv[2]);
-    int maxHeigth = graphics.getMaxHeigth();
+    int maxHeigth = graphics.getMaxHeight();
     int maxWidth  = graphics.getMaxWidth();
 
     if (hasCorrectArguments(heigth, width, maxHeigth, maxWidth)) {

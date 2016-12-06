@@ -29,9 +29,26 @@ void Game::draw(){
     for (int i = 0; i < map->getHeigth(); i++)
         for (int j = 0; j < map->getWidth(); j++)
             m[i][j]->draw();
+}
+
+void Game::drawText(){
+    glDisable(GL_DEPTH_TEST);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0.0, width, 0.0, height);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
     Drawer& drawer = Drawer::getInstance();
     drawer.printScore(player->getScore(), enemy->getScore());
     drawer.printLevel(level);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
 }
 
 void Game::resetGame(){

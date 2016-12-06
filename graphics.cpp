@@ -20,11 +20,11 @@ Graphics& Graphics::getInstance(){
 }
 
 // Getters
-int Graphics::getHeight(){ return heigth; }
+int Graphics::getHeight(){ return height; }
 
 int Graphics::getWidth(){ return width; }
 
-int Graphics::getMaxHeigth(){ return glutGet(GLUT_SCREEN_HEIGHT) / Drawer::cellSize; }
+int Graphics::getMaxHeight(){ return glutGet(GLUT_SCREEN_HEIGHT) / Drawer::cellSize; }
 
 int Graphics::getMaxWidth(){ return glutGet(GLUT_SCREEN_WIDTH) / Drawer::cellSize; }
 
@@ -37,7 +37,7 @@ void Graphics::init(int argc, char * argv[]){
 }
 
 void Graphics::start(){
-    heigth     = game.getHeight() * Drawer::cellSize;
+    height     = game.getHeight() * Drawer::cellSize;
     width      = game.getWidth() * Drawer::cellSize;
     last_t     = 0;
     anglealpha = 90;
@@ -45,7 +45,7 @@ void Graphics::start(){
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(0, 0);
-    glutInitWindowSize(width, heigth);
+    glutInitWindowSize(width, height);
     glutCreateWindow(Graphics::windowTitle);
 
     glutDisplayFunc(myDisplay);
@@ -53,7 +53,9 @@ void Graphics::start(){
     glutSpecialFunc(mySpecial);
     glutIdleFunc(myIdle);
 
-    glEnable(GL_DEPTH_TEST);
+    glPolygonMode(GL_FRONT, GL_FILL);
+    glPolygonMode(GL_BACK, GL_LINE);
+
 
     glutMainLoop();
 }
@@ -62,21 +64,17 @@ void Graphics::display(){
     glClearColor(Color::background.red1, Color::background.green1, Color::background.blue1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    positionObserver(anglealpha, anglebeta, 450);
-
+    glEnable(GL_DEPTH_TEST);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-width * 0.5, width * 0.5, -heigth * 0.5, heigth * 0.5, 50, 2000);
+    glOrtho(-width * 0.5, width * 0.5, -height * 0.5, height * 0.5, 50, 2000);
 
     glMatrixMode(GL_MODELVIEW);
-
-    glPolygonMode(GL_FRONT, GL_FILL);
-    glPolygonMode(GL_BACK, GL_LINE);
+    glLoadIdentity();
+    positionObserver(anglealpha, anglebeta, 450);
 
     game.draw();
+    game.drawText();
 
     glutSwapBuffers();
 } // display

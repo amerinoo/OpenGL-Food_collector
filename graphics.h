@@ -24,7 +24,7 @@ class Graphics{
     static Graphics& getInstance();
     int getHeight();
     int getWidth();
-    int getMaxHeigth();
+    int getMaxHeight();
     int getMaxWidth();
 
     // Setters
@@ -45,7 +45,7 @@ class Graphics{
      Graphics& operator=(Graphics const&);
  protected:
      Game game;
-     int heigth, width;
+     int height, width;
      long last_t;
      static const char* windowTitle;
      int anglealpha, anglebeta;

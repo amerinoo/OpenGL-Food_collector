@@ -299,9 +299,9 @@ void Drawer::printScore(int playerScore, int enemyScore){
 
     playerLabel << "Player: " << playerScore;
     enemyLabel << "Enemy: " << enemyScore;
-
-    printText(width - 0.5, height - 0.5, playerLabel.str());
-    printText(width - 0.5, height - 2, enemyLabel.str());
+    printText(0, 0, "");
+    printText(0.5, height * 0.97, playerLabel.str());
+    printText(0.5, height * 0.94, enemyLabel.str());
 }
 
 void Drawer::printLevel(int level){
@@ -309,19 +309,15 @@ void Drawer::printLevel(int level){
 
     levelLabel << "Level: " << level;
 
-    printText(width * 0.35 - width, height - 1.5, levelLabel.str());
+    printText(width * 0.8, height * 0.97, levelLabel.str());
 }
 
 void Drawer::printText(float x, float y, string text){
-    Color color   = Color::text;
-    GLfloat scale = 0.005 * Drawer::cellSize - 0.05;
+    Color color = Color::text;
 
-    glPushMatrix();
-    glTranslatef(-x * Drawer::cellSize / 2.0, y * Drawer::cellSize / 1.5, 0);
+    glRasterPos2f(x, y);
     glColor3f(color.red1, color.green1, color.blue1);
-    glScalef(scale, scale, 0);
     for (unsigned int i = 0; i < text.size(); i++) {
-        glutStrokeCharacter(GLUT_STROKE_ROMAN, text[i]);
+        glutBitmapCharacter(GLUT_BITMAP_8_BY_13, text[i]);
     }
-    glPopMatrix();
 }
