@@ -62,31 +62,28 @@ void Game::integrate(long t){
 }
 
 void Game::integrate(Agent * agent, long t){
-    if (agent->integrate(t) || agent->getState() == QUIET) {
+    if (agent->integrate(t) || agent->isQuiet()) {
         if (map.hasFood()) {
             agent->setPosition(agent->getNextPosition());
             Direction d = agent->getStrategy()->getAction(agent->getCurrentPosition());
             agent->setNextDirection(d);
             agent->tryNextDirection();
             if (agent->move()) map.eat();
-        } else {
-            if (player->getScore() > enemy->getScore()) {
-                newGame();
-            } else { resetGame(); }
-        }
+        } else { finish(); }
     }
 }
 
+void Game::finish(){
+    if (playerWin()) newGame();
+    else resetGame();
+}
+
+bool Game::playerWin(){ return player->getScore() > enemy->getScore(); }
+
 void Game::moveAgent(CellType cellType, Direction direction){
     if (cellType == PLAYER) {
-        if (player->getState() == QUIET) {
-            player->setDirection(direction);
-            if (player->move()) map.eat();
-        } else {
-            player->setNextDirection(direction);
-        }
-    } else if (cellType == ENEMY) {
-        enemy->setNextDirection(direction);
+        if (player->isQuiet()) player->setDirection(direction);
+        else player->setNextDirection(direction);
     }
 }
 

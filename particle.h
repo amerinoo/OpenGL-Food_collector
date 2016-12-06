@@ -8,9 +8,20 @@
 #include <GL/glut.h>
 #include "enums.h"
 
+typedef struct Translation{
+
+    float x;
+    float y;
+    float vx;
+    float vy;
+    Translation();
+    Translation(float, float, float=0, float=0);
+} Translation;
+
 class Particle {
-    float vx, vy, vr; // -- Velocity vector
-    float transalationX, transalationY, rotation;
+    float vr; // -- Velocity vector
+    float rotation;
+    Translation translation;
     State state;
 
     long time_remaining;
@@ -18,12 +29,11 @@ class Particle {
 public:
     Particle();
     void init_rotation(float, int);
-    void init_movement(float, float, int);
+    void init_movement(Translation, int);
     bool integrate(long);
     bool integrate_move(long);
     bool integrate_rotate(long);
-    float getTranslationX();
-    float getTranslationY();
+    Translation getTranslation();
     float getRotation();
     State getState();
 };

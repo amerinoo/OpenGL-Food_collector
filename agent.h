@@ -22,6 +22,9 @@ class Agent{
     Strategy* getStrategy();
     int getScore();
     State getState();
+    bool isQuiet();
+    bool isMove();
+    bool isRotate();
     Cell* getCurrentPosition();
     Cell* getNextPosition();
     Direction getDirection();
@@ -39,8 +42,12 @@ class Agent{
     bool integrate(long);
     void eat();
     bool move();
+    Translation getTranslation(Direction);
+    bool isCrash();
+    void rotate();
     void shoot();
     void tryNextDirection();
+    Cell* getNextPosition(Direction);
  protected:
     Strategy* strategy;
     CellType cellType;

@@ -72,6 +72,8 @@ void Cell::print(){ cout << getX() << " " << getY() << endl; }
 
 bool Cell::hasFood(){ return cellType == FOOD; }
 
+bool Cell::isWall(){ return cellType == WALL; }
+
 void Cell::draw(){
     Drawer& drawer = Drawer::getInstance();
 

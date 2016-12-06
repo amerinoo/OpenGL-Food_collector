@@ -5,6 +5,12 @@
  */
 #include "particle.h"
 
+Translation::Translation()
+    :  x(0), y(0), vx(0), vy(0){ }
+
+Translation::Translation(float x, float y, float vx, float vy)
+    :  x(x), y(y), vx(vx), vy(vy){ }
+
 Particle::Particle(){
     state = QUIET;
 }
@@ -16,11 +22,8 @@ void Particle::init_rotation(float rotation, int duration){
     time_remaining = duration;
 }
 
-void Particle::init_movement(float widthTranslation, float heightTranslation, int duration){
-    vx = widthTranslation / duration;
-    vy = heightTranslation / duration;
-    transalationX  = 0;
-    transalationY  = 0;
+void Particle::init_movement(Translation t, int duration){
+    translation    = Translation(0, 0, t.x / duration, t.y / duration);
     state          = MOVE;
     time_remaining = duration;
 }
@@ -36,12 +39,12 @@ bool Particle::integrate(long t){
 
 bool Particle::integrate_move(long t){
     if (t < time_remaining) {
-        transalationX  += vx * t;
-        transalationY  += vy * t;
+        translation.x  += translation.vx * t;
+        translation.y  += translation.vy * t;
         time_remaining -= t;
     } else if (t >= time_remaining) {
-        transalationX += vx * time_remaining;
-        transalationY += vy * time_remaining;
+        translation.x += translation.vx * time_remaining;
+        translation.y += translation.vy * time_remaining;
         state          = QUIET;
         return true;
     }
@@ -60,9 +63,7 @@ bool Particle::integrate_rotate(long t){
     return false;
 }
 
-float Particle::getTranslationX(){ return transalationX; }
-
-float Particle::getTranslationY(){ return transalationY; }
+Translation Particle::getTranslation(){ return translation; }
 
 float Particle::getRotation(){ return rotation; }
 

@@ -26,6 +26,8 @@ class Game{
     void pauseGame();
     void integrate(long);
     void integrate(Agent*,long);
+    void finish();
+    bool playerWin();
     void moveAgent(CellType, Direction);
     void shoot(CellType);
 

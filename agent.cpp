@@ -25,6 +25,12 @@ int Agent::getScore(){ return score; }
 
 State Agent::getState(){ return particle.getState(); }
 
+bool Agent::isQuiet(){ return getState() == QUIET; }
+
+bool Agent::isMove(){ return getState() == MOVE; }
+
+bool Agent::isRotate(){ return getState() == ROTATE; }
+
 Cell * Agent::getCurrentPosition(){ return currentPosition; }
 
 Cell * Agent::getNextPosition(){ return nextPosition; }
@@ -65,72 +71,78 @@ void Agent::eat(){
 bool Agent::move(){
     Cell * cell = NULL;
     bool eat    = false;
-    float widthTranslation  = 0;
-    float heightTranslation = 0;
+    Translation translation;
 
     if (currentDirection != NONE) {
-        if (currentDirection == UP) {
-            cell = currentPosition->getUp();
-            heightTranslation = -Drawer::cellSize;
-        } else if (currentDirection == DOWN) {
-            cell = currentPosition->getDown();
-            heightTranslation = Drawer::cellSize;
-        } else if (currentDirection == LEFT) {
-            cell = currentPosition->getLeft();
-            widthTranslation = -Drawer::cellSize;
-        }    else if (currentDirection == RIGHT) {
-            cell = currentPosition->getRight();
-            widthTranslation = Drawer::cellSize;
-        }
-
-        bool crash = cellType == ENEMY &&
-          (cell == agent->getNextPosition() ||
-          currentPosition == agent->getNextPosition() ||
-          cell == agent->getCurrentPosition());
-
+        cell        = getNextPosition(currentDirection);
+        translation = getTranslation(currentDirection);
         if (needRotate) {
-            float r = currentDirection - lastDirection;
-            if (r > 180) r -= 360;
-            else if (r < -180) r += 360;
-            if (r != 0) particle.init_rotation(r, Agent::duration);
-            needRotate = false;
-        } else if (cell->getType() != WALL) {
-            if (cell->getType() == CORRIDOR) {
-                nextPosition = cell;
-            } else if (cell->getType() == FOOD) {
-                nextPosition = cell;
-                this->eat();
-                eat = true;
-            } else if (crash) {
-                nextPosition = cell;
+            rotate();
+        } else if (!cell->isWall()) {
+            nextPosition = cell;
+            particle.init_movement(translation, Agent::duration);
+            if (isCrash()) {
                 agent->getCurrentPosition()->setCellType(CORRIDOR);
                 agent->goInitPosition();
-            } else if (cell->getType() == ENEMY || currentPosition->getType() == ENEMY) {
-                currentPosition->setCellType(CORRIDOR);
-                goInitPosition();
+            } else if (cell->hasFood()) {
+                this->eat();
+                eat = true;
             }
-
-            particle.init_movement(widthTranslation, heightTranslation, Agent::duration);
         }
     }
     return eat;
 } // move
+
+Translation Agent::getTranslation(Direction direction){
+    Translation translation;
+
+    if (direction == UP) translation.y = -Drawer::cellSize;
+    else if (direction == DOWN) translation.y = Drawer::cellSize;
+    else if (direction == LEFT) translation.x = -Drawer::cellSize;
+    else if (direction == RIGHT) translation.x = Drawer::cellSize;
+    return translation;
+}
+
+bool Agent::isCrash(){
+    return (cellType == ENEMY) ?
+           nextPosition == agent->getNextPosition() ||
+           currentPosition == agent->getNextPosition() ||
+           currentPosition == agent->getCurrentPosition() ||
+           nextPosition == agent->getCurrentPosition() : false;
+}
+
+void Agent::rotate(){
+    float r = currentDirection - lastDirection;
+
+    if (r != 0) {
+        if (r > 180) r -= 360;
+        else if (r < -180) r += 360;
+        particle.init_rotation(r, Agent::duration);
+    }
+    needRotate = false;
+}
 
 void Agent::shoot(){
     std::cout << "SHOOT " << currentDirection << std::endl;
 }
 
 void Agent::tryNextDirection(){
-    Cell * cell = NULL;
+    Cell * cell = getNextPosition(nextDirection);
 
-    if (nextDirection == UP) cell = currentPosition->getUp();
-    else if (nextDirection == DOWN) cell = currentPosition->getDown();
-    else if (nextDirection == LEFT) cell = currentPosition->getLeft();
-    else if (nextDirection == RIGHT) cell = currentPosition->getRight();
-    if ((cell != NULL && cell->getType() != WALL) || currentDirection == NONE) {
+    if ((cell != NULL && !cell->isWall()) || currentDirection == NONE) {
         setDirection(nextDirection);
         nextDirection = NONE;
     }
+}
+
+Cell * Agent::getNextPosition(Direction direction){
+    Cell * cell = NULL;
+
+    if (direction == UP) cell = currentPosition->getUp();
+    else if (direction == DOWN) cell = currentPosition->getDown();
+    else if (direction == LEFT) cell = currentPosition->getLeft();
+    else if (direction == RIGHT) cell = currentPosition->getRight();
+    return cell;
 }
 
 bool Agent::integrate(long t){
@@ -144,19 +156,13 @@ bool Agent::integrate(long t){
 }
 
 void Agent::draw(){
-    Direction direction;
+    Drawer& drawer      = Drawer::getInstance();
+    Direction direction = (currentDirection != NONE) ? currentDirection : lastDirection;
 
-    if (currentDirection != NONE) {
-        direction = currentDirection;
-    } else {
-        direction = lastDirection;
-    }
-    Drawer& drawer = Drawer::getInstance();
-
-    if (particle.getState() == MOVE) {
+    if (isMove()) {
         drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(),
-          true, direction, 0, particle.getTranslationX(), particle.getTranslationY());
-    } else if (particle.getState() == ROTATE) {
+          true, direction, 0, particle.getTranslation().x, particle.getTranslation().y);
+    } else if (isRotate()) {
         drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(),
           true, lastDirection, particle.getRotation());
     } else {

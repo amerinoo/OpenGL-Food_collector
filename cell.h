@@ -29,6 +29,7 @@ class Cell{
     char getSymbol();
     CellType getType();
     bool hasFood();
+    bool isWall();
     void eat();
     void draw();
 
