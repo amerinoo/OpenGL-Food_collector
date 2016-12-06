@@ -10,9 +10,22 @@
 #include "particle.h"
 using namespace std;
 
+typedef struct Bullet{
+    Cell* position;
+    Direction direction;
+    bool enable;
+    Particle particle;
+    Bullet();
+    Bullet(Cell* position, Direction direction);
+} Bullet;
+
 class Agent{
  public:
-     static int duration;
+     static int agentVelocity;
+     static int rotateVelocity;
+     static int bulletVelocity;
+
+     static void setVelocity(int);
      Agent* agent;
     // Constructors
     Agent();
@@ -40,6 +53,7 @@ class Agent{
     void goInitPosition();
     void initMovement(Direction, int);
     bool integrate(long);
+    void moveBullet();
     void eat();
     void move();
     void move(Cell*);
@@ -48,6 +62,7 @@ class Agent{
     bool isCrash();
     void rotate();
     void shoot();
+    bool canShoot();
     void tryNextDirection();
     Cell* getNextPosition(Direction,Cell*);
  protected:
@@ -60,6 +75,7 @@ class Agent{
     Cell* currentPosition;
     Cell* nextPosition;
     bool needRotate;
+    Bullet bullet;
 
     Direction lastDirection;
     Direction currentDirection;

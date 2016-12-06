@@ -279,6 +279,9 @@ CellProperties Drawer::getProperties(CellType cellType){
         case FOOD:
             return CellProperties::food;
 
+        case BULLET:
+            return CellProperties::bullet;
+
         case PLAYER:
             return CellProperties::player;
 

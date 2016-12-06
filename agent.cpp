@@ -6,7 +6,20 @@
 #include "agent.h"
 using namespace std;
 
-int Agent::duration = 200;
+int Agent::agentVelocity  = 200;
+int Agent::rotateVelocity = Agent::agentVelocity / 1.5;
+int Agent::bulletVelocity = Agent::agentVelocity / 1.8;
+
+void Agent::setVelocity(int v){
+    Agent::agentVelocity  = v;
+    Agent::rotateVelocity = Agent::agentVelocity / 1.5;
+    Agent::bulletVelocity = Agent::agentVelocity / 1.8;
+}
+
+Bullet::Bullet(){ enable = true; }
+
+Bullet::Bullet(Cell * position, Direction direction)
+    : position(position), direction(direction){ Bullet(); }
 
 // Constructors
 Agent::Agent(){ }
@@ -77,11 +90,9 @@ void Agent::move(){
 } // move
 
 void Agent::move(Cell * cell){
-    Translation translation = getTranslation(currentDirection);
-
     if (!cell->isWall()) {
         nextPosition = cell;
-        particle.init_movement(translation, Agent::duration);
+        particle.init_movement(getTranslation(currentDirection), Agent::agentVelocity);
         if (isCrash()) crash();
         else if (cell->hasFood()) eat();
     }
@@ -116,13 +127,23 @@ void Agent::rotate(){
     if (r != 0) {
         if (r > 180) r -= 360;
         else if (r < -180) r += 360;
-        particle.init_rotation(r, Agent::duration);
+        particle.init_rotation(r, Agent::rotateVelocity);
     }
     needRotate = false;
 }
 
 void Agent::shoot(){
-    std::cout << "SHOOT " << currentDirection << std::endl;
+    if (canShoot()) {
+        bullet = Bullet(currentPosition, currentDirection);
+        bullet.particle.init_movement(getTranslation(bullet.direction), Agent::bulletVelocity);
+        bullet.enable = false;
+    }
+}
+
+bool Agent::canShoot(){
+    return bullet.enable &&
+           !isRotate() &&
+           currentDirection != NONE;
 }
 
 void Agent::tryNextDirection(){
@@ -145,6 +166,9 @@ Cell * Agent::getNextPosition(Direction direction, Cell * position){
 }
 
 bool Agent::integrate(long t){
+    if (bullet.particle.integrate(t)) {
+        moveBullet();
+    }
     if (particle.integrate(t)) {
         currentPosition->setCellType(CORRIDOR);
         currentPosition = nextPosition;
@@ -152,6 +176,12 @@ bool Agent::integrate(long t){
         return true;
     }
     return false;
+}
+
+void Agent::moveBullet(){
+    bullet.position = getNextPosition(bullet.direction, bullet.position);
+    if (bullet.position->isWall()) bullet.enable = true;
+    else bullet.particle.init_movement(getTranslation(bullet.direction), Agent::bulletVelocity);
 }
 
 void Agent::draw(){
@@ -167,5 +197,9 @@ void Agent::draw(){
     } else {
         drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(),
           true, direction);
+    }
+    if (!bullet.enable) {
+        drawer.draw(BULLET, bullet.position->getX(), bullet.position->getY(),
+          true, bullet.direction, 0, bullet.particle.getTranslation().x, bullet.particle.getTranslation().y);
     }
 }

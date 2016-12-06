@@ -131,8 +131,8 @@ void Graphics::keyboard(unsigned char c, int x, int y){
     else if (c == 'j') anglealpha = (anglealpha + 3) % 360;
     else if (c == 'l') anglealpha = (anglealpha - 3 + 360) % 360;
 
-    else if (c == '+' && Agent::duration > 100) Agent::duration -= 50;
-    else if (c == '-' && Agent::duration < 500) Agent::duration += 50;
+    else if (c == '+' && Agent::agentVelocity > 100) Agent::setVelocity(Agent::agentVelocity - 50);
+    else if (c == '-' && Agent::agentVelocity < 500) Agent::setVelocity(Agent::agentVelocity + 50);
     else if (c == 'p') game.pauseGame();
 
 
