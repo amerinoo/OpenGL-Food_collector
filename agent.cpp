@@ -181,8 +181,16 @@ bool Agent::integrate(long t){
 void Agent::moveBullet(){
     bullet.position = getNextPosition(bullet.direction, bullet.position);
     if (bullet.position->isWall()) bullet.enable = true;
+    else if (isCrashBullet()) crashBullet();
     else bullet.particle.init_movement(getTranslation(bullet.direction), Agent::bulletVelocity);
 }
+
+bool Agent::isCrashBullet(){
+    return (cellType == PLAYER) ?
+           bullet.position == agent->getCurrentPosition() : false;
+}
+
+void Agent::crashBullet(){ crash(); bullet.enable = true; }
 
 void Agent::draw(){
     Drawer& drawer      = Drawer::getInstance();

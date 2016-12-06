@@ -13,11 +13,11 @@ const Color Color::background = Color(0, 0, 0);
 const Color Color::text       = Color(0, 150, 0);
 const Color Color::wall       = Color(51, 51, 51, 76);
 const Color Color::corridor   = Color(0, 0, 80);
-const Color Color::food       = Color(255, 214, 0);
+const Color Color::food       = Color(0, 255, 230);
 const Color Color::player     = Color(255, 255, 0);
 const Color Color::enemy      = Color(255, 0, 0);
 const Color Color::tank       = Color(153, 153, 153, 51, 51, 51);
-const Color Color::bullet     = Color(204, 0, 204);
+const Color Color::bullet     = Color(255, 255, 0);
 
 GLfloat Color::RGBToGlut(int num){
     return num / 255.0;

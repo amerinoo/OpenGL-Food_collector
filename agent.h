@@ -54,6 +54,8 @@ class Agent{
     void initMovement(Direction, int);
     bool integrate(long);
     void moveBullet();
+    bool isCrashBullet();
+    void crashBullet();
     void eat();
     void move();
     void move(Cell*);
