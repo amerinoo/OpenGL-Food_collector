@@ -31,7 +31,7 @@ void Game::draw(){
             m[i][j]->draw();
 }
 
-void Game::drawText(){
+void Game::drawText(const char * title){
     glDisable(GL_DEPTH_TEST);
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -42,8 +42,10 @@ void Game::drawText(){
     glLoadIdentity();
 
     Drawer& drawer = Drawer::getInstance();
+    drawer.printTitle(title);
     drawer.printScore(player->getScore(), enemy->getScore());
     drawer.printLevel(level);
+    drawer.printVelocity(Agent::agentVelocity);
 
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();

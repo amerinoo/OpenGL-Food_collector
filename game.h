@@ -21,7 +21,7 @@ class Game{
 	int getWidth();
 
     void draw();
-    void drawText();
+    void drawText(const char*);
     void resetGame();
     void newGame();
     void pauseGame();

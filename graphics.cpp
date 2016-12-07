@@ -7,7 +7,7 @@
 
 using namespace std;
 
-const char * Graphics::windowTitle = "Food collection - Merino";
+const char * Graphics::windowTitle = "Food collection";
 
 // Constructors
 Graphics::Graphics(){ }
@@ -74,7 +74,7 @@ void Graphics::display(){
     positionObserver(anglealpha, anglebeta, 450);
 
     game.draw();
-    game.drawText();
+    game.drawText(windowTitle);
 
     glutSwapBuffers();
 } // display

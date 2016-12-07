@@ -67,8 +67,10 @@ public:
 
     void setHeight(int);
     void setWidth(int);
+    void printTitle(const char*);
     void printScore(int, int);
     void printLevel(int);
+    void printVelocity(int);
 private:
     // Constructors
     Drawer();
@@ -81,6 +83,6 @@ private:
     void drawCylinder(GLdouble, GLdouble, Color);
     void drawHead(Color);
     void drawCube(Color);
-    void printText(float, float, string);
+    void printText(float, float, string,void*);
 };
 #endif

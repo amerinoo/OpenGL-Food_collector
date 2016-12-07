@@ -293,31 +293,42 @@ CellProperties Drawer::getProperties(CellType cellType){
     return CellProperties::wall;
 }
 
+void Drawer::printTitle(const char * title){
+    printText(0, 0, "", GLUT_BITMAP_8_BY_13);
+    printText(width * 0.39, height * 0.96, title, GLUT_BITMAP_HELVETICA_18);
+    printText(width * 0.44, height * 0.935, "Albert Merino", GLUT_BITMAP_HELVETICA_12);
+}
+
 void Drawer::printScore(int playerScore, int enemyScore){
     ostringstream playerLabel;
     ostringstream enemyLabel;
 
     playerLabel << "Player: " << playerScore;
     enemyLabel << "Enemy: " << enemyScore;
-    printText(0, 0, "");
-    printText(0.5, height * 0.97, playerLabel.str());
-    printText(0.5, height * 0.94, enemyLabel.str());
+    printText(width * 0.05, height * 0.97, playerLabel.str(), GLUT_BITMAP_HELVETICA_12);
+    printText(width * 0.05, height * 0.94, enemyLabel.str(), GLUT_BITMAP_HELVETICA_12);
 }
 
 void Drawer::printLevel(int level){
     ostringstream levelLabel;
 
     levelLabel << "Level: " << level;
-
-    printText(width * 0.8, height * 0.97, levelLabel.str());
+    printText(width * 0.8, height * 0.97, levelLabel.str(), GLUT_BITMAP_HELVETICA_12);
 }
 
-void Drawer::printText(float x, float y, string text){
+void Drawer::printVelocity(int velocity){
+    ostringstream velocityLabel;
+
+    velocityLabel << "Velocity: " << velocity;
+    printText(width * 0.8, height * 0.94, velocityLabel.str(), GLUT_BITMAP_HELVETICA_12);
+}
+
+void Drawer::printText(float x, float y, string text, void * font){
     Color color = Color::text;
 
     glRasterPos2f(x, y);
     glColor3f(color.red1, color.green1, color.blue1);
     for (unsigned int i = 0; i < text.size(); i++) {
-        glutBitmapCharacter(GLUT_BITMAP_8_BY_13, text[i]);
+        glutBitmapCharacter(font, text[i]);
     }
 }
