@@ -222,17 +222,18 @@ void Drawer::drawHead(Color color){
 } // drawHead
 
 void Drawer::drawCube(Color color){
-    GLfloat x = Drawer::x;
-    GLfloat y = Drawer::y;
-    GLfloat z = Drawer::z;
+    GLfloat x        = Drawer::x;
+    GLfloat y        = Drawer::y;
+    GLfloat z        = Drawer::z;
+    float pixelError = 0.5;
 
     glColor3f(color.red1, color.green1, color.blue1);
     glBegin(GL_QUADS);
     // FRONT
-    glVertex3f(x, y, z);
-    glVertex3f(-x, y, z);
-    glVertex3f(-x, -y, z);
-    glVertex3f(x, -y, z);
+    glVertex3f(x, y, z + pixelError);
+    glVertex3f(-x, y, z + pixelError);
+    glVertex3f(-x, -y, z + pixelError);
+    glVertex3f(x, -y, z + pixelError);
 
     glColor3f(color.red2, color.green2, color.blue2);
     // BACK
