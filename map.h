@@ -31,7 +31,7 @@ class Map{
     Map(char*);
 
     // Getters
-    int getHeigth();
+    int getHeight();
     int getWidth();
     vector<vector<Cell*> > getMap();
 
@@ -40,6 +40,7 @@ class Map{
     Cell* initPlayer();
     Cell* initEnemy();
     vector<Cell*> getFood();
+    int getFoodRemaining();
     bool hasFood();
     void eat();
     vector<Direction> getLegalActions(Cell*);
@@ -67,7 +68,7 @@ class Map{
     	void print(vector<vector<Cell *> >);
 
     protected:
-        int width, heigth;
+        int width, height;
         vector<vector<Cell*> > map;
         vector<vector<Cell *> > visited;
         int totalFood;

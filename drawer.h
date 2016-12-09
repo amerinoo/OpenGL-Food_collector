@@ -71,6 +71,7 @@ public:
     void printScore(int, int);
     void printLevel(int);
     void printVelocity(int);
+    void printFood(int);
 private:
     // Constructors
     Drawer();

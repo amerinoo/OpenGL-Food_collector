@@ -13,29 +13,29 @@ hasCorrectArguments(int, int, int, int);
 
 int main(int argc, char * argv[]){
     if (argc < 3) {
-        cout << "Usage: " << argv[0] << " <heigth> <width>" << endl;
+        cout << "Usage: " << argv[0] << " <height> <width>" << endl;
         return -1;
     }
 
     Graphics& graphics = Graphics::getInstance();
     graphics.init(argc, argv);
-    int heigth    = atoi(argv[1]);
+    int height    = atoi(argv[1]);
     int width     = atoi(argv[2]);
-    int maxHeigth = graphics.getMaxHeight();
+    int maxHeight = graphics.getMaxHeight();
     int maxWidth  = graphics.getMaxWidth();
 
-    if (hasCorrectArguments(heigth, width, maxHeigth, maxWidth)) {
+    if (hasCorrectArguments(height, width, maxHeight, maxWidth)) {
         cout << "Error: Ilegal Arguments" << endl;
-        cout << "Usage: " << argv[0] << " <heigth> <width>" << endl;
-        cout << "Heigth must be larger than 3 and smaller than " << maxHeigth << endl;
+        cout << "Usage: " << argv[0] << " <height> <width>" << endl;
+        cout << "Height must be larger than 3 and smaller than " << maxHeight << endl;
         cout << "width must be larger than 3 and smaller than " << maxWidth << endl;
         return -1;
     }
 
-    Game game(heigth, width);
+    Game game(height, width);
 
     Drawer& drawer = Drawer::getInstance();
-    drawer.setHeight(heigth);
+    drawer.setHeight(height);
     drawer.setWidth(width);
 
     graphics.setGame(game);
@@ -44,6 +44,6 @@ int main(int argc, char * argv[]){
     return 0;
 }
 
-bool hasCorrectArguments(int heigth, int width, int maxHeigth, int maxWidth){
-    return heigth < 3 || width < 3 || heigth > maxHeigth || width > maxWidth;
+bool hasCorrectArguments(int height, int width, int maxHeight, int maxWidth){
+    return height < 3 || width < 3 || height > maxHeight || width > maxWidth;
 }

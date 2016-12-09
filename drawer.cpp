@@ -9,9 +9,9 @@ Color::Color(const GLfloat red1, const GLfloat green1, const GLfloat blue1,
     : red1(RGBToGlut(red1)), green1(RGBToGlut(green1)), blue1(RGBToGlut(blue1)),
     red2(RGBToGlut(red2)), green2(RGBToGlut(green2)), blue2(RGBToGlut(blue2)){ }
 
-const Color Color::background = Color(0, 0, 0);
+const Color Color::background = Color(64, 64, 64);
 const Color Color::text       = Color(0, 150, 0);
-const Color Color::wall       = Color(51, 51, 51, 76);
+const Color Color::wall       = Color(82, 82, 203, 51, 51, 153);
 const Color Color::corridor   = Color(0, 0, 80);
 const Color Color::food       = Color(0, 255, 230);
 const Color Color::player     = Color(255, 255, 0);
@@ -306,22 +306,29 @@ void Drawer::printScore(int playerScore, int enemyScore){
 
     playerLabel << "Player: " << playerScore;
     enemyLabel << "Enemy: " << enemyScore;
-    printText(width * 0.05, height * 0.97, playerLabel.str(), GLUT_BITMAP_HELVETICA_12);
-    printText(width * 0.05, height * 0.94, enemyLabel.str(), GLUT_BITMAP_HELVETICA_12);
+    printText(width * 0.08, height * 0.03, playerLabel.str(), GLUT_BITMAP_HELVETICA_12);
+    printText(width * 0.83, height * 0.03, enemyLabel.str(), GLUT_BITMAP_HELVETICA_12);
 }
 
 void Drawer::printLevel(int level){
     ostringstream levelLabel;
 
     levelLabel << "Level: " << level;
-    printText(width * 0.8, height * 0.97, levelLabel.str(), GLUT_BITMAP_HELVETICA_12);
+    printText(width * 0.08, height * 0.95, levelLabel.str(), GLUT_BITMAP_HELVETICA_12);
 }
 
 void Drawer::printVelocity(int velocity){
     ostringstream velocityLabel;
 
     velocityLabel << "Velocity: " << velocity;
-    printText(width * 0.8, height * 0.94, velocityLabel.str(), GLUT_BITMAP_HELVETICA_12);
+    printText(width * 0.8, height * 0.95, velocityLabel.str(), GLUT_BITMAP_HELVETICA_12);
+}
+
+void Drawer::printFood(int food){
+    ostringstream foodLabel;
+
+    foodLabel << food;
+    printText(width * 0.48, height * 0.03, foodLabel.str(), GLUT_BITMAP_HELVETICA_12);
 }
 
 void Drawer::printText(float x, float y, string text, void * font){

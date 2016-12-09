@@ -13,7 +13,7 @@ const int Map::initY = 1;
 Map::Map(){ }
 
 Map::Map(int a, int b){
-    heigth    = a;
+    height    = a;
     width     = b;
     totalFood = -2;
     generate();
@@ -23,7 +23,7 @@ Map::Map(int a, int b){
 Map::Map(char fname[]){ getMapFromFile(fname); }
 
 // Getters
-int Map::getHeigth(){ return heigth; }
+int Map::getHeight(){ return height; }
 
 int Map::getWidth(){ return width; }
 
@@ -70,7 +70,7 @@ void Map::print(){ print(map); }
  * Create and put all cells in the Vector<<Vector<Cell>>
  */
 void Map::initCells(){
-    for (int i = 0; i < heigth; i++) {
+    for (int i = 0; i < height; i++) {
         vector<Cell *> aux;
         for (int j = 0; j < ceil(width / 2.0); j++)
             aux.push_back(new Cell(i, j, WALL));
@@ -83,7 +83,7 @@ void Map::initCells(){
  */
 void Map::connect(Cell * c){
     if ((c->getX() - 1) >= 0) c->setUp(map[c->getX() - 1][c->getY()]);
-    if ((c->getX() + 1) <= heigth - 1) c->setDown(map[c->getX() + 1][c->getY()]);
+    if ((c->getX() + 1) <= height - 1) c->setDown(map[c->getX() + 1][c->getY()]);
     if ((c->getY() - 1) >= 0) c->setLeft(map[c->getX()][c->getY() - 1]);
     if ((c->getY() + 1) <= width + 1) c->setRight(map[c->getX()][c->getY() + 1]);
 }
@@ -112,7 +112,7 @@ void Map::initWhitePositionCells(){
 
     decision = floor(width / 2.0);
     if (width % 2 != 0) decision += 1;
-    for (int i = 1; i < heigth - 1; i += 2) {
+    for (int i = 1; i < height - 1; i += 2) {
         vector<Cell *> aux;
         for (int j = 1; j < decision; j += 2) {
             map[i][j]->setCellType(CORRIDOR);
@@ -203,7 +203,7 @@ void Map::middle(){
     int mid = floor(width / 2.0);
 
     if (width % 2 == 1) {
-        for (int i = 1; i < heigth - 1; i++)
+        for (int i = 1; i < height - 1; i++)
             map[i][mid]->setCellType(CORRIDOR);
     }
 }
@@ -212,7 +212,7 @@ void Map::middle(){
  * Put randoms in the wall inferiors to have path.
  */
 void Map::inferiorRandom(){
-    if (heigth % 2 == 0) {
+    if (height % 2 == 0) {
         vector<Cell *> inferior = visited[visited.size() - 1];
         vector<int> shuffle;
         int nums = inferior.size();
@@ -269,7 +269,7 @@ void Map::openRandom(Cell * c, vector<Direction> directions){
         int i = 0;
         if ((directions[i] == UP) && (c->getUp()->getX() >= 1)) {
             c->getUp()->setCellType(CORRIDOR);
-        } else if ((directions[i] == DOWN) && (c->getDown()->getX() <= heigth - 2)) {
+        } else if ((directions[i] == DOWN) && (c->getDown()->getX() <= height - 2)) {
             c->getDown()->setCellType(CORRIDOR);
         } else if ((directions[i] == LEFT) && (c->getLeft()->getY() >= 1)) {
             c->getLeft()->setCellType(CORRIDOR);
@@ -292,7 +292,7 @@ vector<Direction> Map::getLegalActions(Cell * c){
  * Logic the mirror the matriz.
  */
 void Map::mirror(){
-    for (int i = 0; i <= heigth - 1; i++)
+    for (int i = 0; i <= height - 1; i++)
         for (int j = floor(width / 2.0) - 1; j >= 0; j--) {
             Cell * cell = map[i][j];
 
@@ -323,9 +323,9 @@ void Map::getMapFromFile(char * fname){
         if (s == "") width = saux.size();
         s += saux;
     }
-    heigth = s.size() / width;
+    height = s.size() / width;
     int w = 0;
-    for (int i = 0; i < heigth; i++) {
+    for (int i = 0; i < height; i++) {
         vector<Cell *> aux;
         for (int j = 0; j < width; j++) {
             if (s[w] == '0') {
@@ -362,6 +362,8 @@ vector<Cell *> Map::getFood(){
 
     return listCell;
 }
+
+int Map::getFoodRemaining(){ return totalFood; }
 
 bool Map::hasFood(){ return totalFood != 0; }
 

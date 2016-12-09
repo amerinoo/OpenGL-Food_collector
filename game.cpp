@@ -26,7 +26,7 @@ void Game::draw(){
     player->draw();
     enemy->draw();
     vector<vector<Cell *> > m = map->getMap();
-    for (int i = 0; i < map->getHeigth(); i++)
+    for (int i = 0; i < map->getHeight(); i++)
         for (int j = 0; j < map->getWidth(); j++)
             m[i][j]->draw();
 }
@@ -46,6 +46,7 @@ void Game::drawText(const char * title){
     drawer.printScore(player->getScore(), enemy->getScore());
     drawer.printLevel(level);
     drawer.printVelocity(Agent::agentVelocity);
+    drawer.printFood(map->getFoodRemaining());
 
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
