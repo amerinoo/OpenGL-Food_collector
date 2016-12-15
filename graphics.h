@@ -7,8 +7,11 @@
 #define graphics_h
 #include <GL/glut.h>
 #include <cmath>
+#include <cstring>
+#include <iostream>
 #include "game.h"
 #include "drawer.h"
+#include "arduinoSerial.h"
 
 using namespace std;
 
@@ -29,6 +32,7 @@ class Graphics{
 
     // Setters
     void setGame(Game);
+    void setArduinoSerial(ArduinoSerial*);
 
     // Methods
     void init(int argc, char * argv[]);
@@ -38,6 +42,8 @@ class Graphics{
     void keyboard(unsigned char, int, int);
     void special(int, int, int);
     void idle();
+    void serialRead();
+    void parseData(char*);
  private:
      // Constructors
      Graphics();
@@ -45,9 +51,11 @@ class Graphics{
      Graphics& operator=(Graphics const&);
  protected:
      Game game;
+     ArduinoSerial* serial;
      int height, width;
      long last_t;
      static const char* windowTitle;
      int anglealpha, anglebeta;
+     int fd;
 };
 #endif

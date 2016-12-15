@@ -9,10 +9,10 @@ CC = g++
 CFLAGS = -lglut -lGLU -lGL -lm -Wall
 
 # Files to compile
-CFILES = main.cpp graphics.cpp game.cpp strategy.cpp reflexAgent.cpp agent.cpp map.cpp cell.cpp particle.cpp enums.h drawer.cpp
+CFILES = main.cpp graphics.cpp arduinoSerial.cpp game.cpp strategy.cpp reflexAgent.cpp agent.cpp map.cpp cell.cpp particle.cpp enums.h drawer.cpp
 
 # Files' headers
-HFILES = graphics.h game.h strategy.h reflexAgent.h agent.h map.h cell.h particle.h drawer.h
+HFILES = graphics.h arduinoSerial.h game.h strategy.h reflexAgent.h agent.h map.h cell.h particle.h drawer.h
 
 # The build target executable:
 TARGET = food_collector

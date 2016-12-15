@@ -31,6 +31,8 @@ int Graphics::getMaxWidth(){ return glutGet(GLUT_SCREEN_WIDTH) / Drawer::cellSiz
 // Setters
 void Graphics::setGame(Game g){ game = g; }
 
+void Graphics::setArduinoSerial(ArduinoSerial * s){ serial = s; }
+
 // Methods
 void Graphics::init(int argc, char * argv[]){
     glutInit(&argc, argv);
@@ -115,46 +117,49 @@ void Graphics::positionObserver(float alpha, float beta, int radi){
 void Graphics::keyboard(unsigned char c, int x, int y){
     CellType cellType = PLAYER;
 
-    c = tolower(c); // Prevent upper case
+    if (!serial->isConnected()) {
+        c = tolower(c); // Prevent upper case
 
-    if (c == 'r') game.resetGame();
-    else if (c == 'w') game.moveAgent(cellType, UP);
-    else if (c == 's') game.moveAgent(cellType, DOWN);
-    else if (c == 'a') game.moveAgent(cellType, LEFT);
-    else if (c == 'd') game.moveAgent(cellType, RIGHT);
-    else if (c == ' ') game.shoot(cellType);
+        if (c == 'r') game.resetGame();
+        else if (c == 'w') game.moveAgent(cellType, UP);
+        else if (c == 's') game.moveAgent(cellType, DOWN);
+        else if (c == 'a') game.moveAgent(cellType, LEFT);
+        else if (c == 'd') game.moveAgent(cellType, RIGHT);
+        else if (c == ' ') game.shoot(cellType);
 
-    else if (c == 'i' && anglebeta <= (90 - 4)) anglebeta = (anglebeta + 3);
-    else if (c == 'k' && anglebeta >= (-90 + 4)) anglebeta = anglebeta - 3;
-    else if (c == 'j') anglealpha = (anglealpha + 3) % 360;
-    else if (c == 'l') anglealpha = (anglealpha - 3 + 360) % 360;
+        else if (c == 'i' && anglebeta <= (90 - 4)) anglebeta = (anglebeta + 3);
+        else if (c == 'k' && anglebeta >= (-90 + 4)) anglebeta = anglebeta - 3;
+        else if (c == 'j') anglealpha = (anglealpha + 3) % 360;
+        else if (c == 'l') anglealpha = (anglealpha - 3 + 360) % 360;
 
-    else if (c == '+' && Agent::agentVelocity > 100) Agent::setVelocity(Agent::agentVelocity - 50);
-    else if (c == '-' && Agent::agentVelocity < 500) Agent::setVelocity(Agent::agentVelocity + 50);
-    else if (c == 'p') game.pauseGame();
+        else if (c == '+' && Agent::agentVelocity > 100) Agent::setVelocity(Agent::agentVelocity - 50);
+        else if (c == '-' && Agent::agentVelocity < 500) Agent::setVelocity(Agent::agentVelocity + 50);
+        else if (c == 'p') game.pauseGame();
 
-
-    glutPostRedisplay();
+        glutPostRedisplay();
+    }
 }
 
 void Graphics::special(int key, int x, int y){
     CellType cellType = PLAYER;
 
-    switch (key) {
-        case GLUT_KEY_UP:
-            game.moveAgent(cellType, UP);
-            break;
-        case GLUT_KEY_DOWN:
-            game.moveAgent(cellType, DOWN);
-            break;
-        case GLUT_KEY_LEFT:
-            game.moveAgent(cellType, LEFT);
-            break;
-        case GLUT_KEY_RIGHT:
-            game.moveAgent(cellType, RIGHT);
-            break;
+    if (!serial->isConnected()) {
+        switch (key) {
+            case GLUT_KEY_UP:
+                game.moveAgent(cellType, UP);
+                break;
+            case GLUT_KEY_DOWN:
+                game.moveAgent(cellType, DOWN);
+                break;
+            case GLUT_KEY_LEFT:
+                game.moveAgent(cellType, LEFT);
+                break;
+            case GLUT_KEY_RIGHT:
+                game.moveAgent(cellType, RIGHT);
+                break;
+        }
+        glutPostRedisplay();
     }
-    glutPostRedisplay();
 }
 
 void Graphics::idle(){
@@ -166,8 +171,21 @@ void Graphics::idle(){
         game.integrate(t - last_t);
         last_t = t;
     }
+    serialRead();
 
     glutPostRedisplay();
+}
+
+void Graphics::serialRead(){
+    int buf_max = 256;
+    char buf[buf_max];
+
+    if (serial->serialport_read(buf, buf_max))
+        parseData(buf);
+}
+
+void Graphics::parseData(char * data){
+    printf("%s\n", data);
 }
 
 void myDisplay(){ Graphics::getInstance().display(); }
