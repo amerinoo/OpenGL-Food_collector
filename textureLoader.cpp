@@ -9,7 +9,10 @@
 TextureLoader::TextureLoader(){ }
 
 // Methods
-void TextureLoader::loadTextures(){ loadTexture("pared.jpg", 64); }
+void TextureLoader::loadTextures(){
+    glBindTexture(GL_TEXTURE_2D, 0);
+    loadTexture("pared.jpg", 64);
+}
 
 void TextureLoader::loadTexture(const char * filename, int dim){
     unsigned char * buffer;
