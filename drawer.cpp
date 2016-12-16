@@ -102,6 +102,7 @@ void Drawer::drawCorridor(){
     GLfloat y   = Drawer::y;
     GLfloat z   = Drawer::z;
 
+    glBindTexture(GL_TEXTURE_2D, 0);
     glColor3f(color.red1, color.green1, color.blue1);
     glBegin(GL_QUADS);
 
@@ -228,13 +229,21 @@ void Drawer::drawCube(Color color){
     float pixelError = 0.5;
 
     glColor3f(color.red1, color.green1, color.blue1);
+    glEnable(GL_TEXTURE_2D);
     glBegin(GL_QUADS);
     // FRONT
+    glTexCoord2f(0.0, 0.0);
     glVertex3f(x, y, z + pixelError);
+    glTexCoord2f(1.0, 0.0);
     glVertex3f(-x, y, z + pixelError);
+    glTexCoord2f(1.0, 1.0);
     glVertex3f(-x, -y, z + pixelError);
+    glTexCoord2f(0.0, 1.0);
     glVertex3f(x, -y, z + pixelError);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
 
+    glBegin(GL_QUADS);
     glColor3f(color.red2, color.green2, color.blue2);
     // BACK
     glVertex3f(x, -y, -z);

@@ -54,10 +54,11 @@ void Graphics::start(){
     glutKeyboardFunc(myKeyboard);
     glutSpecialFunc(mySpecial);
     glutIdleFunc(myIdle);
-
     glPolygonMode(GL_FRONT, GL_FILL);
     glPolygonMode(GL_BACK, GL_LINE);
 
+    glEnable(GL_TEXTURE_2D);
+    TextureLoader().loadTextures();
 
     glutMainLoop();
 }

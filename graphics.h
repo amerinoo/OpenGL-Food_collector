@@ -12,6 +12,7 @@
 #include "game.h"
 #include "drawer.h"
 #include "arduinoSerial.h"
+#include "textureLoader.h"
 
 using namespace std;
 
