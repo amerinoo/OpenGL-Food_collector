@@ -28,7 +28,7 @@ int main(int argc, char * argv[]){
     int baudrate             = 9600; // default
     char serialport[buf_max] = "/dev/ttyACM0";
     char eolchar             = '*';
-
+    int seed   = 0;
     char quiet = 0;
 
     /* parse options */
@@ -37,6 +37,7 @@ int main(int argc, char * argv[]){
         { "help",    no_argument,       0, 'h' },
         { "height",  required_argument, 0, 'H' },
         { "width",   required_argument, 0, 'W' },
+        { "seed",    required_argument, 0, 's' },
         { "baud",    required_argument, 0, 'b' },
         { "port",    required_argument, 0, 'p' },
         { "eolchar", required_argument, 0, 'e' },
@@ -44,7 +45,7 @@ int main(int argc, char * argv[]){
     };
 
     while (1) {
-        opt = getopt_long(argc, argv, "hH:W:b:p:e:",
+        opt = getopt_long(argc, argv, "hH:W:s:b:p:e:",
           loptions, &option_index);
         if (opt == -1) break;
         switch (opt) {
@@ -60,6 +61,9 @@ int main(int argc, char * argv[]){
                 width = strtol(optarg, NULL, 10);
                 if (!quiet) printf("width : %d\n", width);
                 break;
+            case 's':
+                seed = strtol(optarg, NULL, 10);
+                break;
             case 'b':
                 baudrate = strtol(optarg, NULL, 10);
                 if (!quiet) printf("baudrate : %d\n", baudrate);
@@ -74,7 +78,7 @@ int main(int argc, char * argv[]){
                 break;
         }
     }
-
+    std::cout << "Seed: " << seed << std::endl;
     if (hasCorrectArguments(height, width, maxHeight, maxWidth)) {
         cout << "Error: Ilegal Arguments" << endl;
         cout << "Height must be larger than 3 and smaller than " << maxHeight << endl;
@@ -102,6 +106,7 @@ void usage(char * name){
          << "\nMap options:" << endl
          << "  -H, --height       Height of the map (Default 15)" << endl
          << "  -W, --width        Width of the map (Default 15)" << endl
+         << "  -s, --seed         Seed of map (Default random)" << endl
          << "\nArduino options:" << endl
          << "  -b, --baud         Baudrate (bps) of Arduino (default 9600)" << endl
          << "  -p, --port         Serial port Arduino is connected to (default /dev/ttyACM0)" << endl
