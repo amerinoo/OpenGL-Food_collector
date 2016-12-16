@@ -134,7 +134,7 @@ void Agent::rotate(){
 
 void Agent::shoot(){
     if (canShoot()) {
-        bullet = Bullet(currentPosition, currentDirection);
+        bullet = Bullet(nextPosition, currentDirection);
         bullet.particle.init_movement(getTranslation(bullet.direction), Agent::bulletVelocity);
         bullet.enable = false;
     }
