@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 3
+ * Version 4
  * Student : Albert Eduard Merino Pulido
  */
 #ifndef reflexAgent_h
@@ -9,17 +9,17 @@
 
 using namespace std;
 
-class ReflexAgent: public Strategy{
- public:
+class ReflexAgent : public Strategy {
+public:
     // Constructors
     ReflexAgent();
-    ReflexAgent(Map*);
+    ReflexAgent(Map *);
 
     // Methods
-    Direction getAction(Cell*);
+    Direction getAction(Cell *);
 private:
-    float evaluationFunction(Cell*,Direction);
-    Cell * getNextState(Cell*, Direction);
-    double manhattanDistance(Cell*, Cell*);
+    float evaluationFunction(Cell *, Direction);
+    Cell * getNextState(Cell *, Direction);
+    double manhattanDistance(Cell *, Cell *);
 };
-#endif
+#endif // ifndef reflexAgent_h

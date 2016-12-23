@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 3
+ * Version 4
  * Student : Albert Eduard Merino Pulido
  */
 #ifndef graphics_h
@@ -21,8 +21,8 @@ void myKeyboard(unsigned char, int, int);
 void mySpecial(int, int, int);
 void myIdle();
 
-class Graphics{
- public:
+class Graphics {
+public:
 
     // Getters
     static Graphics& getInstance();
@@ -33,7 +33,7 @@ class Graphics{
 
     // Setters
     void setGame(Game);
-    void setArduinoSerial(ArduinoSerial*);
+    void setArduinoSerial(ArduinoSerial *);
 
     // Methods
     void init(int argc, char * argv[]);
@@ -44,19 +44,19 @@ class Graphics{
     void special(int, int, int);
     void idle();
     void serialRead();
-    void parseData(char*);
- private:
-     // Constructors
-     Graphics();
-     Graphics(Graphics const&);
-     Graphics& operator=(Graphics const&);
- protected:
-     Game game;
-     ArduinoSerial* serial;
-     int height, width;
-     long last_t;
-     static const char* windowTitle;
-     int anglealpha, anglebeta;
-     int fd;
+    void parseData(char *);
+private:
+    // Constructors
+    Graphics();
+    Graphics(Graphics const&);
+    Graphics& operator = (Graphics const&);
+protected:
+    Game game;
+    ArduinoSerial * serial;
+    int height, width;
+    long last_t;
+    static const char * windowTitle;
+    int anglealpha, anglebeta;
+    int fd;
 };
-#endif
+#endif // ifndef graphics_h

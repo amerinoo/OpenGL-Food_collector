@@ -1,27 +1,36 @@
 /*
  * Project name: Food collection
- * Version 3
+ * Version 4
  * Student : Albert Eduard Merino Pulido
  */
 #ifndef arduino_h
 #define arduino_h
 
-#include <stdint.h>   // Standard types
+#include <stdint.h>  // Standard types
+#include <stdio.h>   // Standard input/output definitions
+#include <unistd.h>  // UNIX standard function definitions
+#include <fcntl.h>   // File control definitions
+#include <errno.h>   // Error number definitions
+#include <termios.h> // POSIX terminal control definitions
+#include <cstring>   // String function definitions
+#include <sys/ioctl.h>
+#include <iostream>
+using namespace std;
 
-class ArduinoSerial{
+class ArduinoSerial {
 public:
-    char* serialport;
+    char * serialport;
     int baudrate;
     int fd;
     char eolchar;
     int timeout;
 
-    ArduinoSerial(char*,int,char);
+    ArduinoSerial(char *, int, char);
     void serialport_init();
     int serialport_close();
     bool serialport_write(uint8_t);
-    bool serialport_read(char*,int);
+    bool serialport_read(char *, int);
     int serialport_flush();
     bool isConnected();
 };
-#endif
+#endif // ifndef arduino_h

@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 3
+ * Version 4
  * Student : Albert Eduard Merino Pulido
  */
 #ifndef strategy_h
@@ -9,15 +9,15 @@
 
 using namespace std;
 
-class Strategy{
- public:
+class Strategy {
+public:
     // Constructors
     Strategy();
-    Strategy(Map*);
+    Strategy(Map *);
 
-    virtual Direction getAction(Cell*);
-    Map* getMap();
+    virtual Direction getAction(Cell *);
+    Map * getMap();
 protected:
-    Map* map;
+    Map * map;
 };
-#endif
+#endif // ifndef strategy_h

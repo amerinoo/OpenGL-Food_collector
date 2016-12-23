@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 3
+ * Version 4
  * Student : Albert Eduard Merino Pulido
  */
 #ifndef strategies_h

@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 3
+ * Version 4
  * Student : Albert Eduard Merino Pulido
  */
 #ifndef cell_h
@@ -9,23 +9,23 @@
 #include "drawer.h"
 using namespace std;
 
-class Cell{
- public:
+class Cell {
+public:
     float x, y;
 
     // Constructors
     Cell();
     Cell(float, float, CellType);
-    bool operator==(Cell*);
+    bool operator == (Cell *);
 
     // Getters
     float getX();
     float getY();
     bool isVisited();
-    Cell* getUp();
-    Cell* getDown();
-    Cell* getLeft();
-    Cell* getRight();
+    Cell * getUp();
+    Cell * getDown();
+    Cell * getLeft();
+    Cell * getRight();
     char getSymbol();
     CellType getType();
     bool hasFood();
@@ -39,17 +39,17 @@ class Cell{
     void setX(float);
     void setY(float);
     void setVisited(bool);
-    void setUp(Cell*);
-    void setDown(Cell*);
-    void setLeft(Cell*);
-    void setRight(Cell*);
+    void setUp(Cell *);
+    void setDown(Cell *);
+    void setLeft(Cell *);
+    void setRight(Cell *);
     void setCellType(CellType);
 
     // Print
     void print();
- protected:
+protected:
     CellType cellType;
     bool visited;
-    Cell *up, *down, *left, *right;
+    Cell * up, * down, * left, * right;
 };
-#endif
+#endif // ifndef cell_h

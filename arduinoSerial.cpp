@@ -1,19 +1,9 @@
 /*
  * Project name: Food collection
- * Version 3
+ * Version 4
  * Student : Albert Eduard Merino Pulido
  */
 #include "arduinoSerial.h"
-
-#include <stdio.h>   // Standard input/output definitions
-#include <unistd.h>  // UNIX standard function definitions
-#include <fcntl.h>   // File control definitions
-#include <errno.h>   // Error number definitions
-#include <termios.h> // POSIX terminal control definitions
-#include <cstring>   // String function definitions
-#include <sys/ioctl.h>
-#include <iostream>
-using namespace std;
 
 ArduinoSerial::ArduinoSerial(char * serialport, int baudrate, char eolchar)
     : serialport(serialport), baudrate(baudrate), eolchar(eolchar){

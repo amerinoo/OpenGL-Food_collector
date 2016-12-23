@@ -20,7 +20,7 @@ public:
     // Methods
     static void loadTextures();
 private:
-    static void loadTexture(const char*,int);
-    static void readJPEG(const char*,unsigned char**,int*,int*);
+    static void loadTexture(const char *, int);
+    static void readJPEG(const char *, unsigned char **, int *, int *);
 };
 #endif // ifndef texture_loader_h

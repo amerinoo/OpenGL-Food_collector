@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 3
+ * Version 4
  * Student : Albert Eduard Merino Pulido
  */
 #ifndef drawer_h
@@ -13,8 +13,7 @@
 
 using namespace std;
 
-typedef struct Color{
-
+typedef struct Color {
     static const Color background;
     static const Color text;
     static const Color wall;
@@ -25,20 +24,19 @@ typedef struct Color{
     static const Color tank;
     static const Color bullet;
 
-    const GLfloat red1;
-    const GLfloat green1;
-    const GLfloat blue1;
-    const GLfloat red2;
-    const GLfloat green2;
-    const GLfloat blue2;
+    const GLfloat      red1;
+    const GLfloat      green1;
+    const GLfloat      blue1;
+    const GLfloat      red2;
+    const GLfloat      green2;
+    const GLfloat      blue2;
     Color(const GLfloat red1, const GLfloat green1, const GLfloat blue1,
-      const GLfloat red2=0, const GLfloat green2=0, const GLfloat blue2=0);
+      const GLfloat red2 = 0, const GLfloat green2 = 0, const GLfloat blue2 = 0);
 
     GLfloat RGBToGlut(int);
 } Color;
 
-typedef struct CellProperties{
-
+typedef struct CellProperties {
     static const CellProperties wall;
     static const CellProperties corridor;
     static const CellProperties food;
@@ -46,12 +44,12 @@ typedef struct CellProperties{
     static const CellProperties enemy;
     static const CellProperties bullet;
 
-    const char symbol;
-    const Color color;
+    const char                  symbol;
+    const Color                 color;
     CellProperties(const char symbol, const Color color);
 } CellProperties;
 
-class Drawer{
+class Drawer {
 public:
     static const int cellSize;
     static const GLfloat x;
@@ -62,12 +60,12 @@ public:
     static const GLint stacks;
     int height, width;
     static Drawer& getInstance();
-    void draw(CellType, float, float, bool,Direction=NONE,int=0, int=0, int=0);
+    void draw(CellType, float, float, bool, Direction = NONE, int = 0, int = 0, int = 0);
     CellProperties getProperties(CellType);
 
     void setHeight(int);
     void setWidth(int);
-    void printTitle(const char*);
+    void printTitle(const char *);
     void printScore(int, int);
     void printLevel(int);
     void printVelocity(int);
@@ -76,14 +74,14 @@ private:
     // Constructors
     Drawer();
     Drawer(Drawer const&);
-    Drawer& operator=(Drawer const&);
+    Drawer& operator = (Drawer const&);
     void drawWall();
     void drawCorridor();
     void drawSphere(CellType);
-    void drawTank(CellType,Direction,float);
+    void drawTank(CellType, Direction, float);
     void drawCylinder(GLdouble, GLdouble, Color);
     void drawHead(Color);
     void drawCube(Color);
-    void printText(float, float, string,void*);
+    void printText(float, float, string, void *);
 };
-#endif
+#endif // ifndef drawer_h

@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 3
+ * Version 4
  * Student : Albert Eduard Merino Pulido
  */
 #ifndef miniMaxAgent_h
@@ -9,19 +9,19 @@
 
 using namespace std;
 
-class MinimaxAgent: public Strategy{
- public:
+class MinimaxAgent : public Strategy {
+public:
     // Constructors
     MinimaxAgent();
     MinimaxAgent(Map);
 
     // Methods
-    Direction getAction(Cell*);
+    Direction getAction(Cell *);
 
 private:
-    vector<Direction> getLegalActions(Cell*);
-    float evaluationFunction(Cell*,Direction);
-    Cell * getNextState(Cell*, Direction);
-    double manhattanDistance(Cell*, Cell*);
+    vector<Direction> getLegalActions(Cell *);
+    float evaluationFunction(Cell *, Direction);
+    Cell * getNextState(Cell *, Direction);
+    double manhattanDistance(Cell *, Cell *);
 };
-#endif
+#endif // ifndef miniMaxAgent_h

@@ -1,5 +1,5 @@
 # Project name: Food collection
-# Version 3
+# Version 4
 # Student : Albert Eduard Merino Pulido
 
 # The compiler: gcc for C program, define as g++ for C++

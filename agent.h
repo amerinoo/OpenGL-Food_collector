@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 3
+ * Version 4
  * Student : Albert Eduard Merino Pulido
  */
 #ifndef agent_h
@@ -10,46 +10,46 @@
 #include "particle.h"
 using namespace std;
 
-typedef struct Bullet{
-    Cell* position;
+typedef struct Bullet {
+    Cell *    position;
     Direction direction;
-    bool enable;
-    Particle particle;
+    bool      enable;
+    Particle  particle;
     Bullet();
-    Bullet(Cell* position, Direction direction);
+    Bullet(Cell * position, Direction direction);
 } Bullet;
 
-class Agent{
- public:
-     static int agentVelocity;
-     static int rotateVelocity;
-     static int bulletVelocity;
+class Agent {
+public:
+    static int agentVelocity;
+    static int rotateVelocity;
+    static int bulletVelocity;
 
-     static void setVelocity(int);
-     Agent* agent;
+    static void setVelocity(int);
+    Agent * agent;
     // Constructors
     Agent();
-    Agent(CellType, Cell*, Strategy*);
+    Agent(CellType, Cell *, Strategy *);
 
     // Getters
-    Strategy* getStrategy();
+    Strategy * getStrategy();
     int getScore();
     State getState();
     bool isQuiet();
     bool isMove();
     bool isRotate();
-    Cell* getCurrentPosition();
-    Cell* getNextPosition();
+    Cell * getCurrentPosition();
+    Cell * getNextPosition();
     Direction getDirection();
     void draw();
 
     // Setters
-    void setPosition(Cell*);
+    void setPosition(Cell *);
     void setDirection(Direction);
     void setNextDirection(Direction);
-    void setAgent(Agent*);
+    void setAgent(Agent *);
 
-    //Methods
+    // Methods
     void goInitPosition();
     void initMovement(Direction, int);
     bool integrate(long);
@@ -58,7 +58,7 @@ class Agent{
     void crashBullet();
     void eat();
     void move();
-    void move(Cell*);
+    void move(Cell *);
     void crash();
     Translation getTranslation(Direction);
     bool isCrash();
@@ -66,16 +66,16 @@ class Agent{
     void shoot();
     bool canShoot();
     void tryNextDirection();
-    Cell* getNextPosition(Direction,Cell*);
- protected:
-    Strategy* strategy;
-    Map* map;
+    Cell * getNextPosition(Direction, Cell *);
+protected:
+    Strategy * strategy;
+    Map * map;
     CellType cellType;
     Particle particle;
     int score;
-    Cell* initPosition;
-    Cell* currentPosition;
-    Cell* nextPosition;
+    Cell * initPosition;
+    Cell * currentPosition;
+    Cell * nextPosition;
     bool needRotate;
     Bullet bullet;
 
@@ -83,4 +83,4 @@ class Agent{
     Direction currentDirection;
     Direction nextDirection;
 };
-#endif
+#endif // ifndef agent_h

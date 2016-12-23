@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 3
+ * Version 4
  * Student : Albert Eduard Merino Pulido
  */
 #ifndef particle_h
@@ -8,14 +8,13 @@
 #include <GL/glut.h>
 #include "enums.h"
 
-typedef struct Translation{
-
+typedef struct Translation {
     float x;
     float y;
     float vx;
     float vy;
     Translation();
-    Translation(float, float, float=0, float=0);
+    Translation(float, float, float = 0, float = 0);
 } Translation;
 
 class Particle {
@@ -37,4 +36,4 @@ public:
     float getRotation();
     State getState();
 };
-#endif
+#endif // ifndef particle_h

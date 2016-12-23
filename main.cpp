@@ -1,6 +1,6 @@
 /*
  * Project name: Food collection
- * Version 3
+ * Version 4
  * Student : Albert Eduard Merino Pulido
  */
 #include <iostream>
@@ -11,10 +11,8 @@
 #include "arduinoSerial.h"
 using namespace std;
 
-void
-usage(char *);
-bool
-hasCorrectArguments(int, int, int, int);
+void usage(char *);
+bool hasCorrectArguments(int, int, int, int);
 
 int main(int argc, char * argv[]){
     Graphics& graphics = Graphics::getInstance();
