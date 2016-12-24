@@ -39,6 +39,7 @@ public:
     void init(int argc, char * argv[]);
     void start();
     void display();
+    void configureAmbientLight();
     void positionObserver(float, float, int);
     void keyboard(unsigned char, int, int);
     void special(int, int, int);

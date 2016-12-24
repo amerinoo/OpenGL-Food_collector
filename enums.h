@@ -32,4 +32,8 @@ enum Direction {
     RIGHT = 270,
     NONE  = 360
 };
+
+enum Texture {
+    WALLS
+};
 #endif // ifndef enums_h

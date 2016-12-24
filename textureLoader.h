@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "jpeglib.h"
+#include "enums.h"
 
 using namespace std;
 

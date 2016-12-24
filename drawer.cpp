@@ -4,23 +4,49 @@
  * Student : Albert Eduard Merino Pulido
  */
 #include "drawer.h"
-Color::Color(const GLfloat red1, const GLfloat green1, const GLfloat blue1,
-  const GLfloat red2, const GLfloat green2, const GLfloat blue2)
-    : red1(RGBToGlut(red1)), green1(RGBToGlut(green1)), blue1(RGBToGlut(blue1)),
-    red2(RGBToGlut(red2)), green2(RGBToGlut(green2)), blue2(RGBToGlut(blue2)){ }
+
+Color::Color(const GLfloat red1, const GLfloat green1, const GLfloat blue1, const GLfloat alpha1,
+  const GLfloat red2, const GLfloat green2, const GLfloat blue2, const GLfloat alpha2)
+    : red1(RGBToGlut(red1)), green1(RGBToGlut(green1)), blue1(RGBToGlut(blue1)), alpha1(RGBToGlut(alpha1)),
+    red2(RGBToGlut(red2)), green2(RGBToGlut(green2)), blue2(RGBToGlut(blue2)), alpha2(RGBToGlut(alpha2)){ }
 
 const Color Color::background = Color(64, 64, 64);
 const Color Color::text       = Color(0, 150, 0);
-const Color Color::wall       = Color(82, 82, 203, 51, 51, 153);
+const Color Color::wall       = Color(82, 82, 203, 1, 51, 51, 153);
 const Color Color::corridor   = Color(0, 0, 80);
 const Color Color::food       = Color(0, 255, 230);
 const Color Color::player     = Color(255, 255, 0);
 const Color Color::enemy      = Color(255, 0, 0);
-const Color Color::tank       = Color(153, 153, 153, 51, 51, 51);
+const Color Color::tank       = Color(153, 153, 153, 1, 51, 51, 51);
 const Color Color::bullet     = Color(255, 255, 0);
+
+const Color Color::texture  = Color(255, 255, 255);
+const Color Color::ambient  = Color(100, 100, 100);
+const Color Color::diffuse  = Color(0, 0, 0);
+const Color Color::specular = Color(0, 0, 0);
 
 GLfloat Color::RGBToGlut(int num){
     return num / 255.0;
+}
+
+GLfloat * Color::toArray1(){
+    GLfloat * color = (GLfloat *) malloc(sizeof(GLfloat) * 4);
+
+    color[0] = red1;
+    color[1] = green1;
+    color[2] = blue1;
+    color[3] = alpha1;
+    return color;
+}
+
+GLfloat * Color::toArray2(){
+    GLfloat * color = (GLfloat *) malloc(sizeof(GLfloat) * 4);
+
+    color[0] = red2;
+    color[1] = green2;
+    color[2] = blue2;
+    color[3] = alpha2;
+    return color;
 }
 
 CellProperties::CellProperties(const char symbol, const Color color)
@@ -104,8 +130,9 @@ void Drawer::drawCorridor(){
 
 
     glColor3f(color.red1, color.green1, color.blue1);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color.toArray1());
     glBegin(GL_QUADS);
-
+    glNormal3f(0, 1, 0);
     glVertex3f(x, y, -z);
     glVertex3f(-x, y, -z);
     glVertex3f(-x, -y, -z);
@@ -120,6 +147,7 @@ void Drawer::drawSphere(CellType cellType){
     GLdouble r  = Drawer::r;
 
     glColor3f(color.red1, color.green1, color.blue1);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color.toArray1());
     GLUquadric * quad = gluNewQuadric();
 
     gluSphere(quad, r, Drawer::slices, Drawer::stacks);
@@ -135,44 +163,109 @@ void Drawer::drawTank(CellType cellType, Direction direction, float rotate){
     GLdouble s;
     GLdouble h;
 
+    GLfloat dirHor = 0;
+    GLfloat dirVer = 0;
+
+    if (direction == RIGHT) {
+        dirHor = 1;
+    } else if (direction == LEFT) {
+        dirHor = -1;
+    } else if (direction == UP) {
+        dirVer = 1;
+    } else if (direction == DOWN) {
+        dirVer = -1;
+    }
+
+
+    GLenum light = (cellType == PLAYER) ? GL_LIGHT1 : GL_LIGHT2;
+
+    GLint position[4];
+    GLfloat dir[3];
+    GLfloat color2[4];
+
+    position[0] = 0;
+    position[1] = 0;
+    position[2] = 0;
+    position[3] = 1;
+    glLightiv(light, GL_POSITION, position);
+
+    color2[0] = 0.0;
+    color2[1] = 0.0;
+    color2[2] = 0.0;
+    color2[3] = 1;
+    glLightfv(light, GL_AMBIENT, color2);
+    glLightfv(light, GL_SPECULAR, color2);
+
+    color2[0] = 0.7;
+    color2[1] = 0.7;
+    color2[2] = 0.7;
+    color2[3] = 1;
+    glLightfv(light, GL_DIFFUSE, color2);
+
+    glLightf(light, GL_CONSTANT_ATTENUATION, 1.0);
+    glLightf(light, GL_LINEAR_ATTENUATION, 0.0);
+    glLightf(light, GL_QUADRATIC_ATTENUATION, 0.0);
+
+    dir[0] = dirHor; // 1 right -1 left
+    dir[1] = dirVer; // 1 up -1 down
+    dir[2] = 0;
+    glLightfv(light, GL_SPOT_DIRECTION, dir);
+    glLightf(light, GL_SPOT_CUTOFF, 30.0);
+
+    glEnable(light);
+
+
     glRotatef(90, 1, 0, 0); // Don't touch it.
     glRotatef(direction + rotate, 0, 1, 0);
     glTranslatef(0, 10, -Drawer::cellSize / 2.5);
 
     s = x / 2.0;
     h = x * 5.0;
-    drawCylinder(s, h, Color::tank);
+    drawCanon(s, h, Color::tank);
     drawHead(Color::tank);
 
     // Dibuixa cos
     s = x * 2;
     h = s * 1.5;
     glTranslatef(0, -x * 2.5, -s / 1.2);
-    drawCylinder(s, h, color);
+    drawCanon(s, h, color);
 
-    // Dibuixa roda dreta
     s = x * 1.5;
     h = s * 5;
+    // Dibuixa roda dreta
     glTranslatef(s * wheelSeparation, -s, -s * 3.5);
-    drawCylinder(s, h, color);
+    drawWheel(s, h, color);
 
     // Dibuixa roda esquerra
     glTranslatef(-s * wheelSeparation * 2, 0, -s * 5);
-    drawCylinder(s, h, color);
+    drawWheel(s, h, color);
 } // drawTank
 
-void Drawer::drawCylinder(GLdouble s, GLdouble h, Color color){
+void Drawer::drawCanon(GLdouble s, GLdouble h, Color color){
     GLUquadric * quad = gluNewQuadric();
 
-    glColor3f(color.red1, color.green1, color.blue1);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color.toArray1());
     gluCylinder(quad, s, s, h, Drawer::slices, Drawer::stacks);
-    glColor3f(color.red2, color.green2, color.blue2);
+
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color.toArray2());
     gluSphere(quad, s, Drawer::slices, Drawer::stacks);
     glTranslatef(0, 0, h);
     gluSphere(quad, s, Drawer::slices, Drawer::stacks);
 
     gluDeleteQuadric(quad);
-    glEnd();
+}
+
+void Drawer::drawWheel(GLdouble s, GLdouble h, Color color){
+    GLUquadric * quad = gluNewQuadric();
+
+    drawCanon(s, h, color);
+    glTranslatef(0, 0, -h * 1.16);
+    GLfloat white[] = { 255.0, 255.0, 255.0, 1 };
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, white);
+    gluSphere(quad, s / 4.0, Drawer::slices, Drawer::stacks);
+    glTranslatef(0, 0, h * 1.16);
+
+    gluDeleteQuadric(quad);
 }
 
 void Drawer::drawHead(Color color){
@@ -181,6 +274,7 @@ void Drawer::drawHead(Color color){
     GLfloat z = x;
 
     glColor3f(color.red2, color.green2, color.blue2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color.toArray2());
     glBegin(GL_QUADS);
     // FRONT
     glVertex3f(x, y, z);
@@ -196,6 +290,7 @@ void Drawer::drawHead(Color color){
 
     // RIGHT
     glColor3f(color.red2, color.green2, color.blue2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color.toArray2());
     glVertex3f(x, -y, z);
     glVertex3f(x, -y, -z);
     glVertex3f(x, y, -z);
@@ -227,13 +322,16 @@ void Drawer::drawCube(Color color){
     GLfloat y        = Drawer::y;
     GLfloat z        = Drawer::z;
     float pixelError = 0.5;
+    Color texture    = Color::texture;
 
     glColor3f(color.red1, color.green1, color.blue1);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, texture.toArray1());
 
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D, WALLS);
     glBegin(GL_QUADS);
     // FRONT
+    glNormal3f(0, 0, 1);
     glTexCoord2f(0.0, 0.0);
     glVertex3f(x, y, z + pixelError);
     glTexCoord2f(1.0, 0.0);
@@ -247,31 +345,37 @@ void Drawer::drawCube(Color color){
 
     glBegin(GL_QUADS);
     glColor3f(color.red2, color.green2, color.blue2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color.toArray2());
     // BACK
+    glNormal3f(0, 0, -1);
     glVertex3f(x, -y, -z);
     glVertex3f(-x, -y, -z);
     glVertex3f(-x, y, -z);
     glVertex3f(x, y, -z);
 
     // RIGHT
+    glNormal3f(1, 0, 0);
     glVertex3f(x, -y, z);
     glVertex3f(x, -y, -z);
     glVertex3f(x, y, -z);
     glVertex3f(x, y, z);
 
     // LEFT
+    glNormal3f(-1, 0, 0);
     glVertex3f(-x, y, z);
     glVertex3f(-x, y, -z);
     glVertex3f(-x, -y, -z);
     glVertex3f(-x, -y, z);
 
     // UP
+    glNormal3f(0, 1, 0);
     glVertex3f(x, y, -z);
     glVertex3f(-x, y, -z);
     glVertex3f(-x, y, z);
     glVertex3f(x, y, z);
 
     // DOWN
+    glNormal3f(0, -1, 0);
     glVertex3f(x, -y, z);
     glVertex3f(-x, -y, z);
     glVertex3f(-x, -y, -z);
@@ -343,11 +447,14 @@ void Drawer::printFood(int food){
 }
 
 void Drawer::printText(float x, float y, string text, void * font){
+    glDisable(GL_LIGHTING);
     Color color = Color::text;
 
     glRasterPos2f(x, y);
     glColor3f(color.red1, color.green1, color.blue1);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color.toArray2());
     for (unsigned int i = 0; i < text.size(); i++) {
         glutBitmapCharacter(font, text[i]);
     }
+    glEnable(GL_LIGHTING);
 }

@@ -24,16 +24,27 @@ typedef struct Color {
     static const Color tank;
     static const Color bullet;
 
+    static const Color texture;
+    static const Color ambient;
+    static const Color diffuse;
+    static const Color specular;
+
     const GLfloat      red1;
     const GLfloat      green1;
     const GLfloat      blue1;
+    const GLfloat      alpha1;
     const GLfloat      red2;
     const GLfloat      green2;
     const GLfloat      blue2;
-    Color(const GLfloat red1, const GLfloat green1, const GLfloat blue1,
-      const GLfloat red2 = 0, const GLfloat green2 = 0, const GLfloat blue2 = 0);
+    const GLfloat      alpha2;
+
+    Color(const GLfloat red1, const GLfloat green1, const GLfloat blue1, const GLfloat alpha1 = 1,
+      const GLfloat red2 = 0, const GLfloat green2 = 0, const GLfloat blue2 = 0, const GLfloat alpha2 = 1);
 
     GLfloat RGBToGlut(int);
+
+    GLfloat * toArray1();
+    GLfloat * toArray2();
 } Color;
 
 typedef struct CellProperties {
@@ -79,7 +90,8 @@ private:
     void drawCorridor();
     void drawSphere(CellType);
     void drawTank(CellType, Direction, float);
-    void drawCylinder(GLdouble, GLdouble, Color);
+    void drawCanon(GLdouble, GLdouble, Color);
+    void drawWheel(GLdouble, GLdouble, Color);
     void drawHead(Color);
     void drawCube(Color);
     void printText(float, float, string, void *);

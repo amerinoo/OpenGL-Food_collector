@@ -57,9 +57,10 @@ void Graphics::start(){
     glPolygonMode(GL_FRONT, GL_FILL);
     glPolygonMode(GL_BACK, GL_LINE);
 
+    glEnable(GL_LIGHTING);
     glEnable(GL_TEXTURE_2D);
     TextureLoader().loadTextures();
-
+    configureAmbientLight();
     glutMainLoop();
 }
 
@@ -81,6 +82,20 @@ void Graphics::display(){
 
     glutSwapBuffers();
 } // display
+
+void Graphics::configureAmbientLight(){
+    // -- Ambient light
+    Color ambient  = Color::ambient;
+    Color diffuse  = Color::diffuse;
+    Color specular = Color::specular;
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient.toArray1());
+    glLightfv(GL_LIGHT0, GL_POSITION, ambient.toArray2());
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse.toArray1());
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specular.toArray1());
+
+    glEnable(GL_LIGHT0);
+}
 
 void Graphics::positionObserver(float alpha, float beta, int radi){
     float x, y, z;
