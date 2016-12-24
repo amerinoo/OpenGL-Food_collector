@@ -85,12 +85,13 @@ void Graphics::display(){
 
 void Graphics::configureAmbientLight(){
     // -- Ambient light
-    Color ambient  = Color::ambient;
-    Color diffuse  = Color::diffuse;
-    Color specular = Color::specular;
+    Color position = Color::light_position;
+    Color ambient  = Color::light_ambient;
+    Color diffuse  = Color::light_diffuse;
+    Color specular = Color::light_specular;
 
+    glLightfv(GL_LIGHT0, GL_POSITION, position.toArray1());
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient.toArray1());
-    glLightfv(GL_LIGHT0, GL_POSITION, ambient.toArray2());
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse.toArray1());
     glLightfv(GL_LIGHT0, GL_SPECULAR, specular.toArray1());
 

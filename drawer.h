@@ -8,6 +8,7 @@
 #include <cmath>
 #include <GL/glut.h>
 #include <string>
+#include <utility>
 #include <sstream>
 #include "enums.h"
 
@@ -25,9 +26,13 @@ typedef struct Color {
     static const Color bullet;
 
     static const Color texture;
-    static const Color ambient;
-    static const Color diffuse;
-    static const Color specular;
+    static const Color light_position;
+    static const Color light_ambient;
+    static const Color light_diffuse;
+    static const Color light_specular;
+
+    static const Color light_tank_ambient;
+    static const Color light_tank_diffuse;
 
     const GLfloat      red1;
     const GLfloat      green1;
@@ -69,6 +74,7 @@ public:
     static const GLdouble r;
     static const GLint slices;
     static const GLint stacks;
+    static const GLfloat spot_cutoff;
     int height, width;
     static Drawer& getInstance();
     void draw(CellType, float, float, bool, Direction = NONE, int = 0, int = 0, int = 0);
@@ -95,5 +101,7 @@ private:
     void drawHead(Color);
     void drawCube(Color);
     void printText(float, float, string, void *);
+    void configureLight(CellType, Direction);
+    GLfloat * getSpotDirection(Direction);
 };
 #endif // ifndef drawer_h

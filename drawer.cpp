@@ -20,10 +20,14 @@ const Color Color::enemy      = Color(255, 0, 0);
 const Color Color::tank       = Color(153, 153, 153, 1, 51, 51, 51);
 const Color Color::bullet     = Color(255, 255, 0);
 
-const Color Color::texture  = Color(255, 255, 255);
-const Color Color::ambient  = Color(100, 100, 100);
-const Color Color::diffuse  = Color(0, 0, 0);
-const Color Color::specular = Color(0, 0, 0);
+const Color Color::texture        = Color(255, 255, 255);
+const Color Color::light_position = Color(0, 0, 0);
+const Color Color::light_ambient  = Color(100, 100, 100);
+const Color Color::light_diffuse  = Color(0, 0, 0);
+const Color Color::light_specular = Color(0, 0, 0);
+
+const Color Color::light_tank_ambient = Color(76, 76, 76);
+const Color Color::light_tank_diffuse = Color(178, 178, 178);
 
 GLfloat Color::RGBToGlut(int num){
     return num / 255.0;
@@ -52,13 +56,14 @@ GLfloat * Color::toArray2(){
 CellProperties::CellProperties(const char symbol, const Color color)
     : symbol(symbol), color(color){ }
 
-const int Drawer::cellSize = 40;
-const GLfloat Drawer::x    = Drawer::cellSize / 2.0;
-const GLfloat Drawer::y    = Drawer::x;
-const GLfloat Drawer::z    = Drawer::cellSize / 5.0;
-const GLdouble Drawer::r   = Drawer::cellSize / 8;
-const GLint Drawer::slices = 10;
-const GLint Drawer::stacks = 5;
+const int Drawer::cellSize        = 40;
+const GLfloat Drawer::x           = Drawer::cellSize / 2.0;
+const GLfloat Drawer::y           = Drawer::x;
+const GLfloat Drawer::z           = Drawer::cellSize / 5.0;
+const GLdouble Drawer::r          = Drawer::cellSize / 8;
+const GLint Drawer::slices        = 10;
+const GLint Drawer::stacks        = 5;
+const GLfloat Drawer::spot_cutoff = 30.0;
 
 const CellProperties CellProperties::wall     = CellProperties('0', Color::wall);
 const CellProperties CellProperties::corridor = CellProperties(' ', Color::corridor);
@@ -163,57 +168,7 @@ void Drawer::drawTank(CellType cellType, Direction direction, float rotate){
     GLdouble s;
     GLdouble h;
 
-    GLfloat dirHor = 0;
-    GLfloat dirVer = 0;
-
-    if (direction == RIGHT) {
-        dirHor = 1;
-    } else if (direction == LEFT) {
-        dirHor = -1;
-    } else if (direction == UP) {
-        dirVer = 1;
-    } else if (direction == DOWN) {
-        dirVer = -1;
-    }
-
-
-    GLenum light = (cellType == PLAYER) ? GL_LIGHT1 : GL_LIGHT2;
-
-    GLint position[4];
-    GLfloat dir[3];
-    GLfloat color2[4];
-
-    position[0] = 0;
-    position[1] = 0;
-    position[2] = 0;
-    position[3] = 1;
-    glLightiv(light, GL_POSITION, position);
-
-    color2[0] = 0.0;
-    color2[1] = 0.0;
-    color2[2] = 0.0;
-    color2[3] = 1;
-    glLightfv(light, GL_AMBIENT, color2);
-    glLightfv(light, GL_SPECULAR, color2);
-
-    color2[0] = 0.7;
-    color2[1] = 0.7;
-    color2[2] = 0.7;
-    color2[3] = 1;
-    glLightfv(light, GL_DIFFUSE, color2);
-
-    glLightf(light, GL_CONSTANT_ATTENUATION, 1.0);
-    glLightf(light, GL_LINEAR_ATTENUATION, 0.0);
-    glLightf(light, GL_QUADRATIC_ATTENUATION, 0.0);
-
-    dir[0] = dirHor; // 1 right -1 left
-    dir[1] = dirVer; // 1 up -1 down
-    dir[2] = 0;
-    glLightfv(light, GL_SPOT_DIRECTION, dir);
-    glLightf(light, GL_SPOT_CUTOFF, 30.0);
-
-    glEnable(light);
-
+    configureLight(cellType, direction);
 
     glRotatef(90, 1, 0, 0); // Don't touch it.
     glRotatef(direction + rotate, 0, 1, 0);
@@ -457,4 +412,36 @@ void Drawer::printText(float x, float y, string text, void * font){
         glutBitmapCharacter(font, text[i]);
     }
     glEnable(GL_LIGHTING);
+}
+
+void Drawer::configureLight(CellType cellType, Direction direction){
+    Color position = Color::light_position;
+    Color ambient  = Color::light_tank_ambient;
+    Color diffuse  = Color::light_tank_diffuse;
+    GLenum light   = (cellType == PLAYER) ? GL_LIGHT1 : GL_LIGHT2;
+
+    glLightfv(light, GL_POSITION, position.toArray1());
+    glLightfv(light, GL_AMBIENT, ambient.toArray1());
+    glLightfv(light, GL_DIFFUSE, diffuse.toArray1());
+    glLightfv(light, GL_SPOT_DIRECTION, getSpotDirection(direction));
+    glLightf(light, GL_SPOT_CUTOFF, Drawer::spot_cutoff);
+
+    glEnable(light);
+} // configureLight
+
+GLfloat * Drawer::getSpotDirection(Direction direction){
+    GLfloat * spot_dir = (GLfloat *) malloc(sizeof(GLfloat) * 3);
+    GLfloat dirHor     = 0;
+    GLfloat dirVer     = 0;
+
+    if (direction == RIGHT) dirHor = 1;
+    else if (direction == LEFT) dirHor = -1;
+    else if (direction == UP) dirVer = 1;
+    else if (direction == DOWN) dirVer = -1;
+
+    spot_dir[0] = dirHor; // 1 right -1 left
+    spot_dir[1] = dirVer; // 1 up -1 down
+    spot_dir[2] = 0;
+
+    return spot_dir;
 }
