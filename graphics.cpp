@@ -132,51 +132,51 @@ void Graphics::positionObserver(float alpha, float beta, int radi){
 }
 
 void Graphics::keyboard(unsigned char c, int x, int y){
-    CellType cellType = PLAYER;
-
-    if (!serial->isConnected()) {
-        c = tolower(c); // Prevent upper case
-
-        if (c == 'r') game.resetGame();
-        else if (c == 'w') game.moveAgent(cellType, UP);
-        else if (c == 's') game.moveAgent(cellType, DOWN);
-        else if (c == 'a') game.moveAgent(cellType, LEFT);
-        else if (c == 'd') game.moveAgent(cellType, RIGHT);
-        else if (c == ' ') game.shoot(cellType);
-
-        else if (c == 'i' && anglebeta <= (90 - 4)) anglebeta = (anglebeta + 3);
-        else if (c == 'k' && anglebeta >= (-90 + 4)) anglebeta = anglebeta - 3;
-        else if (c == 'j') anglealpha = (anglealpha + 3) % 360;
-        else if (c == 'l') anglealpha = (anglealpha - 3 + 360) % 360;
-
-        else if (c == '+' && Agent::agentVelocity > 100) Agent::setVelocity(Agent::agentVelocity - 50);
-        else if (c == '-' && Agent::agentVelocity < 500) Agent::setVelocity(Agent::agentVelocity + 50);
-        else if (c == 'p') game.pauseGame();
-
-        glutPostRedisplay();
-    }
+    if (!serial->isConnected()) makeAction(c);
 }
 
 void Graphics::special(int key, int x, int y){
-    CellType cellType = PLAYER;
+    if (!serial->isConnected()) makeAction(key);
+}
 
-    if (!serial->isConnected()) {
-        switch (key) {
-            case GLUT_KEY_UP:
-                game.moveAgent(cellType, UP);
-                break;
-            case GLUT_KEY_DOWN:
-                game.moveAgent(cellType, DOWN);
-                break;
-            case GLUT_KEY_LEFT:
-                game.moveAgent(cellType, LEFT);
-                break;
-            case GLUT_KEY_RIGHT:
-                game.moveAgent(cellType, RIGHT);
-                break;
-        }
-        glutPostRedisplay();
+void Graphics::makeAction(unsigned char c, CellType cellType){
+    c = tolower(c); // Prevent upper case
+
+    if (c == 'r') game.resetGame();
+    else if (c == 'w') game.moveAgent(cellType, UP);
+    else if (c == 's') game.moveAgent(cellType, DOWN);
+    else if (c == 'a') game.moveAgent(cellType, LEFT);
+    else if (c == 'd') game.moveAgent(cellType, RIGHT);
+    else if (c == ' ') game.shoot(cellType);
+
+    else if (c == 'i' && anglebeta <= (90 - 4)) anglebeta = (anglebeta + 3);
+    else if (c == 'k' && anglebeta >= (-90 + 4)) anglebeta = anglebeta - 3;
+    else if (c == 'j') anglealpha = (anglealpha + 3) % 360;
+    else if (c == 'l') anglealpha = (anglealpha - 3 + 360) % 360;
+
+    else if (c == '+' && Agent::agentVelocity > 100) Agent::setVelocity(Agent::agentVelocity - 50);
+    else if (c == '-' && Agent::agentVelocity < 500) Agent::setVelocity(Agent::agentVelocity + 50);
+    else if (c == 'p') game.pauseGame();
+
+    glutPostRedisplay();
+}
+
+void Graphics::makeAction(int key, CellType cellType){
+    switch (key) {
+        case GLUT_KEY_UP:
+            game.moveAgent(cellType, UP);
+            break;
+        case GLUT_KEY_DOWN:
+            game.moveAgent(cellType, DOWN);
+            break;
+        case GLUT_KEY_LEFT:
+            game.moveAgent(cellType, LEFT);
+            break;
+        case GLUT_KEY_RIGHT:
+            game.moveAgent(cellType, RIGHT);
+            break;
     }
+    glutPostRedisplay();
 }
 
 void Graphics::idle(){
