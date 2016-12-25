@@ -202,7 +202,14 @@ void Graphics::serialRead(){
 }
 
 void Graphics::parseData(char * data){
-    printf("%s\n", data);
+    // printf("%s\n", data);
+    char * pch = strtok(data, ";");
+
+    while (pch != NULL) {
+        char letter = pch[0];
+        printf("%c : %s\n", letter, pch);
+        pch = strtok(NULL, ";");
+    }
 }
 
 void myDisplay(){ Graphics::getInstance().display(); }
