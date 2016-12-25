@@ -87,6 +87,7 @@ public:
     void printLevel(int);
     void printVelocity(int);
     void printFood(int);
+    void printArduino(bool);
 private:
     // Constructors
     Drawer();

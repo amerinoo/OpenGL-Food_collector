@@ -381,24 +381,31 @@ void Drawer::printScore(int playerScore, int enemyScore){
 }
 
 void Drawer::printLevel(int level){
-    ostringstream levelLabel;
+    ostringstream label;
 
-    levelLabel << "Level: " << level;
-    printText(width * 0.08, height * 0.95, levelLabel.str(), GLUT_BITMAP_HELVETICA_12);
+    label << "Level: " << level;
+    printText(width * 0.08, height * 0.95, label.str(), GLUT_BITMAP_HELVETICA_12);
 }
 
 void Drawer::printVelocity(int velocity){
-    ostringstream velocityLabel;
+    ostringstream label;
 
-    velocityLabel << "Velocity: " << velocity;
-    printText(width * 0.8, height * 0.95, velocityLabel.str(), GLUT_BITMAP_HELVETICA_12);
+    label << "Velocity: " << velocity;
+    printText(width * 0.8, height * 0.95, label.str(), GLUT_BITMAP_HELVETICA_12);
 }
 
 void Drawer::printFood(int food){
-    ostringstream foodLabel;
+    ostringstream label;
 
-    foodLabel << food;
-    printText(width * 0.48, height * 0.03, foodLabel.str(), GLUT_BITMAP_HELVETICA_12);
+    label << food;
+    printText(width * 0.48, height * 0.03, label.str(), GLUT_BITMAP_HELVETICA_12);
+}
+
+void Drawer::printArduino(bool isConnected){
+    ostringstream label;
+
+    label << isConnected;
+    printText(width * 0.95, height * 0.95, label.str(), GLUT_BITMAP_HELVETICA_12);
 }
 
 void Drawer::printText(float x, float y, string text, void * font){

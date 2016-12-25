@@ -31,7 +31,7 @@ void Game::draw(){
             m[i][j]->draw();
 }
 
-void Game::drawText(const char * title){
+void Game::drawText(const char * title, bool isConnected){
     glDisable(GL_DEPTH_TEST);
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -47,6 +47,7 @@ void Game::drawText(const char * title){
     drawer.printLevel(level);
     drawer.printVelocity(Agent::agentVelocity);
     drawer.printFood(map->getFoodRemaining());
+    drawer.printArduino(isConnected);
 
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();

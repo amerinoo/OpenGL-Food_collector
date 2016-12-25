@@ -78,7 +78,7 @@ void Graphics::display(){
     positionObserver(anglealpha, anglebeta, 450);
 
     game.draw();
-    game.drawText(windowTitle);
+    game.drawText(windowTitle, serial->isConnected());
 
     glutSwapBuffers();
 } // display
@@ -132,11 +132,11 @@ void Graphics::positionObserver(float alpha, float beta, int radi){
 }
 
 void Graphics::keyboard(unsigned char c, int x, int y){
-    if (!serial->isConnected()) makeAction(c);
+    makeAction(c);
 }
 
 void Graphics::special(int key, int x, int y){
-    if (!serial->isConnected()) makeAction(key);
+    makeAction(key);
 }
 
 void Graphics::makeAction(unsigned char c, CellType cellType){

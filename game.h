@@ -20,7 +20,7 @@ public:
     int getWidth();
 
     void draw();
-    void drawText(const char *);
+    void drawText(const char *, bool);
     void resetGame();
     void newGame();
     void pauseGame();

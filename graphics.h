@@ -42,9 +42,9 @@ public:
     void configureAmbientLight();
     void positionObserver(float, float, int);
     void keyboard(unsigned char, int, int);
+    void special(int, int, int);
     void makeAction(unsigned char, CellType = PLAYER);
     void makeAction(int, CellType = PLAYER);
-    void special(int, int, int);
     void idle();
     void serialRead();
     void parseData(char *);
