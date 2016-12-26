@@ -5,6 +5,8 @@
  */
 #include "arduinoSerial.h"
 
+Sensor::Sensor(){ }
+
 ArduinoSerial::ArduinoSerial(char * serialport, int baudrate, char eolchar)
     : serialport(serialport), baudrate(baudrate), eolchar(eolchar){
     serialport_init();

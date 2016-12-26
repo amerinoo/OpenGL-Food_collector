@@ -17,6 +17,13 @@
 #include <iostream>
 using namespace std;
 
+typedef struct Sensor {
+    int horz;
+    int vert;
+    int sel;
+    Sensor();
+} Sensor;
+
 class ArduinoSerial {
 public:
     char * serialport;

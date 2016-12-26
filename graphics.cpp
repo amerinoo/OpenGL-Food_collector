@@ -142,21 +142,21 @@ void Graphics::special(int key, int x, int y){
 void Graphics::makeAction(unsigned char c, CellType cellType){
     c = tolower(c); // Prevent upper case
 
-    if (c == 'r') game.resetGame();
-    else if (c == 'w') game.moveAgent(cellType, UP);
-    else if (c == 's') game.moveAgent(cellType, DOWN);
-    else if (c == 'a') game.moveAgent(cellType, LEFT);
-    else if (c == 'd') game.moveAgent(cellType, RIGHT);
-    else if (c == ' ') game.shoot(cellType);
+    if (c == K_R) game.resetGame();
+    else if (c == K_W) game.moveAgent(cellType, UP);
+    else if (c == K_S) game.moveAgent(cellType, DOWN);
+    else if (c == K_A) game.moveAgent(cellType, LEFT);
+    else if (c == K_D) game.moveAgent(cellType, RIGHT);
+    else if (c == K_SPACE) game.shoot(cellType);
 
-    else if (c == 'i' && anglebeta <= (90 - 4)) anglebeta = (anglebeta + 3);
-    else if (c == 'k' && anglebeta >= (-90 + 4)) anglebeta = anglebeta - 3;
-    else if (c == 'j') anglealpha = (anglealpha + 3) % 360;
-    else if (c == 'l') anglealpha = (anglealpha - 3 + 360) % 360;
+    else if (c == K_I && anglebeta <= (90 - 4)) anglebeta = (anglebeta + 3);
+    else if (c == K_K && anglebeta >= (-90 + 4)) anglebeta = anglebeta - 3;
+    else if (c == K_J) anglealpha = (anglealpha + 3) % 360;
+    else if (c == K_L) anglealpha = (anglealpha - 3 + 360) % 360;
 
-    else if (c == '+' && Agent::agentVelocity > 100) Agent::setVelocity(Agent::agentVelocity - 50);
-    else if (c == '-' && Agent::agentVelocity < 500) Agent::setVelocity(Agent::agentVelocity + 50);
-    else if (c == 'p') game.pauseGame();
+    else if (c == K_PLUS && Agent::agentVelocity > 100) Agent::setVelocity(Agent::agentVelocity - 50);
+    else if (c == K_MINUS && Agent::agentVelocity < 500) Agent::setVelocity(Agent::agentVelocity + 50);
+    else if (c == K_P) game.pauseGame();
 
     glutPostRedisplay();
 }
@@ -197,18 +197,38 @@ void Graphics::serialRead(){
     int buf_max = 256;
     char buf[buf_max];
 
-    if (serial->serialport_read(buf, buf_max))
-        parseData(buf);
+    if (serial->serialport_read(buf, buf_max)) parseData(buf);
 }
 
-void Graphics::parseData(char * data){
-    // printf("%s\n", data);
-    char * pch = strtok(data, ";");
+void Graphics::parseData(char * d){
+    Sensor sensor;
+    string data(d);
+    Json::Value root;
+    Json::Reader reader;
+    bool success = reader.parse(d, root);
 
-    while (pch != NULL) {
-        char letter = pch[0];
-        printf("%c : %s\n", letter, pch);
-        pch = strtok(NULL, ";");
+    if (success) {
+        sensor.horz = root.get(string(1, JOYSTICK_HORZ), "-1").asInt();
+        sensor.vert = root.get(string(1, JOYSTICK_VERT), "-1").asInt();
+        sensor.sel  = root.get(string(1, JOYSTICK_SEL), "-1").asInt();
+
+        joystick(sensor);
+    }
+} // parseData
+
+void Graphics::joystick(Sensor sensor){
+    unsigned char direction;
+
+    if (sensor.horz > sensor.vert) {
+        if (sensor.horz >= 100) direction = K_D;
+        else direction = K_A;
+    } else {
+        if (sensor.vert >= 100) direction = K_W;
+        else direction = K_S;
+    }
+    makeAction(direction);
+    if (sensor.sel == 0) {
+        /* Switch player lights */
     }
 }
 

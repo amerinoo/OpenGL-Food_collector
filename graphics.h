@@ -13,6 +13,7 @@
 #include "drawer.h"
 #include "arduinoSerial.h"
 #include "textureLoader.h"
+#include "json.h"
 
 using namespace std;
 
@@ -48,6 +49,7 @@ public:
     void idle();
     void serialRead();
     void parseData(char *);
+    void joystick(Sensor);
 private:
     // Constructors
     Graphics();
