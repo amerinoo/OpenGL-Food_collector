@@ -16,10 +16,7 @@ public:
     ReflexAgent(Map *);
 
     // Methods
-    Direction getAction(Cell *);
-private:
-    float evaluationFunction(Cell *, Direction);
-    Cell * getNextState(Cell *, Direction);
-    double manhattanDistance(Cell *, Cell *);
+    Direction getAction();
+    float evaluationFunction(Map, Direction);
 };
 #endif // ifndef reflexAgent_h

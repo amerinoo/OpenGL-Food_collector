@@ -68,14 +68,15 @@ public:
     void tryNextDirection();
     Cell * getNextPosition(Direction, Cell *);
 protected:
-    Strategy * strategy;
-    Map * map;
+
     CellType cellType;
-    Particle particle;
-    int score;
     Cell * initPosition;
-    Cell * currentPosition;
+    Strategy * strategy;
+    Map * gameState;
+    int score;
     Cell * nextPosition;
+    Particle particle;
+
     bool needRotate;
     Bullet bullet;
 

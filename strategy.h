@@ -6,6 +6,7 @@
 #ifndef strategy_h
 #define strategy_h
 #include "map.h"
+#include <climits>
 
 using namespace std;
 
@@ -15,9 +16,13 @@ public:
     Strategy();
     Strategy(Map *);
 
-    virtual Direction getAction(Cell *);
-    Map * getMap();
+    Map * getGameState();
+    virtual Direction getAction();
+    vector<Direction> getLegalActions(Cell *);
+    float getDistance(Cell *, Cell *);
+    float manhattanDistance(Cell *, Cell *);
+
 protected:
-    Map * map;
+    Map * gameState;
 };
 #endif // ifndef strategy_h

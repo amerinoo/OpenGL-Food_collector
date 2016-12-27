@@ -37,13 +37,18 @@ public:
 
     // Methods
     void generate();
-    Cell * initPlayer();
-    Cell * initEnemy();
+    Cell * getInitPosition(CellType);
+    void setPosition(CellType, Cell *);
     vector<Cell *> getFood();
+    int getScore(CellType);
+    Cell * getPosition(CellType);
     int getFoodRemaining();
     bool hasFood();
-    void eat();
+    void eat(CellType);
+    void incrementScore(CellType);
     vector<Direction> getLegalActions(Cell *);
+    Map generateSuccessor(CellType, Direction);
+    Cell * getNextState(Cell *, Direction);
 
     // Print
     void print();
@@ -72,5 +77,8 @@ protected:
     vector<vector<Cell *> > map;
     vector<vector<Cell *> > visited;
     int totalFood;
+    Cell * player;
+    Cell * enemy;
+    int scorePlayer, scoreEnemy;
 };
 #endif // ifndef map_h

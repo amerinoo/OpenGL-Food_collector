@@ -25,17 +25,15 @@ Bullet::Bullet(Cell * position, Direction direction)
 Agent::Agent(){ }
 
 Agent::Agent(CellType cellType, Cell * initPosition, Strategy * strategy)
-    : cellType(cellType), initPosition(initPosition){
-    this->strategy = strategy;
-    map   = strategy->getMap();
-    score = 0;
+    : cellType(cellType), initPosition(initPosition), strategy(strategy),
+    gameState(strategy->getGameState()), score(0){
     goInitPosition();
 }
 
 // Getters
 Strategy * Agent::getStrategy(){ return strategy; }
 
-int Agent::getScore(){ return score; }
+int Agent::getScore(){ return gameState->getScore(cellType); }
 
 State Agent::getState(){ return particle.getState(); }
 
@@ -45,7 +43,7 @@ bool Agent::isMove(){ return getState() == MOVE; }
 
 bool Agent::isRotate(){ return getState() == ROTATE; }
 
-Cell * Agent::getCurrentPosition(){ return currentPosition; }
+Cell * Agent::getCurrentPosition(){ return gameState->getPosition(cellType); }
 
 Cell * Agent::getNextPosition(){ return nextPosition; }
 
@@ -53,7 +51,7 @@ Direction Agent::getDirection(){ return currentDirection; }
 
 void Agent::setPosition(Cell * cell){
     cell->setCellType(cellType);
-    currentPosition = cell;
+    gameState->setPosition(cellType, cell);
 }
 
 void Agent::setDirection(Direction currentDirection){
@@ -79,14 +77,13 @@ void Agent::goInitPosition(){
 }
 
 void Agent::eat(){
-    score += 1;
-    map->eat();
+    gameState->eat(cellType);
 }
 
 void Agent::move(){
     if (currentDirection != NONE) {
         if (needRotate) rotate();
-        else move(getNextPosition(currentDirection, currentPosition)); }
+        else move(getNextPosition(currentDirection, getCurrentPosition())); }
 } // move
 
 void Agent::move(Cell * cell){
@@ -109,6 +106,8 @@ Translation Agent::getTranslation(Direction direction){
 }
 
 bool Agent::isCrash(){
+    Cell * currentPosition = getCurrentPosition();
+
     return (cellType == ENEMY) ?
            nextPosition == agent->getNextPosition() ||
            currentPosition == agent->getNextPosition() ||
@@ -147,7 +146,7 @@ bool Agent::canShoot(){
 }
 
 void Agent::tryNextDirection(){
-    Cell * cell = getNextPosition(nextDirection, currentPosition);
+    Cell * cell = getNextPosition(nextDirection, getCurrentPosition());
 
     if ((cell != NULL && !cell->isWall()) || currentDirection == NONE) {
         setDirection(nextDirection);
@@ -166,6 +165,8 @@ Cell * Agent::getNextPosition(Direction direction, Cell * position){
 }
 
 bool Agent::integrate(long t){
+    Cell * currentPosition = getCurrentPosition();
+
     if (bullet.particle.integrate(t)) {
         moveBullet();
     }
@@ -193,8 +194,9 @@ bool Agent::isCrashBullet(){
 void Agent::crashBullet(){ crash(); bullet.enable = true; }
 
 void Agent::draw(){
-    Drawer& drawer      = Drawer::getInstance();
-    Direction direction = (currentDirection != NONE) ? currentDirection : lastDirection;
+    Drawer& drawer         = Drawer::getInstance();
+    Direction direction    = (currentDirection != NONE) ? currentDirection : lastDirection;
+    Cell * currentPosition = getCurrentPosition();
 
     if (isMove()) {
         drawer.draw(cellType, currentPosition->getX(), currentPosition->getY(),

@@ -6,14 +6,16 @@
 #include "reflexAgent.h"
 ReflexAgent::ReflexAgent() : Strategy(){ }
 
-ReflexAgent::ReflexAgent(Map * map) : Strategy(map){ }
+ReflexAgent::ReflexAgent(Map * gameState) : Strategy(gameState){ }
 
-Direction ReflexAgent::getAction(Cell * c){
-    vector<Direction> legalActions = map->getLegalActions(c);
+Direction ReflexAgent::getAction(){
+    Cell * c = gameState->getPosition(ENEMY);
+
+    vector<Direction> legalActions = getLegalActions(c);
     vector<float> scores;
 
     for (unsigned int i = 0; i < legalActions.size(); i++) {
-        scores.push_back(evaluationFunction(c, legalActions[i]));
+        scores.push_back(evaluationFunction(*gameState, legalActions[i]));
     }
     float bestScore = -99999999999999999;
     for (unsigned int i = 0; i < scores.size(); i++) {
@@ -31,25 +33,15 @@ Direction ReflexAgent::getAction(Cell * c){
     return legalActions[bestIndices[0]];
 } // getAction
 
-float ReflexAgent::evaluationFunction(Cell * currentPosition, Direction direction){
-    float totalScore    = 0.0;
-    Cell * nextPosition = getNextState(currentPosition, direction);
+float ReflexAgent::evaluationFunction(Map currentGameState, Direction direction){
+    float totalScore       = 0.0;
+    Cell * currentPosition = currentGameState.getPosition(ENEMY);
+    Cell * nextPosition    = currentGameState.getNextState(currentPosition, direction);
 
-    vector<Cell *> food = map->getFood();
+    vector<Cell *> food = gameState->getFood();
     for (unsigned int i = 0; i < food.size(); i++) {
-        int d = manhattanDistance(nextPosition, food[i]);
-        totalScore += (d == 0.0) ? 100 : 1.0 / (d * d);
+        int d = getDistance(nextPosition, food[i]);
+        totalScore += (d == 0.0) ? 50 : 1.0 / (d * d);
     }
     return totalScore;
 } // evaluationFunction
-
-Cell * ReflexAgent::getNextState(Cell * cell, Direction direction){
-    if (direction == UP) return cell->getUp();
-    else if (direction == DOWN) return cell->getDown();
-    else if (direction == LEFT) return cell->getLeft();
-    else return cell->getRight();
-}
-
-double ReflexAgent::manhattanDistance(Cell * c1, Cell * c2){
-    return abs(c2->getX() - c1->getX()) + abs(c2->getY() - c1->getY());
-}

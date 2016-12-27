@@ -6,4 +6,5 @@
 #ifndef strategies_h
 #define strategies_h
 #include "reflexAgent.h"
+#include "expectimaxAgent.h"
 #endif

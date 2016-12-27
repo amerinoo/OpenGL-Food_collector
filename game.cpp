@@ -64,8 +64,9 @@ void Game::resetGame(){
 void Game::newGame(){
     newMap();
     level += 1;
-    player = new Agent(PLAYER, map->initPlayer(), new Strategy(map));
-    enemy  = new Agent(ENEMY, map->initEnemy(), new ReflexAgent(map));
+    player = new Agent(PLAYER, map->getInitPosition(PLAYER), new Strategy(map));
+    enemy  = new Agent(ENEMY, map->getInitPosition(ENEMY), new ExpectimaxAgent(map, 4));
+    // enemy  = new Agent(ENEMY, map->getInitPosition(ENEMY), new ReflexAgent(map));
     player->setAgent(enemy);
     enemy->setAgent(player);
     map->print();
@@ -86,7 +87,7 @@ void Game::integrate(Agent * agent, long t){
     if (agent->integrate(t) || agent->isQuiet()) {
         if (map->hasFood()) {
             agent->setPosition(agent->getNextPosition());
-            Direction d = agent->getStrategy()->getAction(agent->getCurrentPosition());
+            Direction d = agent->getStrategy()->getAction();
             agent->setNextDirection(d);
             agent->tryNextDirection();
             agent->move();

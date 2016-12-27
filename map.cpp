@@ -13,9 +13,11 @@ const int Map::initY = 1;
 Map::Map(){ }
 
 Map::Map(int a, int b){
-    height    = a;
-    width     = b;
-    totalFood = -2;
+    height      = a;
+    width       = b;
+    scorePlayer = 0;
+    scoreEnemy  = 0;
+    totalFood   = -2;
     generate();
     initMap();
 }
@@ -51,16 +53,16 @@ void Map::initMap(){
             }
 }
 
-Cell * Map::initPlayer(){
-    Cell * player = map[Map::initX][Map::initY];
-
-    return player;
+Cell * Map::getInitPosition(CellType agent){
+    return (agent == PLAYER) ? map[Map::initX][Map::initY] : map[Map::initX][width - 1 - Map::initY];
 }
 
-Cell * Map::initEnemy(){
-    Cell * enemy = map[Map::initX][width - 1 - Map::initY];
-
-    return enemy;
+void Map::setPosition(CellType agent, Cell * c){
+    if (agent == PLAYER) {
+        player = c;
+    } else {
+        enemy = c;
+    }
 }
 
 // Print
@@ -288,6 +290,21 @@ vector<Direction> Map::getLegalActions(Cell * c){
     return legalActions;
 }
 
+Map Map::generateSuccessor(CellType agent, Direction action){
+    Map other(*this);
+
+    other.setPosition(agent, getNextState(getPosition(agent), action));
+    // if (other.getPosition(agent)->hasFood()) other.eat(agent);
+    return other;
+}
+
+Cell * Map::getNextState(Cell * cell, Direction direction){
+    if (direction == UP) return cell->getUp();
+    else if (direction == DOWN) return cell->getDown();
+    else if (direction == LEFT) return cell->getLeft();
+    else return cell->getRight();
+}
+
 /*
  * Logic the mirror the matriz.
  */
@@ -363,10 +380,29 @@ vector<Cell *> Map::getFood(){
     return listCell;
 }
 
+int Map::getScore(CellType agent){
+    return (agent == PLAYER) ? scorePlayer : scoreEnemy;
+}
+
+Cell * Map::getPosition(CellType agent){
+    return (agent == PLAYER) ? player : enemy;
+}
+
 int Map::getFoodRemaining(){ return totalFood; }
 
 bool Map::hasFood(){ return totalFood != 0; }
 
-void Map::eat(){
+void Map::eat(CellType agent){
+    incrementScore(agent);
     totalFood -= 1;
+}
+
+void Map::incrementScore(CellType agent){
+    int multiplier = 10;
+
+    if (agent == PLAYER) {
+        scorePlayer += 1 * multiplier;
+    } else {
+        scoreEnemy += 1 * multiplier;
+    }
 }

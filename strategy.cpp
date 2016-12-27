@@ -6,8 +6,20 @@
 #include "strategy.h"
 Strategy::Strategy(){ }
 
-Strategy::Strategy(Map * map) : map(map){ }
+Strategy::Strategy(Map * gameState) : gameState(gameState){ }
 
-Direction Strategy::getAction(Cell * c){ return NONE; }
+Map * Strategy::getGameState(){ return gameState; }
 
-Map * Strategy::getMap(){ return map; }
+Direction Strategy::getAction(){ return NONE; }
+
+vector<Direction> Strategy::getLegalActions(Cell * c){
+    return gameState->getLegalActions(c);
+}
+
+float Strategy::getDistance(Cell * c1, Cell * c2){
+    return manhattanDistance(c1, c2);
+}
+
+float Strategy::manhattanDistance(Cell * c1, Cell * c2){
+    return abs(c2->getX() - c1->getX()) + abs(c2->getY() - c1->getY());
+}
