@@ -57,7 +57,56 @@ Direction ExpectimaxAgent::expectimaxDecision(){
             actions.push_back(legalActions[i]);
         }
     }
+    // for (unsigned int i = 0; i < actions.size(); i++) {
+    //     switch (actions[i]) {
+    //         case UP:
+    //             std::cout << "UP, ";
+    //             break;
+    //
+    //         case DOWN:
+    //             std::cout << "DOWN, ";
+    //             break;
+    //
+    //         case LEFT:
+    //             std::cout << "LEFT, ";
+    //             break;
+    //
+    //         case RIGHT:
+    //             std::cout << "RIGHT, ";
+    //             break;
+    //
+    //         case NONE:
+    //             std::cout << "NONE, ";
+    //             break;
+    //     }
+    // }
+    // std::cout << std::endl;
     random_shuffle(actions.begin(), actions.end());
+    // for (unsigned int i = 0; i < actions.size(); i++) {
+    //     switch (actions[i]) {
+    //         case UP:
+    //             std::cout << "UP, ";
+    //             break;
+    //
+    //         case DOWN:
+    //             std::cout << "DOWN, ";
+    //             break;
+    //
+    //         case LEFT:
+    //             std::cout << "LEFT, ";
+    //             break;
+    //
+    //         case RIGHT:
+    //             std::cout << "RIGHT, ";
+    //             break;
+    //
+    //         case NONE:
+    //             std::cout << "NONE, ";
+    //             break;
+    //     }
+    // }
+    // std::cout << std::endl;
+    // std::cout << std::endl;
     return actions[0];
 } // expectimaxDecision
 
@@ -74,19 +123,24 @@ Map ExpectimaxAgent::result(Map gameState, CellType agent, Direction action){
 }
 
 float ExpectimaxAgent::evaluationFunction(Map currentGameState){
-    float totalScore     = currentGameState.getScore(ENEMY);
+    float staticScore    = currentGameState.getScore(ENEMY);
+    float mapScore       = 0.0;
     Cell * enemyPosition = currentGameState.getPosition(ENEMY);
     float d;
 
-    vector<Cell *> food = currentGameState.getFood();
+    vector<Cell *> food = currentGameState.getCandidateFood();
     for (unsigned int i = 0; i < food.size(); i++) {
-        d = getDistance(enemyPosition, food[i]);
-        totalScore += (d == 0.0) ? 50 : 1.0 / (d * d);
+        d         = getDistance(enemyPosition, food[i]);
+        mapScore += (d == 0.0) ? 50 : 1.0 / (d * d);
+    }
+    if (!currentGameState.isInInitialPosition(PLAYER)) {
+        d = getDistance(enemyPosition, currentGameState.getPosition(PLAYER));
+        if (d <= 1.0) {
+            mapScore += 300;
+        }
     }
 
-    d = getDistance(enemyPosition, currentGameState.getPosition(PLAYER));
-    if (d <= 1.0) {
-        totalScore += 300;
-    }
-    return totalScore;
+    int c1 = 1000;
+    int c2 = 1;
+    return c1 * staticScore + c2 * mapScore;
 } // evaluationFunction

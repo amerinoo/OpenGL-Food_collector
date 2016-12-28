@@ -40,8 +40,11 @@ public:
     Cell * getInitPosition(CellType);
     void setPosition(CellType, Cell *);
     vector<Cell *> getFood();
+    vector<Cell *> getCandidateFood();
+    bool isCandidate(Cell*);
     int getScore(CellType);
     Cell * getPosition(CellType);
+    bool isInInitialPosition(CellType);
     int getFoodRemaining();
     bool hasFood();
     void eat(CellType);
@@ -53,6 +56,7 @@ public:
     // Print
     void print();
 
+    int scorePlayer, scoreEnemy;
 private:
     void initCells();
     void connect(Cell *);
@@ -79,6 +83,5 @@ protected:
     int totalFood;
     Cell * player;
     Cell * enemy;
-    int scorePlayer, scoreEnemy;
 };
 #endif // ifndef map_h

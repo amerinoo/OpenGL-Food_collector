@@ -294,7 +294,12 @@ Map Map::generateSuccessor(CellType agent, Direction action){
     Map other(*this);
 
     other.setPosition(agent, getNextState(getPosition(agent), action));
-    // if (other.getPosition(agent)->hasFood()) other.eat(agent);
+    if (agent == PLAYER) {
+        other.scorePlayer -= 1;
+    } else {
+        other.scoreEnemy -= 1;
+    }
+    if (other.getPosition(agent)->hasFood()) other.eat(agent);
     return other;
 }
 
@@ -380,12 +385,36 @@ vector<Cell *> Map::getFood(){
     return listCell;
 }
 
+vector<Cell *> Map::getCandidateFood(){
+    vector<Cell *> listCell;
+    vector<Cell *> foods = getFood();
+
+    for (unsigned int i = 0; i < foods.size(); i++)
+        if (isCandidate(foods[i]))
+            listCell.push_back(foods[i]);
+
+    return listCell;
+}
+
+bool Map::isCandidate(Cell * c){
+    if (c->getUp()->isCorridor()) return true;
+    else if (c->getDown()->isCorridor()) return true;
+    else if (c->getLeft()->isCorridor()) return true;
+    else if (c->getRight()->isCorridor()) return true;
+
+    return false;
+}
+
 int Map::getScore(CellType agent){
     return (agent == PLAYER) ? scorePlayer : scoreEnemy;
 }
 
 Cell * Map::getPosition(CellType agent){
     return (agent == PLAYER) ? player : enemy;
+}
+
+bool Map::isInInitialPosition(CellType agent){
+    return getInitPosition(agent) == getPosition(agent);
 }
 
 int Map::getFoodRemaining(){ return totalFood; }
