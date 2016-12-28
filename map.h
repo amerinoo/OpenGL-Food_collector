@@ -24,6 +24,8 @@ class Map {
 public:
     static const int initX;
     static const int initY;
+    static float seed;
+    static bool isSeed;
 
     // Constructors
     Map();
@@ -33,6 +35,8 @@ public:
     // Getters
     int getHeight();
     int getWidth();
+    void setSeed(float);
+    float getSeed();
     vector<vector<Cell *> > getMap();
 
     // Methods
@@ -41,7 +45,7 @@ public:
     void setPosition(CellType, Cell *);
     vector<Cell *> getFood();
     vector<Cell *> getCandidateFood();
-    bool isCandidate(Cell*);
+    bool isCandidate(Cell *);
     int getScore(CellType);
     Cell * getPosition(CellType);
     bool isInInitialPosition(CellType);
@@ -77,7 +81,7 @@ private:
     void print(vector<vector<Cell *> > );
 
 protected:
-    int width, height;
+    int height, width;
     vector<vector<Cell *> > map;
     vector<vector<Cell *> > visited;
     int totalFood;

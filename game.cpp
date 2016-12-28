@@ -10,12 +10,8 @@ using namespace std;
 // Constructors
 Game::Game(){ }
 
-Game::Game(int height, int width){
-    this->height = height;
-    this->width  = width;
-    map = NULL;
-    resetGame();
-}
+Game::Game(int height, int width, float seed)
+    : height(height), width(width), seed(seed), map(NULL){ }
 
 // Getters
 int Game::getHeight(){ return height; }
@@ -118,4 +114,6 @@ void Game::shoot(CellType cellType){
 void Game::newMap(){
     if (map != NULL) delete map;
     map = new Map(height, width);
+    if (seed != -1) map->setSeed(seed);
+    map->generate();
 }

@@ -13,7 +13,7 @@ class Game {
 public:
     // Constructors
     Game();
-    Game(int, int);
+    Game(int, int, float);
 
     // Getters
     int getHeight();
@@ -34,11 +34,12 @@ public:
 private:
     void newMap();
 protected:
-    Map * map;
-    int width, height;
+    int height, width;
     Agent * player;
     Agent * enemy;
     int level;
     bool pause;
+    float seed;
+    Map * map;
 };
 #endif // ifndef game_h

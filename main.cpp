@@ -26,8 +26,8 @@ int main(int argc, char * argv[]){
     int baudrate             = 9600; // default
     char serialport[buf_max] = "/dev/ttyACM0";
     char eolchar             = '*';
-    int seed   = 0;
-    char quiet = 0;
+    float seed               = -1;
+    char quiet               = 1;
 
     /* parse options */
     int option_index = 0, opt;
@@ -61,6 +61,7 @@ int main(int argc, char * argv[]){
                 break;
             case 's':
                 seed = strtol(optarg, NULL, 10);
+                if (!quiet) printf("seed : %f\n", seed);
                 break;
             case 'b':
                 baudrate = strtol(optarg, NULL, 10);
@@ -76,7 +77,6 @@ int main(int argc, char * argv[]){
                 break;
         }
     }
-    std::cout << "Seed: " << seed << std::endl;
     if (hasCorrectArguments(height, width, maxHeight, maxWidth)) {
         cout << "Error: Ilegal Arguments" << endl;
         cout << "Height must be larger than 3 and smaller than " << maxHeight << endl;
@@ -84,8 +84,8 @@ int main(int argc, char * argv[]){
         return -1;
     }
     ArduinoSerial * serial = new ArduinoSerial(serialport, baudrate, eolchar);
-    Game game(height, width);
-
+    Game game(height, width, seed);
+    game.resetGame();
     Drawer& drawer = Drawer::getInstance();
     drawer.setHeight(height);
     drawer.setWidth(width);

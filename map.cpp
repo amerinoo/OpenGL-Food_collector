@@ -8,18 +8,17 @@ using namespace std;
 
 const int Map::initX = 1;
 const int Map::initY = 1;
+float Map::seed      = 1;
+bool Map::isSeed     = false;
 
 // Constructors
 Map::Map(){ }
 
-Map::Map(int a, int b){
-    height      = a;
-    width       = b;
+Map::Map(int height, int width)
+    : height(height), width(width){
     scorePlayer = 0;
     scoreEnemy  = 0;
     totalFood   = -2;
-    generate();
-    initMap();
 }
 
 Map::Map(char fname[]){ getMapFromFile(fname); }
@@ -29,11 +28,20 @@ int Map::getHeight(){ return height; }
 
 int Map::getWidth(){ return width; }
 
+void Map::setSeed(float seed){
+    this->isSeed = true;
+    this->seed   = seed;
+}
+
+float Map::getSeed(){
+    return (this->isSeed) ? this->seed : rand();
+}
+
 vector<vector<Cell *> > Map::getMap(){ return map; }
 
 // Methods
 void Map::generate(){
-    srand(time(NULL));
+    srand(getSeed());
     initCells();
     connectCells();
     inside();
@@ -42,6 +50,7 @@ void Map::generate(){
     middleRandom();
     mirror();
     connectCells();
+    initMap();
 }
 
 void Map::initMap(){
