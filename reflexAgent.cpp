@@ -40,7 +40,7 @@ float ReflexAgent::evaluationFunction(Map currentGameState, Direction direction)
 
     vector<Cell *> food = gameState->getFood();
     for (unsigned int i = 0; i < food.size(); i++) {
-        int d = getDistance(nextPosition, food[i]);
+        int d = getDistance(currentGameState, nextPosition, food[i]);
         totalScore += (d == 0.0) ? 50 : 1.0 / (d * d);
     }
     return totalScore;

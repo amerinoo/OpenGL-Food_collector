@@ -82,10 +82,12 @@ void Game::integrate(long t){
 void Game::integrate(Agent * agent, long t){
     if (agent->integrate(t) || agent->isQuiet()) {
         if (map->hasFood()) {
-            agent->setPosition(agent->getNextPosition());
-            Direction d = agent->getStrategy()->getAction();
-            agent->setNextDirection(d);
-            agent->tryNextDirection();
+            if (agent->getNeedAction()) {
+                agent->setPosition(agent->getNextPosition());
+                Direction d = agent->getStrategy()->getAction();
+                agent->setNextDirection(d);
+                agent->tryNextDirection();
+            }
             agent->move();
         } else { finish(); }
     }

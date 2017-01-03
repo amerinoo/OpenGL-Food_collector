@@ -30,6 +30,8 @@ float Cell::getX(){ return x; }
 
 float Cell::getY(){ return y; }
 
+float Cell::getKey(){ return getX() * 100 + getY(); }
+
 bool Cell::isVisited(){ return visited; }
 
 Cell * Cell::getUp(){ return up; }

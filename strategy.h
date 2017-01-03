@@ -7,8 +7,20 @@
 #define strategy_h
 #include "map.h"
 #include <climits>
+#include <queue>
+#include <map>
 
 using namespace std;
+
+typedef struct Node {
+    Cell *        state;
+    struct Node * parent;
+    Direction     action;
+    Node();
+    Node(Cell *, Node *, Direction);
+
+    vector<Direction> path();
+} Node;
 
 class Strategy {
 public:
@@ -19,8 +31,9 @@ public:
     Map * getGameState();
     virtual Direction getAction();
     vector<Direction> getLegalActions(Cell *);
-    float getDistance(Cell *, Cell *);
+    float getDistance(Map, Cell *, Cell *);
     float manhattanDistance(Cell *, Cell *);
+    vector<Direction> blindSearchGraph(Map, Cell *, Cell *);
 
 protected:
     Map * gameState;

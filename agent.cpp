@@ -43,6 +43,8 @@ bool Agent::isMove(){ return getState() == MOVE; }
 
 bool Agent::isRotate(){ return getState() == ROTATE; }
 
+bool Agent::getNeedAction(){ return needAction; }
+
 Cell * Agent::getCurrentPosition(){ return gameState->getPosition(cellType); }
 
 Cell * Agent::getNextPosition(){ return nextPosition; }
@@ -74,6 +76,7 @@ void Agent::goInitPosition(){
     lastDirection    = DOWN;
     currentDirection = NONE;
     nextDirection    = NONE;
+    needAction       = true;
 }
 
 void Agent::eat(){
@@ -82,8 +85,14 @@ void Agent::eat(){
 
 void Agent::move(){
     if (currentDirection != NONE) {
-        if (needRotate) rotate();
-        else move(getNextPosition(currentDirection, getCurrentPosition())); }
+        if (needRotate) {
+            rotate();
+            needAction = false;
+        } else {
+            move(getNextPosition(currentDirection, getCurrentPosition()));
+            needAction = true;
+        }
+    }
 } // move
 
 void Agent::move(Cell * cell){

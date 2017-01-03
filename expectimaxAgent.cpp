@@ -5,9 +5,17 @@
  */
 #include "expectimaxAgent.h"
 
+const int ExpectimaxAgent::c1 = 1000;
+const int ExpectimaxAgent::c2 = 1;
+
 ExpectimaxAgent::ExpectimaxAgent() : Strategy(){ }
 
-ExpectimaxAgent::ExpectimaxAgent(Map * gameState, int depth) : Strategy(gameState), depth(depth){ }
+ExpectimaxAgent::ExpectimaxAgent(Map * gameState, int depth)
+    : Strategy(gameState), depth(depth){
+    best  = INT_MIN;
+    alarm = false;
+    bestDirections = vector<Direction>();
+}
 
 Direction ExpectimaxAgent::getAction(){
     return expectimaxDecision();
@@ -46,67 +54,46 @@ Direction ExpectimaxAgent::expectimaxDecision(){
     vector<Direction> legalActions = getLegalActions(gameState->getPosition(ENEMY));
     vector<Direction> actions;
     float u;
-
-    for (unsigned int i = 0; i < legalActions.size(); i++) {
-        u = minValue(result(*gameState, ENEMY, legalActions[i]), PLAYER, depth);
-        if (u == v) {
-            actions.push_back(legalActions[i]);
-        } else if (u > v) {
-            v = u;
-            actions.clear();
-            actions.push_back(legalActions[i]);
+    if (alarm) {
+        float minD = INT_MAX;
+        float d;
+        Cell * enemyPosition = gameState->getPosition(ENEMY);
+        Cell * goal;
+        vector<Cell *> food = gameState->getCandidateFood();
+        for (unsigned int i = 0; i < food.size(); i++) {
+            d = getDistance(*gameState, enemyPosition, food[i]);
+            if (minD > d) {
+                minD = d;
+                goal = food[i];
+            }
+        }
+        bestDirections = blindSearchGraph(*gameState, enemyPosition, goal);
+        alarm = false;
+        best  = 0;
+    }
+    if (!bestDirections.empty()) {
+        actions.push_back(bestDirections.back());
+        bestDirections.pop_back();
+    } else {
+        for (unsigned int i = 0; i < legalActions.size(); i++) {
+            u = minValue(result(*gameState, ENEMY, legalActions[i]), PLAYER, depth);
+            if (u == v) {
+                actions.push_back(legalActions[i]);
+            } else if (u > v) {
+                v = u;
+                actions.clear();
+                actions.push_back(legalActions[i]);
+            }
         }
     }
-    // for (unsigned int i = 0; i < actions.size(); i++) {
-    //     switch (actions[i]) {
-    //         case UP:
-    //             std::cout << "UP, ";
-    //             break;
-    //
-    //         case DOWN:
-    //             std::cout << "DOWN, ";
-    //             break;
-    //
-    //         case LEFT:
-    //             std::cout << "LEFT, ";
-    //             break;
-    //
-    //         case RIGHT:
-    //             std::cout << "RIGHT, ";
-    //             break;
-    //
-    //         case NONE:
-    //             std::cout << "NONE, ";
-    //             break;
-    //     }
-    // }
-    // std::cout << std::endl;
+
+    if (best < v) {
+        best = v;
+    } else if (v != INT_MIN && v < best - (10 * c1) && bestDirections.empty()) {
+        best  = v;
+        alarm = true;
+    }
     random_shuffle(actions.begin(), actions.end());
-    // for (unsigned int i = 0; i < actions.size(); i++) {
-    //     switch (actions[i]) {
-    //         case UP:
-    //             std::cout << "UP, ";
-    //             break;
-    //
-    //         case DOWN:
-    //             std::cout << "DOWN, ";
-    //             break;
-    //
-    //         case LEFT:
-    //             std::cout << "LEFT, ";
-    //             break;
-    //
-    //         case RIGHT:
-    //             std::cout << "RIGHT, ";
-    //             break;
-    //
-    //         case NONE:
-    //             std::cout << "NONE, ";
-    //             break;
-    //     }
-    // }
-    // std::cout << std::endl;
-    // std::cout << std::endl;
     return actions[0];
 } // expectimaxDecision
 
@@ -130,17 +117,12 @@ float ExpectimaxAgent::evaluationFunction(Map currentGameState){
 
     vector<Cell *> food = currentGameState.getCandidateFood();
     for (unsigned int i = 0; i < food.size(); i++) {
-        d         = getDistance(enemyPosition, food[i]);
+        d         = getDistance(currentGameState, enemyPosition, food[i]);
         mapScore += (d == 0.0) ? 50 : 1.0 / (d * d);
     }
     if (!currentGameState.isInInitialPosition(PLAYER)) {
-        d = getDistance(enemyPosition, currentGameState.getPosition(PLAYER));
-        if (d <= 1.0) {
-            mapScore += 300;
-        }
+        d = getDistance(currentGameState, enemyPosition, currentGameState.getPosition(PLAYER));
+        if (d <= 1.0) mapScore += 70;
     }
-
-    int c1 = 1000;
-    int c2 = 1;
     return c1 * staticScore + c2 * mapScore;
 } // evaluationFunction

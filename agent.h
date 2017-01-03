@@ -38,6 +38,7 @@ public:
     bool isQuiet();
     bool isMove();
     bool isRotate();
+    bool getNeedAction();
     Cell * getCurrentPosition();
     Cell * getNextPosition();
     Direction getDirection();
@@ -78,6 +79,7 @@ protected:
     Particle particle;
 
     bool needRotate;
+    bool needAction;
     Bullet bullet;
 
     Direction lastDirection;

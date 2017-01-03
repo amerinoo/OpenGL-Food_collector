@@ -21,6 +21,7 @@ public:
     // Getters
     float getX();
     float getY();
+    float getKey();
     bool isVisited();
     Cell * getUp();
     Cell * getDown();

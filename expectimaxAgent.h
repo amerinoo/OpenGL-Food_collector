@@ -11,6 +11,8 @@ using namespace std;
 
 class ExpectimaxAgent : public Strategy {
 public:
+    static const int c1;
+    static const int c2;
     // Constructors
     ExpectimaxAgent();
     ExpectimaxAgent(Map *, int = 4);
@@ -28,5 +30,8 @@ private:
     float evaluationFunction(Map);
 
     int depth;
+    int best;
+    bool alarm;
+    vector<Direction> bestDirections;
 };
 #endif // ifndef expectimaxAgent_h
