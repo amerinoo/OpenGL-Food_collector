@@ -47,9 +47,13 @@ public:
     void makeAction(unsigned char, CellType = PLAYER);
     void makeAction(int, CellType = PLAYER);
     void idle();
+
+    // Arduino
     void serialRead();
     void parseData(char *);
     void joystick(Sensor);
+    void dht(Sensor);
+
 private:
     // Constructors
     Graphics();

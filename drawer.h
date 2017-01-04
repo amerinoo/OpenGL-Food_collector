@@ -75,6 +75,8 @@ public:
     static const GLint slices;
     static const GLint stacks;
     static const GLfloat spot_cutoff;
+    static Texture textureCorridor;
+
     int height, width;
     static Drawer& getInstance();
     void draw(CellType, float, float, bool, Direction = NONE, int = 0, int = 0, int = 0);

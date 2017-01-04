@@ -211,8 +211,10 @@ void Graphics::parseData(char * d){
         sensor.horz = root.get(string(1, JOYSTICK_HORZ), "-1").asInt();
         sensor.vert = root.get(string(1, JOYSTICK_VERT), "-1").asInt();
         sensor.sel  = root.get(string(1, JOYSTICK_SEL), "-1").asInt();
-
         joystick(sensor);
+
+        sensor.temperature = root.get(string(1, DHT_TEMP), "-1").asInt();
+        dht(sensor);
     }
 } // parseData
 
@@ -228,6 +230,13 @@ void Graphics::joystick(Sensor sensor){
     makeAction(direction);
 
     if (sensor.sel == 1) makeAction((unsigned char) K_SPACE);
+}
+
+void Graphics::dht(Sensor sensor){
+    // std::cout << sensor.temperature << endl;
+    if (sensor.temperature != 0) {
+        Drawer::textureCorridor = (sensor.temperature > 26) ? LAVA : WATER;
+    }
 }
 
 void myDisplay(){ Graphics::getInstance().display(); }

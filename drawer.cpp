@@ -12,7 +12,7 @@ Color::Color(const GLfloat red1, const GLfloat green1, const GLfloat blue1, cons
 
 const Color Color::background = Color(64, 64, 64);
 const Color Color::text       = Color(0, 150, 0);
-const Color Color::wall       = Color(82, 82, 203, 1, 51, 51, 153);
+const Color Color::wall       = Color(82, 82, 203, 1, 151, 151, 153);
 const Color Color::corridor   = Color(0, 0, 80);
 const Color Color::food       = Color(0, 255, 230);
 const Color Color::player     = Color(255, 255, 0);
@@ -64,6 +64,7 @@ const GLdouble Drawer::r          = Drawer::cellSize / 8;
 const GLint Drawer::slices        = 10;
 const GLint Drawer::stacks        = 5;
 const GLfloat Drawer::spot_cutoff = 30.0;
+Texture Drawer::textureCorridor   = WATER;
 
 const CellProperties CellProperties::wall     = CellProperties('0', Color::wall);
 const CellProperties CellProperties::corridor = CellProperties(' ', Color::corridor);
@@ -128,22 +129,29 @@ void Drawer::drawWall(){
 
 void Drawer::drawCorridor(){
     CellProperties properties = getProperties(CORRIDOR);
-    Color color = properties.color;
-    GLfloat x   = Drawer::x;
-    GLfloat y   = Drawer::y;
-    GLfloat z   = Drawer::z;
+    Color color   = properties.color;
+    Color texture = Color::texture;
+    GLfloat x     = Drawer::x;
+    GLfloat y     = Drawer::y;
+    GLfloat z     = Drawer::z;
 
 
     glColor3f(color.red1, color.green1, color.blue1);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color.toArray1());
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, texture.toArray1());
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureCorridor);
     glBegin(GL_QUADS);
     glNormal3f(0, 1, 0);
+    glTexCoord2f(0.0, 0.0);
     glVertex3f(x, y, -z);
+    glTexCoord2f(1.0, 0.0);
     glVertex3f(-x, y, -z);
+    glTexCoord2f(1.0, 1.0);
     glVertex3f(-x, -y, -z);
+    glTexCoord2f(0.0, 1.0);
     glVertex3f(x, -y, -z);
-
     glEnd();
+    glDisable(GL_TEXTURE_2D);
 } // drawCorridor
 
 void Drawer::drawSphere(CellType cellType){
@@ -283,7 +291,7 @@ void Drawer::drawCube(Color color){
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, texture.toArray1());
 
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, WALLS);
+    glBindTexture(GL_TEXTURE_2D, WOOD);
     glBegin(GL_QUADS);
     // FRONT
     glNormal3f(0, 0, 1);

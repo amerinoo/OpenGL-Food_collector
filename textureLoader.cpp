@@ -10,8 +10,12 @@ TextureLoader::TextureLoader(){ }
 
 // Methods
 void TextureLoader::loadTextures(){
-    glBindTexture(GL_TEXTURE_2D, WALLS);
-    loadTexture("pared.jpg", 64);
+    glBindTexture(GL_TEXTURE_2D, WOOD);
+    loadTexture("wood.jpg", 64);
+    glBindTexture(GL_TEXTURE_2D, WATER);
+    loadTexture("water.jpg", 64);
+    glBindTexture(GL_TEXTURE_2D, LAVA);
+    loadTexture("lava.jpg", 64);
 }
 
 void TextureLoader::loadTexture(const char * filename, int dim){

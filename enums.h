@@ -34,7 +34,9 @@ enum Direction {
 };
 
 enum Texture {
-    WALLS
+    WOOD,
+    WATER,
+    LAVA
 };
 
 enum SensorType {
