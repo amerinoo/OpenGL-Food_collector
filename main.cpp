@@ -14,6 +14,9 @@ using namespace std;
 void usage(char *);
 bool hasCorrectArguments(int, int, int, int);
 
+int minHeight = 5;
+int minWidth  = 6;
+
 int main(int argc, char * argv[]){
     Graphics& graphics = Graphics::getInstance();
 
@@ -32,18 +35,19 @@ int main(int argc, char * argv[]){
     /* parse options */
     int option_index = 0, opt;
     static struct option loptions[] = {
-        { "help",    no_argument,       0, 'h' },
-        { "height",  required_argument, 0, 'H' },
-        { "width",   required_argument, 0, 'W' },
-        { "seed",    required_argument, 0, 's' },
-        { "baud",    required_argument, 0, 'b' },
-        { "port",    required_argument, 0, 'p' },
-        { "eolchar", required_argument, 0, 'e' },
-        { NULL,                      0, 0,   0 }
+        { "help",   no_argument,       0, 'h' },
+        { "height", required_argument, 0, 'H' },
+        { "width",  required_argument, 0, 'W' },
+        { "seed",   required_argument, 0, 's' },
+        { "baud",   required_argument, 0, 'b' },
+        { "port",   required_argument, 0, 'p' },
+        { "fast",   no_argument,       0, 'f' },
+        { "turtle", no_argument,       0, 't' },
+        { NULL,                     0, 0,   0 }
     };
 
     while (1) {
-        opt = getopt_long(argc, argv, "hH:W:s:b:p:e:",
+        opt = getopt_long(argc, argv, "hH:W:s:b:p:ft",
           loptions, &option_index);
         if (opt == -1) break;
         switch (opt) {
@@ -53,34 +57,38 @@ int main(int argc, char * argv[]){
                 break;
             case 'H':
                 height = strtol(optarg, NULL, 10);
-                if (!quiet) printf("height : %d\n", height);
+                if (!quiet) printf("Height : %d\n", height);
                 break;
             case 'W':
                 width = strtol(optarg, NULL, 10);
-                if (!quiet) printf("width : %d\n", width);
+                if (!quiet) printf("Width : %d\n", width);
                 break;
             case 's':
                 seed = strtol(optarg, NULL, 10);
-                if (!quiet) printf("seed : %f\n", seed);
+                if (!quiet) printf("Seed : %f\n", seed);
                 break;
             case 'b':
                 baudrate = strtol(optarg, NULL, 10);
-                if (!quiet) printf("baudrate : %d\n", baudrate);
+                if (!quiet) printf("Baudrate : %d\n", baudrate);
                 break;
             case 'p':
                 strcpy(serialport, optarg);
                 if (!quiet) printf("Port : %s\n", serialport);
                 break;
-            case 'e':
-                eolchar = optarg[0];
-                if (!quiet) printf("Eolchar : %c\n", eolchar);
+            case 'f':
+                Agent::agentVelocity = 20;
+                if (!quiet) printf("Fast mode activated\n");
+                break;
+            case 't':
+                Agent::agentVelocity = 500;
+                if (!quiet) printf("Turtle mode activated\n");
                 break;
         }
     }
     if (hasCorrectArguments(height, width, maxHeight, maxWidth)) {
         cout << "Error: Ilegal Arguments" << endl;
-        cout << "Height must be larger than 3 and smaller than " << maxHeight << endl;
-        cout << "width must be larger than 3 and smaller than " << maxWidth << endl;
+        cout << "Height must be larger than " << minHeight << " and smaller than " << maxHeight << endl;
+        cout << "Width must be larger than " << minWidth << " and smaller than " << maxWidth << endl;
         return -1;
     }
     ArduinoSerial * serial = new ArduinoSerial(serialport, baudrate, eolchar);
@@ -108,18 +116,20 @@ void usage(char * name){
          << "\nArduino options:" << endl
          << "  -b, --baud         Baudrate (bps) of Arduino (default 9600)" << endl
          << "  -p, --port         Serial port Arduino is connected to (default /dev/ttyACM0)" << endl
-         << "  -e  --eolchar      Specify EOL char for reads (default '*')" << endl
+         << "\nVelocity options:" << endl
+         << "  -f  --fast         Activate fast mode (Velocity 50)" << endl
+         << "  -t  --turtle       Activate turtle mode (Velocity 500)" << endl
          << "" << endl
-         << "Note: Order is important. Set '-b' baudrate before opening port'-p'. " << endl
+         << "Note: Order is not important." << endl
          << "Examples:" << endl
-         << "\t" << name << endl
-         << "\t" << name << " -H 12 -W 23" << endl
-         << "\t" << name << " -p /dev/ttyACM1" << endl
-         << "\t" << name << " -e *" << endl
+         << "  " << name << endl
+         << "  " << name << " -H 12 -W 23" << endl
+         << "  " << name << " -p /dev/ttyACM1" << endl
+         << "  " << name << " -s 12 -f" << endl
          << endl;
     exit(EXIT_SUCCESS);
 }
 
 bool hasCorrectArguments(int height, int width, int maxHeight, int maxWidth){
-    return height < 3 || width < 3 || height > maxHeight || width > maxWidth;
+    return height < minHeight || width < minWidth || height > maxHeight || width > maxWidth;
 }
