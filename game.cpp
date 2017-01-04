@@ -18,6 +18,8 @@ int Game::getHeight(){ return height; }
 
 int Game::getWidth(){ return width; }
 
+bool Game::isPaused(){ return pause; }
+
 void Game::draw(){
     player->draw();
     enemy->draw();

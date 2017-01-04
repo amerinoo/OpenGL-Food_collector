@@ -40,10 +40,11 @@ enum Texture {
 };
 
 enum SensorType {
-    JOYSTICK_HORZ = 'H',
-    JOYSTICK_VERT = 'V',
-    JOYSTICK_SEL  = 'S',
-    DHT_TEMP      = 'T'
+    JOYSTICK_HORZ       = 'H',
+    JOYSTICK_VERT       = 'V',
+    JOYSTICK_SEL        = 'S',
+    DHT_TEMP            = 'T',
+    ULTRASOUND_DISTANCE = 'D'
 };
 
 enum Keyboard {

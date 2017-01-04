@@ -215,6 +215,9 @@ void Graphics::parseData(char * d){
 
         sensor.temperature = root.get(string(1, DHT_TEMP), "-1").asInt();
         dht(sensor);
+
+        sensor.distance = root.get(string(1, ULTRASOUND_DISTANCE), "-1").asInt();
+        ultrasound(sensor);
     }
 } // parseData
 
@@ -237,6 +240,14 @@ void Graphics::dht(Sensor sensor){
     if (sensor.temperature != 0) {
         Drawer::textureCorridor = (sensor.temperature > 26) ? LAVA : WATER;
     }
+}
+
+void Graphics::ultrasound(Sensor sensor){
+    // std::cout << sensor.distance << endl;
+    bool clause1 = sensor.distance > 100 && sensor.distance < 800 && !game.isPaused(); // Pause
+    bool clause2 = sensor.distance < 100 && game.isPaused();                           // Resume
+
+    if (clause1 || clause2) makeAction((unsigned char) K_P);
 }
 
 void myDisplay(){ Graphics::getInstance().display(); }

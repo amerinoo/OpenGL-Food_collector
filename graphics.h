@@ -53,6 +53,7 @@ public:
     void parseData(char *);
     void joystick(Sensor);
     void dht(Sensor);
+    void ultrasound(Sensor);
 
 private:
     // Constructors

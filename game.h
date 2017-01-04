@@ -18,6 +18,7 @@ public:
     // Getters
     int getHeight();
     int getWidth();
+    bool isPaused();
 
     void draw();
     void drawText(const char *, bool);
