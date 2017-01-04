@@ -100,7 +100,7 @@ void Agent::move(Cell * cell){
         nextPosition = cell;
         particle.init_movement(getTranslation(currentDirection), Agent::agentVelocity);
         if (isCrash()) crash();
-        else if (cell->hasFood()) eat();
+        if (cell->hasFood()) eat();
         if (cellType == PLAYER) {
             gameState->scorePlayer -= 1;
         } else {
