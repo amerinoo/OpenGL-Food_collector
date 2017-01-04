@@ -33,6 +33,7 @@ public:
     int fd;
     char eolchar;
     int timeout;
+    bool reading;
 
     ArduinoSerial(char *, int, char);
     void serialport_init();
@@ -41,5 +42,7 @@ public:
     bool serialport_read(char *, int);
     int serialport_flush();
     bool isConnected();
+    bool isReading();
+    void setReading(bool);
 };
 #endif // ifndef arduino_h

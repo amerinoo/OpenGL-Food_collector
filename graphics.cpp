@@ -78,7 +78,7 @@ void Graphics::display(){
     positionObserver(anglealpha, anglebeta, 450);
 
     game.draw();
-    game.drawText(windowTitle, serial->isConnected());
+    game.drawText(windowTitle, serial->isConnected() && serial->isReading());
 
     glutSwapBuffers();
 } // display
@@ -206,6 +206,8 @@ void Graphics::parseData(char * d){
     Json::Value root;
     Json::Reader reader;
     bool success = reader.parse(d, root);
+
+    serial->setReading(success);
 
     if (success) {
         sensor.horz = root.get(string(1, JOYSTICK_HORZ), "-1").asInt();

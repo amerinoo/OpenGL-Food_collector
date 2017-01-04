@@ -8,7 +8,7 @@
 Sensor::Sensor(){ }
 
 ArduinoSerial::ArduinoSerial(char * serialport, int baudrate, char eolchar)
-    : serialport(serialport), baudrate(baudrate), eolchar(eolchar){
+    : serialport(serialport), baudrate(baudrate), eolchar(eolchar), reading(false){
     serialport_init();
 }
 
@@ -93,3 +93,7 @@ int ArduinoSerial::serialport_flush(){
 }
 
 bool ArduinoSerial::isConnected(){ return fd != -1; }
+
+bool ArduinoSerial::isReading(){ return reading; }
+
+void ArduinoSerial::setReading(bool reading){ this->reading = reading; }
