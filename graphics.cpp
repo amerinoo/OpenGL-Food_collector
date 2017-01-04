@@ -217,19 +217,17 @@ void Graphics::parseData(char * d){
 } // parseData
 
 void Graphics::joystick(Sensor sensor){
+    // std::cout << sensor.vert << " " << sensor.horz << " " << sensor.sel << std::endl;
     unsigned char direction;
+    bool vert = sensor.vert > 5 && sensor.vert < 15;
+    bool horz = sensor.horz > 5 && sensor.horz < 15;
 
-    if (sensor.horz > sensor.vert) {
-        if (sensor.horz >= 100) direction = K_D;
-        else direction = K_A;
-    } else {
-        if (sensor.vert >= 100) direction = K_W;
-        else direction = K_S;
-    }
+    if (vert && horz) direction = '!';
+    else if (vert) direction = (sensor.horz >= 10) ? K_L : K_J;
+    else direction = (sensor.vert >= 10) ? K_K : K_I;
     makeAction(direction);
-    if (sensor.sel == 0) {
-        /* Switch player lights */
-    }
+
+    if (sensor.sel == 1) makeAction((unsigned char) K_SPACE);
 }
 
 void myDisplay(){ Graphics::getInstance().display(); }
