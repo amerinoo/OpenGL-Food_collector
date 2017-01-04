@@ -224,6 +224,10 @@ void Graphics::parseData(char * d){
         sensor.x = root.get(string(1, ADXL_X), "-1").asInt();
         sensor.y = root.get(string(1, ADXL_Y), "-1").asInt();
         adxl(sensor);
+
+        sensor.qs  = root.get(string(1, HEART_RATE_QS), "-1").asInt();
+        sensor.bpm = root.get(string(1, HEART_RATE_BPM), "-1").asInt();
+        heartRate(sensor);
     }
 } // parseData
 
@@ -266,6 +270,14 @@ void Graphics::adxl(Sensor sensor){
     else if (vert) direction = (sensor.x >= 0) ? K_D : K_A;
     else direction = (sensor.y >= 0) ? K_W : K_S;
     makeAction(direction);
+}
+
+void Graphics::heartRate(Sensor sensor){
+    // std::cout << sensor.qs << " " << sensor.bpm << std::endl;
+    if (sensor.qs) {
+        if (sensor.bpm > 80 && sensor.bpm < 110) makeAction((unsigned char) K_MINUS);  // Reduce velocity
+        else if (sensor.bpm < 70) makeAction((unsigned char) K_PLUS);                  // Increase velocity
+    }
 }
 
 void myDisplay(){ Graphics::getInstance().display(); }

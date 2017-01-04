@@ -55,6 +55,7 @@ public:
     void dht(Sensor);
     void ultrasound(Sensor);
     void adxl(Sensor);
+    void heartRate(Sensor);
 
 private:
     // Constructors

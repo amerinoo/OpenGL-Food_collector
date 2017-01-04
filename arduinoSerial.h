@@ -25,6 +25,8 @@ typedef struct Sensor {
     int distance;
     int x;
     int y;
+    int qs;
+    int bpm;
     Sensor();
 } Sensor;
 

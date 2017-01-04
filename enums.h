@@ -46,7 +46,9 @@ enum SensorType {
     DHT_TEMP            = 'T',
     ULTRASOUND_DISTANCE = 'D',
     ADXL_X              = 'X',
-    ADXL_Y              = 'Y'
+    ADXL_Y              = 'Y',
+    HEART_RATE_QS       = 'Q',
+    HEART_RATE_BPM      = 'B'
 };
 
 enum Keyboard {
