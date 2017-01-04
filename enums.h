@@ -44,7 +44,9 @@ enum SensorType {
     JOYSTICK_VERT       = 'V',
     JOYSTICK_SEL        = 'S',
     DHT_TEMP            = 'T',
-    ULTRASOUND_DISTANCE = 'D'
+    ULTRASOUND_DISTANCE = 'D',
+    ADXL_X              = 'X',
+    ADXL_Y              = 'Y'
 };
 
 enum Keyboard {

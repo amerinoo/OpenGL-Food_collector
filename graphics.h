@@ -54,6 +54,7 @@ public:
     void joystick(Sensor);
     void dht(Sensor);
     void ultrasound(Sensor);
+    void adxl(Sensor);
 
 private:
     // Constructors

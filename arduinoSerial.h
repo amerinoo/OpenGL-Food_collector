@@ -23,6 +23,8 @@ typedef struct Sensor {
     int sel;
     int temperature;
     int distance;
+    int x;
+    int y;
     Sensor();
 } Sensor;
 

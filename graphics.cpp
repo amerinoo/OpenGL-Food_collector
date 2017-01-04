@@ -220,6 +220,10 @@ void Graphics::parseData(char * d){
 
         sensor.distance = root.get(string(1, ULTRASOUND_DISTANCE), "-1").asInt();
         ultrasound(sensor);
+
+        sensor.x = root.get(string(1, ADXL_X), "-1").asInt();
+        sensor.y = root.get(string(1, ADXL_Y), "-1").asInt();
+        adxl(sensor);
     }
 } // parseData
 
@@ -250,6 +254,18 @@ void Graphics::ultrasound(Sensor sensor){
     bool clause2 = sensor.distance < 100 && game.isPaused();                           // Resume
 
     if (clause1 || clause2) makeAction((unsigned char) K_P);
+}
+
+void Graphics::adxl(Sensor sensor){
+    // std::cout << sensor.x << " " << sensor.y << std::endl;
+    unsigned char direction;
+    bool horz = sensor.x > -5 && sensor.x < 5;
+    bool vert = sensor.y > -5 && sensor.y < 5;
+
+    if (vert && horz) direction = '!';
+    else if (vert) direction = (sensor.x >= 0) ? K_D : K_A;
+    else direction = (sensor.y >= 0) ? K_W : K_S;
+    makeAction(direction);
 }
 
 void myDisplay(){ Graphics::getInstance().display(); }
