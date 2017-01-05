@@ -67,7 +67,7 @@ void Game::newGame(){
     // enemy  = new Agent(ENEMY, map->getInitPosition(ENEMY), new ReflexAgent(map));
     player->setAgent(enemy);
     enemy->setAgent(player);
-    map->print();
+    std::cout << map->toString() << std::endl;
 }
 
 void Game::pauseGame(){

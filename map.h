@@ -38,6 +38,7 @@ public:
     void setSeed(float);
     float getSeed();
     vector<vector<Cell *> > getMap();
+    string toString();
 
     // Methods
     void generate();

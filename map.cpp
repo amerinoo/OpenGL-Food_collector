@@ -39,6 +39,18 @@ float Map::getSeed(){
 
 vector<vector<Cell *> > Map::getMap(){ return map; }
 
+string Map::toString(){
+    ostringstream mapString;
+
+    for (unsigned int i = 0; i < map.size(); i++) {
+        for (unsigned int j = 0; j < map[i].size(); j++) {
+            mapString << map[i][j]->getSymbol() << " ";
+        }
+        mapString << endl;
+    }
+    return mapString.str();
+}
+
 // Methods
 void Map::generate(){
     srand(getSeed());
@@ -73,9 +85,6 @@ void Map::setPosition(CellType agent, Cell * c){
         enemy = c;
     }
 }
-
-// Print
-void Map::print(){ print(map); }
 
 /*
  * Create and put all cells in the Vector<<Vector<Cell>>
@@ -368,19 +377,6 @@ void Map::getMapFromFile(char * fname){
         }
         map.push_back(aux);
     }
-}
-
-/*
- * Print.
- */
-void Map::print(vector<vector<Cell *> > v){
-    for (unsigned int i = 0; i < v.size(); i++) {
-        for (unsigned int j = 0; j < v[i].size(); j++) {
-            cout << v[i][j]->getSymbol() << " ";
-        }
-        cout << endl;
-    }
-    cout << endl;
 }
 
 vector<Cell *> Map::getFood(){
