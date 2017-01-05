@@ -13,7 +13,7 @@ class Game {
 public:
     // Constructors
     Game();
-    Game(int, int, float);
+    Game(int, int, float, StrategyType = EXPECTIMAX_AGENT);
 
     // Getters
     int getHeight();
@@ -24,6 +24,7 @@ public:
     void drawText(const char *, bool);
     void resetGame();
     void newGame();
+    Strategy * getStrategyByType();
     void pauseGame();
     void integrate(long);
     void integrate(Agent *, long);
@@ -41,6 +42,7 @@ protected:
     int level;
     bool pause;
     float seed;
+    StrategyType strategyType;
     Map * map;
 };
 #endif // ifndef game_h

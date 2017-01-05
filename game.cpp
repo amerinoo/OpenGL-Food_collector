@@ -10,8 +10,8 @@ using namespace std;
 // Constructors
 Game::Game(){ }
 
-Game::Game(int height, int width, float seed)
-    : height(height), width(width), seed(seed), map(NULL){ }
+Game::Game(int height, int width, float seed, StrategyType strategyType)
+    : height(height), width(width), seed(seed), strategyType(strategyType), map(NULL){ }
 
 // Getters
 int Game::getHeight(){ return height; }
@@ -63,7 +63,7 @@ void Game::newGame(){
     newMap();
     level += 1;
     player = new Agent(PLAYER, map->getInitPosition(PLAYER), new Strategy(map));
-    enemy  = new Agent(ENEMY, map->getInitPosition(ENEMY), new ExpectimaxAgent(map, 4));
+    enemy  = new Agent(ENEMY, map->getInitPosition(ENEMY), getStrategyByType());
     // enemy  = new Agent(ENEMY, map->getInitPosition(ENEMY), new ReflexAgent(map));
     player->setAgent(enemy);
     enemy->setAgent(player);
@@ -120,4 +120,17 @@ void Game::newMap(){
     map = new Map(height, width);
     if (seed != -1) map->setSeed(seed);
     map->generate();
+}
+
+Strategy * Game::getStrategyByType(){
+    switch (strategyType) {
+        case REFLEX_AGENT:
+            return new ReflexAgent(map);
+
+        case EXPECTIMAX_AGENT:
+            return new ExpectimaxAgent(map, 4);
+
+        default:
+            return new Strategy(map);
+    }
 }

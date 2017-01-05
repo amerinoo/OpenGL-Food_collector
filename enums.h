@@ -68,4 +68,9 @@ enum Keyboard {
     K_MINUS = '-',
     K_P     = 'p'
 };
+
+enum StrategyType {
+    REFLEX_AGENT,
+    EXPECTIMAX_AGENT
+};
 #endif // ifndef enums_h
