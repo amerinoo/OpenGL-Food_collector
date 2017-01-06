@@ -30,6 +30,8 @@ public:
 
     Map * getGameState();
     virtual Direction getAction();
+    virtual void final(Map state);
+    Direction randomChoice(vector<Direction> );
     vector<Direction> getLegalActions(Cell *);
     float getDistance(Map, Cell *, Cell *);
     float manhattanDistance(Cell *, Cell *);

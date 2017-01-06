@@ -93,8 +93,8 @@ Direction ExpectimaxAgent::expectimaxDecision(){
         best  = v;
         alarm = true;
     }
-    random_shuffle(actions.begin(), actions.end());
-    return actions[0];
+
+    return randomChoice(actions);
 } // expectimaxDecision
 
 float ExpectimaxAgent::utility(Map gameState){

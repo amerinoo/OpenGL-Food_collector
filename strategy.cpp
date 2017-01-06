@@ -31,6 +31,13 @@ Map * Strategy::getGameState(){ return gameState; }
 
 Direction Strategy::getAction(){ return NONE; }
 
+void Strategy::final(Map state){ }
+
+Direction Strategy::randomChoice(vector<Direction> actions){
+    random_shuffle(actions.begin(), actions.end());
+    return actions[0];
+}
+
 vector<Direction> Strategy::getLegalActions(Cell * c){
     return gameState->getLegalActions(c);
 }

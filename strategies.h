@@ -7,4 +7,5 @@
 #define strategies_h
 #include "reflexAgent.h"
 #include "expectimaxAgent.h"
+#include "pacmanQAgent.h"
 #endif
