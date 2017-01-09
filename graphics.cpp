@@ -157,6 +157,7 @@ void Graphics::makeAction(unsigned char c, CellType cellType){
     else if (c == K_PLUS && Agent::agentVelocity > 100) Agent::setVelocity(Agent::agentVelocity - 50);
     else if (c == K_MINUS && Agent::agentVelocity < 500) Agent::setVelocity(Agent::agentVelocity + 50);
     else if (c == K_P) game.pauseGame();
+    else if (c == K_C) Drawer::textureCorridor = (Drawer::textureCorridor == WATER) ? LAVA : WATER;
 
     glutPostRedisplay();
 }

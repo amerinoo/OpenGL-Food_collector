@@ -66,7 +66,8 @@ enum Keyboard {
 
     K_PLUS  = '+',
     K_MINUS = '-',
-    K_P     = 'p'
+    K_P     = 'p',
+    K_C     = 'c'
 };
 
 enum StrategyType {
