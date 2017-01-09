@@ -120,13 +120,7 @@ Translation Agent::getTranslation(Direction direction){
 }
 
 bool Agent::isCrash(){
-    Cell * currentPosition = getCurrentPosition();
-
-    return (cellType == ENEMY) ?
-           nextPosition == agent->getNextPosition() ||
-           currentPosition == agent->getNextPosition() ||
-           currentPosition == agent->getCurrentPosition() ||
-           nextPosition == agent->getCurrentPosition() : false;
+    return isCrash(ENEMY, getCurrentPosition(), agent->getCurrentPosition());
 }
 
 void Agent::crash(){
@@ -201,8 +195,15 @@ void Agent::moveBullet(){
 }
 
 bool Agent::isCrashBullet(){
-    return (cellType == PLAYER) ?
-           bullet.position == agent->getCurrentPosition() : false;
+    return isCrash(PLAYER, bullet.position, agent->getCurrentPosition());
+}
+
+bool Agent::isCrash(CellType agent, Cell * c1, Cell * c2){
+    return (cellType == agent) ? manhattanDistance(c1, c2) <= 1 : false;
+}
+
+float Agent::manhattanDistance(Cell * c1, Cell * c2){
+    return abs(c2->getX() - c1->getX()) + abs(c2->getY() - c1->getY());
 }
 
 void Agent::crashBullet(){ crash(); bullet.enable = true; }
