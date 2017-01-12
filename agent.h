@@ -81,6 +81,7 @@ protected:
     Particle particle;
 
     bool needRotate;
+    bool needAction;
     Bullet bullet;
 
     Direction lastDirection;
