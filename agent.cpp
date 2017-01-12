@@ -100,7 +100,6 @@ void Agent::move(Cell * cell){
         nextPosition = cell;
         particle.init_movement(getTranslation(currentDirection), Agent::agentVelocity);
         if (isCrash()) crash();
-        if (cell->hasFood()) eat();
         if (cellType == PLAYER) {
             gameState->scorePlayer -= 1;
         } else {
@@ -181,6 +180,7 @@ bool Agent::integrate(long t){
     if (particle.integrate(t)) {
         currentPosition->setCellType(CORRIDOR);
         currentPosition = nextPosition;
+        if (currentPosition->hasFood()) eat();
         currentPosition->setCellType(cellType);
         return true;
     }
