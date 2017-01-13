@@ -30,6 +30,7 @@ public:
     void integrate(Agent *, long);
     void finish();
     bool playerWin();
+    void showGameResults(bool);
     void moveAgent(CellType, Direction);
     void shoot(CellType);
 

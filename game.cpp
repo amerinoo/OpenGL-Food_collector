@@ -67,7 +67,7 @@ void Game::newGame(){
     // enemy  = new Agent(ENEMY, map->getInitPosition(ENEMY), new ReflexAgent(map));
     player->setAgent(enemy);
     enemy->setAgent(player);
-    std::cout << map->toString() << std::endl;
+    std::cout << map->toString();
 }
 
 void Game::pauseGame(){
@@ -96,11 +96,23 @@ void Game::integrate(Agent * agent, long t){
 }
 
 void Game::finish(){
-    if (playerWin()) newGame();
+    bool playerWins = playerWin();
+
+    showGameResults(playerWins);
+    if (playerWins) newGame();
     else resetGame();
 }
 
 bool Game::playerWin(){ return player->getScore() > enemy->getScore(); }
+
+void Game::showGameResults(bool playerWins){
+    if (playerWins) cout << "Player Wins!" << endl;
+    else cout << "Enemy Wins!" << endl;
+    cout << "Player: " << player->getScore() << std::endl;
+    cout << "Enemy: " << enemy->getScore() << std::endl;
+    cout << "Level: " << level << std::endl;
+    cout << std::endl << "**********************" << std::endl << std::endl;
+}
 
 void Game::moveAgent(CellType cellType, Direction direction){
     if (cellType == PLAYER) {
