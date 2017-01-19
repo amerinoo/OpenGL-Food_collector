@@ -211,73 +211,93 @@ void Graphics::parseData(char * d){
     serial->setReading(success);
 
     if (success) {
-        sensor.horz = root.get(string(1, JOYSTICK_HORZ), "-1").asInt();
-        sensor.vert = root.get(string(1, JOYSTICK_VERT), "-1").asInt();
-        sensor.sel  = root.get(string(1, JOYSTICK_SEL), "-1").asInt();
+        sensor.camera_direction = root.get(string(1, JOYSTICK_CAMERA_DIRECTION), "-1").asInt();
+        sensor.sel = root.get(string(1, JOYSTICK_SEL), "-1").asInt();
         joystick(sensor);
 
-        sensor.temperature = root.get(string(1, DHT_TEMP), "-1").asInt();
+        sensor.texture = root.get(string(1, DHT_TEXTURE), "-1").asInt();
         dht(sensor);
 
         sensor.distance = root.get(string(1, ULTRASOUND_DISTANCE), "-1").asInt();
         ultrasound(sensor);
 
-        sensor.x = root.get(string(1, ADXL_X), "-1").asInt();
-        sensor.y = root.get(string(1, ADXL_Y), "-1").asInt();
+        sensor.direction = root.get(string(1, ADXL_DIRECTION), "-1").asInt();
         adxl(sensor);
 
-        sensor.qs  = root.get(string(1, HEART_RATE_QS), "-1").asInt();
-        sensor.bpm = root.get(string(1, HEART_RATE_BPM), "-1").asInt();
+        sensor.velocity = root.get(string(1, HEART_RATE_VELOCITY), "-1").asInt();
         heartRate(sensor);
     }
 } // parseData
 
 void Graphics::joystick(Sensor sensor){
-    // std::cout << sensor.vert << " " << sensor.horz << " " << sensor.sel << std::endl;
     unsigned char direction;
-    bool vert = sensor.vert > 5 && sensor.vert < 15;
-    bool horz = sensor.horz > 5 && sensor.horz < 15;
 
-    if (vert && horz) direction = '!';
-    else if (vert) direction = (sensor.horz >= 10) ? K_L : K_J;
-    else direction = (sensor.vert >= 10) ? K_K : K_I;
+    switch (sensor.camera_direction) {
+        case CAMERA_UP:
+            direction = K_I;
+            break;
+        case CAMERA_DOWN:
+            direction = K_K;
+            break;
+        case CAMERA_RIGHT:
+            direction = K_L;
+            break;
+        case CAMERA_LEFT:
+            direction = K_J;
+            break;
+        case CAMERA_NONE:
+            direction = '!';
+            break;
+    }
     makeAction(direction);
 
-    if (sensor.sel == 1) makeAction((unsigned char) K_SPACE);
+    if (sensor.sel == SHOOT) makeAction((unsigned char) K_SPACE);
 }
 
 void Graphics::dht(Sensor sensor){
-    // std::cout << sensor.temperature << endl;
-    if (sensor.temperature != 0) {
-        Drawer::textureCorridor = (sensor.temperature > 26) ? LAVA : WATER;
-    }
+    Drawer::textureCorridor = (Texture) sensor.texture;
 }
 
 void Graphics::ultrasound(Sensor sensor){
-    // std::cout << sensor.distance << endl;
-    bool clause1 = sensor.distance > 100 && sensor.distance < 800 && !game.isPaused(); // Pause
-    bool clause2 = sensor.distance < 100 && game.isPaused();                           // Resume
+    bool clause1 = sensor.distance == PAUSE && !game.isPaused(); // Pause
+    bool clause2 = sensor.distance == RESUME && game.isPaused(); // Resume
 
     if (clause1 || clause2) makeAction((unsigned char) K_P);
 }
 
 void Graphics::adxl(Sensor sensor){
-    // std::cout << sensor.x << " " << sensor.y << std::endl;
     unsigned char direction;
-    bool horz = sensor.x > -5 && sensor.x < 5;
-    bool vert = sensor.y > -5 && sensor.y < 5;
 
-    if (vert && horz) direction = '!';
-    else if (vert) direction = (sensor.x >= 0) ? K_D : K_A;
-    else direction = (sensor.y >= 0) ? K_W : K_S;
+    switch (sensor.direction) {
+        case UP:
+            direction = K_W;
+            break;
+        case DOWN:
+            direction = K_S;
+            break;
+        case RIGHT:
+            direction = K_D;
+            break;
+        case LEFT:
+            direction = K_A;
+            break;
+        case NONE:
+            direction = '!';
+            break;
+    }
     makeAction(direction);
 }
 
 void Graphics::heartRate(Sensor sensor){
-    // std::cout << sensor.qs << " " << sensor.bpm << std::endl;
-    if (sensor.qs) {
-        if (sensor.bpm > 80 && sensor.bpm < 110) makeAction((unsigned char) K_MINUS);  // Reduce velocity
-        else if (sensor.bpm < 70) makeAction((unsigned char) K_PLUS);                  // Increase velocity
+    switch (sensor.velocity) {
+        case INCREASE:
+            makeAction((unsigned char) K_PLUS);
+            break;
+        case REDUCE:
+            makeAction((unsigned char) K_MINUS);
+            break;
+        case KEEP:
+            break;
     }
 }
 

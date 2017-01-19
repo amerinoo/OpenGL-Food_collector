@@ -34,21 +34,42 @@ enum Direction {
 };
 
 enum Texture {
-    WOOD,
-    WATER,
-    LAVA
+    WATER = 0,
+    LAVA  = 1,
+    WOOD  = 2
+};
+
+enum Camera {
+    CAMERA_UP    = 0,
+    CAMERA_RIGHT = 1,
+    CAMERA_DOWN  = 2,
+    CAMERA_LEFT  = 3,
+    CAMERA_NONE  = 4
+};
+
+enum Shoot {
+    NO_SHOOT = 0,
+    SHOOT    = 1
+};
+
+enum PauseResume {
+    PAUSE  = 0,
+    RESUME = 1
+};
+
+enum Velocity {
+    INCREASE = 0,
+    REDUCE   = 1,
+    KEEP     = 2
 };
 
 enum SensorType {
-    JOYSTICK_HORZ       = 'H',
-    JOYSTICK_VERT       = 'V',
-    JOYSTICK_SEL        = 'S',
-    DHT_TEMP            = 'T',
-    ULTRASOUND_DISTANCE = 'D',
-    ADXL_X              = 'X',
-    ADXL_Y              = 'Y',
-    HEART_RATE_QS       = 'Q',
-    HEART_RATE_BPM      = 'B'
+    JOYSTICK_CAMERA_DIRECTION = 'C',
+    JOYSTICK_SEL              = 'S',
+    DHT_TEXTURE               = 'T',
+    ULTRASOUND_DISTANCE       = 'P',
+    ADXL_DIRECTION            = 'M',
+    HEART_RATE_VELOCITY       = 'V'
 };
 
 enum Keyboard {

@@ -18,15 +18,12 @@
 using namespace std;
 
 typedef struct Sensor {
-    int horz;
-    int vert;
+    int camera_direction;
     int sel;
-    int temperature;
+    int texture;
     int distance;
-    int x;
-    int y;
-    int qs;
-    int bpm;
+    int direction;
+    int velocity;
     Sensor();
 } Sensor;
 
