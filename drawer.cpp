@@ -12,7 +12,7 @@ Color::Color(const GLfloat red1, const GLfloat green1, const GLfloat blue1, cons
 
 const Color Color::background = Color(64, 64, 64);
 const Color Color::text       = Color(0, 150, 0);
-const Color Color::wall       = Color(82, 82, 203, 1, 151, 151, 153);
+const Color Color::wall       = Color(82, 82, 203, 1, 113, 64, 15);
 const Color Color::corridor   = Color(0, 0, 80);
 const Color Color::food       = Color(0, 255, 230);
 const Color Color::player     = Color(255, 255, 0);
@@ -22,11 +22,11 @@ const Color Color::bullet     = Color(255, 255, 0);
 
 const Color Color::texture        = Color(255, 255, 255);
 const Color Color::light_position = Color(0, 0, 0);
-const Color Color::light_ambient  = Color(100, 100, 100);
+const Color Color::light_ambient  = Color(40, 40, 40);
 const Color Color::light_diffuse  = Color(0, 0, 0);
 const Color Color::light_specular = Color(0, 0, 0);
 
-const Color Color::light_tank_ambient = Color(76, 76, 76);
+const Color Color::light_tank_ambient = Color(20, 20, 20);
 const Color Color::light_tank_diffuse = Color(178, 178, 178);
 
 GLfloat Color::RGBToGlut(int num){
@@ -56,15 +56,16 @@ GLfloat * Color::toArray2(){
 CellProperties::CellProperties(const char symbol, const Color color)
     : symbol(symbol), color(color){ }
 
-const int Drawer::cellSize        = 40;
-const GLfloat Drawer::x           = Drawer::cellSize / 2.0;
-const GLfloat Drawer::y           = Drawer::x;
-const GLfloat Drawer::z           = Drawer::cellSize / 5.0;
-const GLdouble Drawer::r          = Drawer::cellSize / 8;
-const GLint Drawer::slices        = 10;
-const GLint Drawer::stacks        = 5;
-const GLfloat Drawer::spot_cutoff = 30.0;
-Texture Drawer::textureCorridor   = WATER;
+const int Drawer::cellSize          = 40;
+const GLfloat Drawer::x             = Drawer::cellSize / 2.0;
+const GLfloat Drawer::y             = Drawer::x;
+const GLfloat Drawer::z             = Drawer::cellSize / 4.0;
+const GLdouble Drawer::foodRadius   = Drawer::cellSize / 6.0;
+const GLdouble Drawer::bulletRadius = Drawer::cellSize / 8.0;
+const GLint Drawer::slices          = 10;
+const GLint Drawer::stacks          = 5;
+const GLfloat Drawer::spot_cutoff   = 30.0;
+Texture Drawer::textureCorridor     = WATER;
 
 const CellProperties CellProperties::wall     = CellProperties('0', Color::wall);
 const CellProperties CellProperties::corridor = CellProperties(' ', Color::corridor);
@@ -157,15 +158,12 @@ void Drawer::drawCorridor(){
 void Drawer::drawSphere(CellType cellType){
     CellProperties properties = getProperties(cellType);
     Color color = properties.color;
-    GLdouble r  = Drawer::r;
+    GLdouble r  = (cellType == BULLET) ? Drawer::bulletRadius : Drawer::foodRadius;
 
     glColor3f(color.red1, color.green1, color.blue1);
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color.toArray1());
-    GLUquadric * quad = gluNewQuadric();
+    glutSolidSphere(r, Drawer::slices, Drawer::stacks);
 
-    gluSphere(quad, r, Drawer::slices, Drawer::stacks);
-
-    gluDeleteQuadric(quad);
     glEnd();
 } // drawFood
 
@@ -437,9 +435,13 @@ void Drawer::configureLight(CellType cellType, Direction direction){
 
     glLightfv(light, GL_POSITION, position.toArray1());
     glLightfv(light, GL_AMBIENT, ambient.toArray1());
+    glLightf(light, GL_CONSTANT_ATTENUATION, 1.0);
+    glLightf(light, GL_LINEAR_ATTENUATION, 0.0);
+    glLightf(light, GL_QUADRATIC_ATTENUATION, 0.0);
     glLightfv(light, GL_DIFFUSE, diffuse.toArray1());
     glLightfv(light, GL_SPOT_DIRECTION, getSpotDirection(direction));
     glLightf(light, GL_SPOT_CUTOFF, Drawer::spot_cutoff);
+    glLightf(light, GL_SPOT_EXPONENT, 0);
 
     glEnable(light);
 } // configureLight

@@ -71,7 +71,8 @@ public:
     static const GLfloat x;
     static const GLfloat y;
     static const GLfloat z;
-    static const GLdouble r;
+    static const GLdouble foodRadius;
+    static const GLdouble bulletRadius;
     static const GLint slices;
     static const GLint stacks;
     static const GLfloat spot_cutoff;
