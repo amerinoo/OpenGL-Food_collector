@@ -27,7 +27,7 @@ int main(int argc, char * argv[]){
     int maxHeight             = graphics.getMaxHeight();
     int maxWidth              = graphics.getMaxWidth();
     const int buf_max         = 512;
-    int baudrate              = 9600; // default
+    int baudrate              = 115200; // default
     char serialport[buf_max]  = "/dev/ttyACM0";
     char eolchar              = '}';
     float seed                = -1;
@@ -122,7 +122,7 @@ void usage(char * name){
          << "  -W, --width        Width of the map (Default 15)" << endl
          << "  -s, --seed         Seed of map (Default random)" << endl
          << "\nArduino options:" << endl
-         << "  -b, --baud         Baudrate (bps) of Arduino (default 9600)" << endl
+         << "  -b, --baud         Baudrate (bps) of Arduino (default 115200)" << endl
          << "  -p, --port         Serial port Arduino is connected to (default /dev/ttyACM0)" << endl
          << "\nAgent options:" << endl
          << "  -a  --agent        Select agent strategy (Default Expectimax)" << endl

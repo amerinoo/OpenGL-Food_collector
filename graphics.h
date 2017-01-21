@@ -9,6 +9,7 @@
 #include <cmath>
 #include <cstring>
 #include <iostream>
+#include <pthread.h>
 #include "game.h"
 #include "drawer.h"
 #include "arduinoSerial.h"
@@ -47,8 +48,8 @@ public:
     void makeAction(unsigned char, CellType = PLAYER);
     void makeAction(int, CellType = PLAYER);
     void idle();
-
     // Arduino
+    static void* staticSerialRead(void*);
     void serialRead();
     void parseData(char *);
     void joystick(Sensor);
@@ -70,5 +71,6 @@ protected:
     static const char * windowTitle;
     int anglealpha, anglebeta;
     int fd;
+    pthread_t thread;
 };
 #endif // ifndef graphics_h

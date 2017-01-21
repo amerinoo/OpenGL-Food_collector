@@ -189,9 +189,14 @@ void Graphics::idle(){
         game.integrate(t - last_t);
         last_t = t;
     }
-    serialRead();
+    pthread_create(&thread, NULL, Graphics::staticSerialRead, this);
 
     glutPostRedisplay();
+}
+
+void * Graphics::staticSerialRead(void * c){
+    ((Graphics *) c)->serialRead();
+    return NULL;
 }
 
 void Graphics::serialRead(){
@@ -203,11 +208,12 @@ void Graphics::serialRead(){
 
 void Graphics::parseData(char * d){
     Sensor sensor;
-    string data(d);
     Json::Value root;
     Json::Reader reader;
-    bool success = reader.parse(d, root);
 
+    bool success = d[0] == '{' && strlen(d) > 35 && reader.parse(d, root);
+
+    // std::cout << d << " " << success << " " << strlen(d) << std::endl;
     serial->setReading(success);
 
     if (success) {
