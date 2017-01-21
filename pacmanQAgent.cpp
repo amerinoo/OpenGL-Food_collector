@@ -23,11 +23,14 @@ Direction PacmanQAgent::computeActionFromQValues(Map state){
     vector<Direction> legalActions = getLegalActions(state.getPosition(agent));
     if (legalActions.empty()) return NONE;
 
+    vector<Direction> bestActions;
+    float maxValue = getValue(state);
     map<Direction, float> bestAction;
     for (unsigned int i = 0; i < legalActions.size(); i++) {
-        bestAction[legalActions[i]] = getQValue(state, legalActions[i]);
+        if (abs(maxValue - getQValue(state, legalActions[i])) < 0.00000001)
+            bestActions.push_back(legalActions[i]);
     }
-    return argMax(bestAction);
+    return randomChoice(bestActions);
 }
 
 Direction PacmanQAgent::getAction(Map state){
