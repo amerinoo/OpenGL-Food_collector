@@ -6,10 +6,10 @@
 #include "reflexAgent.h"
 ReflexAgent::ReflexAgent() : Strategy(){ }
 
-ReflexAgent::ReflexAgent(Map * gameState) : Strategy(gameState){ }
+ReflexAgent::ReflexAgent(Map * gameState, CellType agent) : Strategy(gameState, agent){ }
 
 Direction ReflexAgent::getAction(){
-    Cell * c = gameState->getPosition(ENEMY);
+    Cell * c = gameState->getPosition(agent1);
 
     vector<Direction> legalActions = getLegalActions(c);
     vector<float> scores;
@@ -35,7 +35,7 @@ Direction ReflexAgent::getAction(){
 
 float ReflexAgent::evaluationFunction(Map currentGameState, Direction direction){
     float totalScore       = 0.0;
-    Cell * currentPosition = currentGameState.getPosition(ENEMY);
+    Cell * currentPosition = currentGameState.getPosition(agent1);
     Cell * nextPosition    = currentGameState.getNextState(currentPosition, direction);
 
     vector<Cell *> food = gameState->getFood();

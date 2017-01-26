@@ -10,8 +10,9 @@ using namespace std;
 // Constructors
 Game::Game(){ }
 
-Game::Game(int height, int width, float seed, StrategyType strategyType)
-    : height(height), width(width), seed(seed), strategyType(strategyType), map(NULL){ }
+Game::Game(int height, int width, float seed, StrategyType strategyTypePlayer, StrategyType strategyTypeEnemy)
+    : height(height), width(width), seed(seed), strategyTypePlayer(strategyTypePlayer),
+    strategyTypeEnemy(strategyTypeEnemy), map(NULL){ }
 
 // Getters
 int Game::getHeight(){ return height; }
@@ -62,8 +63,8 @@ void Game::resetGame(){
 void Game::newGame(){
     newMap();
     level += 1;
-    player = new Agent(PLAYER, map->getInitPosition(PLAYER), new Strategy(map));
-    enemy  = new Agent(ENEMY, map->getInitPosition(ENEMY), getStrategyByType());
+    player = new Agent(PLAYER, map->getInitPosition(PLAYER), getStrategyByType(PLAYER, strategyTypePlayer));
+    enemy  = new Agent(ENEMY, map->getInitPosition(ENEMY), getStrategyByType(ENEMY, strategyTypeEnemy));
     // enemy  = new Agent(ENEMY, map->getInitPosition(ENEMY), new ReflexAgent(map));
     player->setAgent(enemy);
     enemy->setAgent(player);
@@ -134,15 +135,15 @@ void Game::newMap(){
     map->generate();
 }
 
-Strategy * Game::getStrategyByType(){
+Strategy * Game::getStrategyByType(CellType agent, StrategyType strategyType){
     switch (strategyType) {
         case REFLEX_AGENT:
-            return new ReflexAgent(map);
+            return new ReflexAgent(map, agent);
 
         case EXPECTIMAX_AGENT:
-            return new ExpectimaxAgent(map, 4);
+            return new ExpectimaxAgent(map, agent, 4);
 
         default:
-            return new Strategy(map);
+            return new Strategy(map, agent);
     }
 }

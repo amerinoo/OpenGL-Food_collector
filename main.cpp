@@ -22,17 +22,18 @@ int main(int argc, char * argv[]){
     Graphics& graphics = Graphics::getInstance();
 
     graphics.init(argc, argv);
-    int height                = 15;
-    int width                 = 15;
-    int maxHeight             = graphics.getMaxHeight();
-    int maxWidth              = graphics.getMaxWidth();
-    const int buf_max         = 512;
-    int baudrate              = 115200; // default
-    char serialport[buf_max]  = "/dev/ttyACM0";
-    char eolchar              = '}';
-    float seed                = -1;
-    char quiet                = 1;
-    StrategyType strategyType = EXPECTIMAX_AGENT;
+    int height                      = 15;
+    int width                       = 15;
+    int maxHeight                   = graphics.getMaxHeight();
+    int maxWidth                    = graphics.getMaxWidth();
+    const int buf_max               = 512;
+    int baudrate                    = 115200; // default
+    char serialport[buf_max]        = "/dev/ttyACM0";
+    char eolchar                    = '}';
+    float seed                      = -1;
+    char quiet                      = 1;
+    StrategyType strategyTypePlayer = HUMAN_AGENT;
+    StrategyType strategyTypeEnemy  = EXPECTIMAX_AGENT;
 
     /* parse options */
     int option_index = 0, opt;
@@ -43,14 +44,15 @@ int main(int argc, char * argv[]){
         { "seed",   required_argument, 0, 's' },
         { "baud",   required_argument, 0, 'b' },
         { "port",   required_argument, 0, 'p' },
-        { "agent",  required_argument, 0, 'a' },
+        { "player", required_argument, 0, 'P' },
+        { "enemy",  required_argument, 0, 'E' },
         { "fast",   no_argument,       0, 'f' },
         { "turtle", no_argument,       0, 't' },
         { NULL,                     0, 0,   0 }
     };
 
     while (1) {
-        opt = getopt_long(argc, argv, "hH:W:s:b:p:a:ft",
+        opt = getopt_long(argc, argv, "hH:W:s:b:p:P:E:ft",
           loptions, &option_index);
         if (opt == -1) break;
         switch (opt) {
@@ -78,10 +80,15 @@ int main(int argc, char * argv[]){
                 strcpy(serialport, optarg);
                 if (!quiet) printf("Port : %s\n", serialport);
                 break;
-            case 'a':
-                if (strcmp("reflex", optarg) == 0) strategyType = REFLEX_AGENT;
-                else if (strcmp("expectimax", optarg) == 0) strategyType = EXPECTIMAX_AGENT;
-                if (!quiet) printf("Strategy : %s\n", optarg);
+            case 'P':
+                if (strcmp("reflex", optarg) == 0) strategyTypePlayer = REFLEX_AGENT;
+                else if (strcmp("expectimax", optarg) == 0) strategyTypePlayer = EXPECTIMAX_AGENT;
+                if (!quiet) printf("Strategy Player : %s\n", optarg);
+                break;
+            case 'E':
+                if (strcmp("reflex", optarg) == 0) strategyTypeEnemy = REFLEX_AGENT;
+                else if (strcmp("expectimax", optarg) == 0) strategyTypeEnemy = EXPECTIMAX_AGENT;
+                if (!quiet) printf("Strategy Player : %s\n", optarg);
                 break;
             case 'f':
                 Agent::agentVelocity = 20;
@@ -100,7 +107,7 @@ int main(int argc, char * argv[]){
         return -1;
     }
     ArduinoSerial * serial = new ArduinoSerial(serialport, baudrate, eolchar);
-    Game game(height, width, seed, strategyType);
+    Game game(height, width, seed, strategyTypePlayer, strategyTypeEnemy);
     game.resetGame();
     Drawer& drawer = Drawer::getInstance();
     drawer.setHeight(height);
@@ -125,7 +132,8 @@ void usage(char * name){
          << "  -b, --baud         Baudrate (bps) of Arduino (default 115200)" << endl
          << "  -p, --port         Serial port Arduino is connected to (default /dev/ttyACM0)" << endl
          << "\nAgent options:" << endl
-         << "  -a  --agent        Select agent strategy (Default Expectimax)" << endl
+         << "  -P  --player       Select player strategy (Default Human)" << endl
+         << "  -E  --enemy        Select enemy strategy (Default Expectimax)" << endl
          << "  Options:" << endl
          << "    · reflex" << endl
          << "    · expectimax" << endl

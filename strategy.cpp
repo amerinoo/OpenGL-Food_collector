@@ -25,7 +25,9 @@ vector<Direction> Node::path(){
 
 Strategy::Strategy(){ }
 
-Strategy::Strategy(Map * gameState) : gameState(gameState){ }
+Strategy::Strategy(Map * gameState, CellType agent) : gameState(gameState), agent1(agent){
+    agent2 = (agent == PLAYER) ? ENEMY : PLAYER;
+}
 
 Map * Strategy::getGameState(){ return gameState; }
 

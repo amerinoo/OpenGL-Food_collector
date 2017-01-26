@@ -15,7 +15,7 @@ public:
     static const int c2;
     // Constructors
     ExpectimaxAgent();
-    ExpectimaxAgent(Map *, int = 4);
+    ExpectimaxAgent(Map *, CellType, int = 4);
 
     // Methods
     Direction getAction();

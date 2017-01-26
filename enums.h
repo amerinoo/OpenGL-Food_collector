@@ -92,6 +92,7 @@ enum Keyboard {
 };
 
 enum StrategyType {
+    HUMAN_AGENT,
     REFLEX_AGENT,
     EXPECTIMAX_AGENT
 };

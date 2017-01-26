@@ -10,8 +10,8 @@ const int ExpectimaxAgent::c2 = 1;
 
 ExpectimaxAgent::ExpectimaxAgent() : Strategy(){ }
 
-ExpectimaxAgent::ExpectimaxAgent(Map * gameState, int depth)
-    : Strategy(gameState), depth(depth){
+ExpectimaxAgent::ExpectimaxAgent(Map * gameState, CellType agent, int depth)
+    : Strategy(gameState, agent), depth(depth){
     best  = INT_MIN;
     alarm = false;
     bestDirections = vector<Direction>();
@@ -28,7 +28,7 @@ float ExpectimaxAgent::maxValue(Map gameState, CellType agent, int depth){
     vector<Direction> legalActions = getLegalActions(gameState.getPosition(agent));
     float v = INT_MIN;
     for (unsigned int i = 0; i < legalActions.size(); i++) {
-        v = max(v, minValue(result(gameState, agent, legalActions[i]), PLAYER, depth));
+        v = max(v, minValue(result(gameState, agent, legalActions[i]), agent2, depth));
     }
     return v;
 }
@@ -42,7 +42,7 @@ float ExpectimaxAgent::minValue(Map gameState, CellType agent, int depth){
     float numOptions = legalActions.size();
     float v = INT_MAX;
     for (unsigned int i = 0; i < legalActions.size(); i++) {
-        v    = maxValue(result(gameState, agent, legalActions[i]), ENEMY, depth - 1);
+        v    = maxValue(result(gameState, agent, legalActions[i]), agent1, depth - 1);
         all += v;
     }
     return all / numOptions;
@@ -51,13 +51,13 @@ float ExpectimaxAgent::minValue(Map gameState, CellType agent, int depth){
 Direction ExpectimaxAgent::expectimaxDecision(){
     float v = INT_MIN;
 
-    vector<Direction> legalActions = getLegalActions(gameState->getPosition(ENEMY));
+    vector<Direction> legalActions = getLegalActions(gameState->getPosition(agent1));
     vector<Direction> actions;
     float u;
     if (alarm) {
         float minD = INT_MAX;
         float d;
-        Cell * enemyPosition = gameState->getPosition(ENEMY);
+        Cell * enemyPosition = gameState->getPosition(agent1);
         Cell * goal;
         vector<Cell *> food = gameState->getCandidateFood();
         for (unsigned int i = 0; i < food.size(); i++) {
@@ -76,7 +76,7 @@ Direction ExpectimaxAgent::expectimaxDecision(){
         bestDirections.pop_back();
     } else {
         for (unsigned int i = 0; i < legalActions.size(); i++) {
-            u = minValue(result(*gameState, ENEMY, legalActions[i]), PLAYER, depth);
+            u = minValue(result(*gameState, agent1, legalActions[i]), agent2, depth);
             if (u == v) {
                 actions.push_back(legalActions[i]);
             } else if (u > v) {
@@ -110,9 +110,9 @@ Map ExpectimaxAgent::result(Map gameState, CellType agent, Direction action){
 }
 
 float ExpectimaxAgent::evaluationFunction(Map currentGameState){
-    float staticScore    = currentGameState.getScore(ENEMY);
+    float staticScore    = currentGameState.getScore(agent1);
     float mapScore       = 0.0;
-    Cell * enemyPosition = currentGameState.getPosition(ENEMY);
+    Cell * enemyPosition = currentGameState.getPosition(agent1);
     float d;
 
     vector<Cell *> food = currentGameState.getCandidateFood();
@@ -120,8 +120,8 @@ float ExpectimaxAgent::evaluationFunction(Map currentGameState){
         d         = getDistance(currentGameState, enemyPosition, food[i]);
         mapScore += (d == 0.0) ? 50 : 1.0 / (d * d);
     }
-    if (!currentGameState.isInInitialPosition(PLAYER)) {
-        d = getDistance(currentGameState, enemyPosition, currentGameState.getPosition(PLAYER));
+    if (!currentGameState.isInInitialPosition(agent2)) {
+        d = getDistance(currentGameState, enemyPosition, currentGameState.getPosition(agent2));
         if (d <= 1.0) mapScore += 70;
     }
     return c1 * staticScore + c2 * mapScore;

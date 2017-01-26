@@ -26,7 +26,7 @@ class Strategy {
 public:
     // Constructors
     Strategy();
-    Strategy(Map *);
+    Strategy(Map *, CellType agent);
 
     Map * getGameState();
     virtual Direction getAction();
@@ -39,5 +39,7 @@ public:
 
 protected:
     Map * gameState;
+    CellType agent1;
+    CellType agent2;
 };
 #endif // ifndef strategy_h
