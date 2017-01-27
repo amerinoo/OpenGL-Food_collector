@@ -6,7 +6,7 @@
 CC = g++
 
 # Compiler flags:
-CFLAGS = -lglut -lGLU -lGL -lm -ljpeg -Wall -lpthread
+CFLAGS = -lglut -lGLU -lGL -lm -ljpeg -Wall -lpthread -g
 
 # Files to compile
 CFILES = main.cpp graphics.cpp textureLoader.cpp arduinoSerial.cpp game.cpp \
