@@ -29,7 +29,10 @@ public:
     Strategy(Map *, CellType agent);
 
     Map * getGameState();
+    void setGameState(Map * gameState);
     virtual Direction getAction();
+    virtual Map observationFunction(Map state);
+    virtual void registerInitialState();
     virtual void final(Map state);
     Direction randomChoice(vector<Direction> );
     vector<Direction> getLegalActions(Cell *);

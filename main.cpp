@@ -83,12 +83,14 @@ int main(int argc, char * argv[]){
             case 'P':
                 if (strcmp("reflex", optarg) == 0) strategyTypePlayer = REFLEX_AGENT;
                 else if (strcmp("expectimax", optarg) == 0) strategyTypePlayer = EXPECTIMAX_AGENT;
+                else if (strcmp("reinforcement", optarg) == 0) strategyTypePlayer = REINFORCEMENT_AGENT;
                 if (!quiet) printf("Strategy Player : %s\n", optarg);
                 break;
             case 'E':
                 if (strcmp("reflex", optarg) == 0) strategyTypeEnemy = REFLEX_AGENT;
                 else if (strcmp("expectimax", optarg) == 0) strategyTypeEnemy = EXPECTIMAX_AGENT;
-                if (!quiet) printf("Strategy Player : %s\n", optarg);
+                else if (strcmp("reinforcement", optarg) == 0) strategyTypePlayer = REINFORCEMENT_AGENT;
+                if (!quiet) printf("Strategy Enemy : %s\n", optarg);
                 break;
             case 'f':
                 Agent::agentVelocity = 20;
@@ -137,6 +139,7 @@ void usage(char * name){
          << "  Options:" << endl
          << "    · reflex" << endl
          << "    · expectimax" << endl
+         << "    · reinforcement" << endl
          << "\nVelocity options:" << endl
          << "  -f  --fast         Activate fast mode (Velocity 50)" << endl
          << "  -t  --turtle       Activate turtle mode (Velocity 500)" << endl

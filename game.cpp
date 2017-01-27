@@ -12,7 +12,12 @@ Game::Game(){ }
 
 Game::Game(int height, int width, float seed, StrategyType strategyTypePlayer, StrategyType strategyTypeEnemy)
     : height(height), width(width), seed(seed), strategyTypePlayer(strategyTypePlayer),
-    strategyTypeEnemy(strategyTypeEnemy), map(NULL){ }
+    strategyTypeEnemy(strategyTypeEnemy), map(NULL){
+    player = new Agent(PLAYER, getStrategyByType(PLAYER, strategyTypePlayer));
+    enemy  = new Agent(ENEMY, getStrategyByType(ENEMY, strategyTypeEnemy));
+    player->setAgent(enemy);
+    enemy->setAgent(player);
+}
 
 // Getters
 int Game::getHeight(){ return height; }
@@ -63,11 +68,8 @@ void Game::resetGame(){
 void Game::newGame(){
     newMap();
     level += 1;
-    player = new Agent(PLAYER, map->getInitPosition(PLAYER), getStrategyByType(PLAYER, strategyTypePlayer));
-    enemy  = new Agent(ENEMY, map->getInitPosition(ENEMY), getStrategyByType(ENEMY, strategyTypeEnemy));
-    // enemy  = new Agent(ENEMY, map->getInitPosition(ENEMY), new ReflexAgent(map));
-    player->setAgent(enemy);
-    enemy->setAgent(player);
+    player->setMap(map);
+    enemy->setMap(map);
     std::cout << map->toString();
 }
 
@@ -90,11 +92,15 @@ void Game::integrate(Agent * agent, long t){
                 Direction d = agent->getStrategy()->getAction();
                 agent->setNextDirection(d);
                 agent->tryNextDirection();
+                agent->observationFunction(*map);
             }
             agent->move();
-        } else { finish(); }
+        } else {
+            agent->final(*map);
+            finish();
+        }
     }
-}
+} // integrate
 
 void Game::finish(){
     bool playerWins = playerWin();
@@ -142,6 +148,9 @@ Strategy * Game::getStrategyByType(CellType agent, StrategyType strategyType){
 
         case EXPECTIMAX_AGENT:
             return new ExpectimaxAgent(map, agent, 4);
+
+        case REINFORCEMENT_AGENT:
+            return new PacmanQAgent(map, agent);
 
         default:
             return new Strategy(map, agent);

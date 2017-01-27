@@ -24,10 +24,10 @@ Bullet::Bullet(Cell * position, Direction direction)
 // Constructors
 Agent::Agent(){ }
 
-Agent::Agent(CellType cellType, Cell * initPosition, Strategy * strategy)
-    : cellType(cellType), initPosition(initPosition), strategy(strategy),
-    gameState(strategy->getGameState()), score(0){
-    goInitPosition();
+Agent::Agent(CellType cellType, Strategy * strategy)
+    : cellType(cellType), strategy(strategy),
+    gameState(), score(0){
+    strategy->registerInitialState();
 }
 
 // Getters
@@ -50,6 +50,13 @@ Cell * Agent::getCurrentPosition(){ return gameState->getPosition(cellType); }
 Cell * Agent::getNextPosition(){ return nextPosition; }
 
 Direction Agent::getDirection(){ return currentDirection; }
+
+void Agent::setMap(Map * gameState){
+    strategy->setGameState(gameState);
+    this->gameState = gameState;
+    initPosition    = gameState->getInitPosition(cellType);
+    goInitPosition();
+}
 
 void Agent::setPosition(Cell * cell){
     cell->setCellType(cellType);
@@ -107,6 +114,12 @@ void Agent::move(Cell * cell){
         }
     }
 }
+
+Map Agent::observationFunction(Map state){
+    return strategy->observationFunction(state);
+}
+
+void Agent::final(Map state){ strategy->final(state); }
 
 Translation Agent::getTranslation(Direction direction){
     Translation translation;

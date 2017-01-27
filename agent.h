@@ -29,7 +29,7 @@ public:
     Agent * agent;
     // Constructors
     Agent();
-    Agent(CellType, Cell *, Strategy *);
+    Agent(CellType, Strategy *);
 
     // Getters
     Strategy * getStrategy();
@@ -45,6 +45,7 @@ public:
     void draw();
 
     // Setters
+    void setMap(Map * gameState);
     void setPosition(Cell *);
     void setDirection(Direction);
     void setNextDirection(Direction);
@@ -60,6 +61,8 @@ public:
     void eat();
     void move();
     void move(Cell *);
+    Map observationFunction(Map state);
+    void final(Map state);
     void crash();
     Translation getTranslation(Direction);
     bool isCrash();

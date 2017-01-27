@@ -31,7 +31,15 @@ Strategy::Strategy(Map * gameState, CellType agent) : gameState(gameState), agen
 
 Map * Strategy::getGameState(){ return gameState; }
 
+void Strategy::setGameState(Map * gameState){
+    this->gameState = gameState;
+}
+
 Direction Strategy::getAction(){ return NONE; }
+
+Map Strategy::observationFunction(Map state){ return state; }
+
+void Strategy::registerInitialState(){ }
 
 void Strategy::final(Map state){ }
 

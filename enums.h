@@ -94,6 +94,7 @@ enum Keyboard {
 enum StrategyType {
     HUMAN_AGENT,
     REFLEX_AGENT,
-    EXPECTIMAX_AGENT
+    EXPECTIMAX_AGENT,
+    REINFORCEMENT_AGENT
 };
 #endif // ifndef enums_h
