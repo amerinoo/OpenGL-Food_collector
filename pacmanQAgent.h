@@ -11,13 +11,13 @@ public:
     PacmanQAgent();
     PacmanQAgent(Map * gameState, CellType agent, float epsilon = 5, float alpha = 0.2, float discount = 0.9,
       int numTraining = 50);
-    float getQValue(Map state, Direction action);
+    virtual float getQValue(Map state, Direction action);
     float computeValueFromQValues(Map state);
     Direction computeActionFromQValues(Map state);
     Direction getAction();
     bool flipCoin(float epsilon);
     void doAction(Map state, Direction action);
-    void update(Map state, Direction action, Map nextState, float reward);
+    virtual void update(Map state, Direction action, Map nextState, float reward);
     Direction getPolicy(Map state);
     float getValue(Map state);
     /************** Start ReinforcementAgent **************/
@@ -28,7 +28,7 @@ public:
     void observeTransition(Map state, Direction action, Map nextState, float deltaReward);
     Map observationFunction(Map state);
     void registerInitialState();
-    void final(Map state);
+    virtual void final(Map state);
     /************** End ReinforcementAgent **************/
 protected:
     float epsilon;

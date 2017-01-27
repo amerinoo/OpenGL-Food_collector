@@ -10,13 +10,14 @@ CFLAGS = -lglut -lGLU -lGL -lm -ljpeg -Wall -lpthread -g
 
 # Files to compile
 CFILES = main.cpp graphics.cpp textureLoader.cpp arduinoSerial.cpp game.cpp \
-			strategy.cpp pacmanQAgent.cpp expectimaxAgent.cpp reflexAgent.cpp \
-			agent.cpp map.cpp cell.cpp particle.cpp enums.h drawer.cpp jsoncpp.cpp
+			strategy.cpp approximateQAgent.cpp pacmanQAgent.cpp expectimaxAgent.cpp \
+			reflexAgent.cpp agent.cpp map.cpp cell.cpp particle.cpp enums.h \
+			drawer.cpp jsoncpp.cpp
 
 # Files' headers
 HFILES = graphics.h textureLoader.h arduinoSerial.h game.h strategy.h \
-			pacmanQAgent.h expectimaxAgent.h reflexAgent.h agent.h map.h \
-			cell.h particle.h drawer.h
+			pacmanQAgent.h approximateQAgent.cpp expectimaxAgent.h reflexAgent.h \
+			agent.h map.h cell.h particle.h drawer.h
 
 # The build target executable:
 TARGET = food_collector
