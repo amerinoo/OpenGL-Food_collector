@@ -38,7 +38,7 @@ public:
     vector<Direction> getLegalActions(Cell *);
     float getDistance(Map, Cell *, Cell *);
     float manhattanDistance(Cell *, Cell *);
-    vector<Direction> blindSearchGraph(Map, Cell *, Cell *);
+    vector<Direction> blindSearchGraph(Map, Cell *);
 
 protected:
     Map * gameState;

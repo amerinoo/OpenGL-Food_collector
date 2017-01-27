@@ -55,19 +55,7 @@ Direction ExpectimaxAgent::expectimaxDecision(){
     vector<Direction> actions;
     float u;
     if (alarm) {
-        float minD = INT_MAX;
-        float d;
-        Cell * enemyPosition = gameState->getPosition(agent1);
-        Cell * goal;
-        vector<Cell *> food = gameState->getCandidateFood();
-        for (unsigned int i = 0; i < food.size(); i++) {
-            d = getDistance(*gameState, enemyPosition, food[i]);
-            if (minD > d) {
-                minD = d;
-                goal = food[i];
-            }
-        }
-        bestDirections = blindSearchGraph(*gameState, enemyPosition, goal);
+        bestDirections = blindSearchGraph(*gameState, gameState->getPosition(agent1));
         alarm = false;
         best  = 0;
     }

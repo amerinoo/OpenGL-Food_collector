@@ -60,11 +60,10 @@ float Strategy::manhattanDistance(Cell * c1, Cell * c2){
     return abs(c2->getX() - c1->getX()) + abs(c2->getY() - c1->getY());
 }
 
-vector<Direction> Strategy::blindSearchGraph(Map gameState, Cell * initial, Cell * goal){
+vector<Direction> Strategy::blindSearchGraph(Map gameState, Cell * initial){
     queue<Node *> fringe;
     Node * n = new  Node(initial, NULL, NONE);
-    if (n->state == goal)
-        return n->path();
+    if (n->state->hasFood()) return n->path();
 
     fringe.push(n);
     map<float, char> generated;
@@ -81,9 +80,7 @@ vector<Direction> Strategy::blindSearchGraph(Map gameState, Cell * initial, Cell
         for (unsigned int i = 0; i < legalActions.size(); i++) {
             Node * ns = new Node(gameState.getNextState(n->state, legalActions[i]), n, legalActions[i]);
             if (generated.count(ns->state->getKey()) < 1) {
-                if (ns->state == goal) {
-                    return ns->path();
-                }
+                if (ns->state->hasFood()) return ns->path();
 
                 fringe.push(ns);
                 generated[ns->state->getKey()] = 'F';
