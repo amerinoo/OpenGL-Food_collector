@@ -67,7 +67,7 @@ public:
     Translation getTranslation(Direction);
     bool isCrash();
     bool isCrash(CellType agent, Cell * c1, Cell * c2);
-    float manhattanDistance(Cell*, Cell*);
+    float manhattanDistance(Cell *, Cell *);
     void rotate();
     void shoot();
     bool canShoot();

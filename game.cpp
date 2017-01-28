@@ -92,17 +92,16 @@ void Game::integrate(Agent * agent, long t){
                 Direction d = agent->getStrategy()->getAction();
                 agent->setNextDirection(d);
                 agent->tryNextDirection();
-                agent->observationFunction(*map);
             }
             agent->move();
         } else {
-            agent->final(*map);
             finish();
         }
     }
 } // integrate
 
 void Game::finish(){
+    enemy->final(*map);
     bool playerWins = playerWin();
 
     showGameResults(playerWins);
@@ -150,7 +149,7 @@ Strategy * Game::getStrategyByType(CellType agent, StrategyType strategyType){
             return new ExpectimaxAgent(map, agent, 4);
 
         case REINFORCEMENT_AGENT:
-            return new PacmanQAgent(map, agent);
+            return new ApproximateQAgent(map, agent);
 
         default:
             return new Strategy(map, agent);

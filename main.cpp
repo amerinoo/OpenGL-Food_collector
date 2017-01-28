@@ -33,7 +33,7 @@ int main(int argc, char * argv[]){
     float seed                      = -1;
     char quiet                      = 1;
     StrategyType strategyTypePlayer = HUMAN_AGENT;
-    StrategyType strategyTypeEnemy  = EXPECTIMAX_AGENT;
+    StrategyType strategyTypeEnemy  = REINFORCEMENT_AGENT;
 
     /* parse options */
     int option_index = 0, opt;
@@ -89,7 +89,7 @@ int main(int argc, char * argv[]){
             case 'E':
                 if (strcmp("reflex", optarg) == 0) strategyTypeEnemy = REFLEX_AGENT;
                 else if (strcmp("expectimax", optarg) == 0) strategyTypeEnemy = EXPECTIMAX_AGENT;
-                else if (strcmp("reinforcement", optarg) == 0) strategyTypePlayer = REINFORCEMENT_AGENT;
+                else if (strcmp("reinforcement", optarg) == 0) strategyTypeEnemy = REINFORCEMENT_AGENT;
                 if (!quiet) printf("Strategy Enemy : %s\n", optarg);
                 break;
             case 'f':

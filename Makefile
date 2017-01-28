@@ -16,7 +16,7 @@ CFILES = main.cpp graphics.cpp textureLoader.cpp arduinoSerial.cpp game.cpp \
 
 # Files' headers
 HFILES = graphics.h textureLoader.h arduinoSerial.h game.h strategy.h \
-			pacmanQAgent.h approximateQAgent.cpp expectimaxAgent.h reflexAgent.h \
+			pacmanQAgent.h approximateQAgent.h expectimaxAgent.h reflexAgent.h \
 			agent.h map.h cell.h particle.h drawer.h
 
 # The build target executable:

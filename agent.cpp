@@ -97,6 +97,7 @@ void Agent::move(){
             needAction = false;
         } else {
             move(getNextPosition(currentDirection, getCurrentPosition()));
+            observationFunction(*gameState);
             needAction = true;
         }
     }

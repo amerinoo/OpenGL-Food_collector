@@ -8,4 +8,5 @@
 #include "reflexAgent.h"
 #include "expectimaxAgent.h"
 #include "pacmanQAgent.h"
+#include "approximateQAgent.h"
 #endif
