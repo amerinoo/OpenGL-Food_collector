@@ -31,7 +31,22 @@ Agent::Agent(CellType cellType, Strategy * strategy)
 }
 
 // Getters
-Strategy * Agent::getStrategy(){ return strategy; }
+Direction Agent::getAction(){
+    Direction action = strategy->getAction();
+
+    if (action != NONE) {
+        float x1 = gameState->getPosition(PLAYER)->getX();
+        float x2 = gameState->getPosition(ENEMY)->getX();
+        float y1 = gameState->getPosition(PLAYER)->getY();
+        float y2 = gameState->getPosition(ENEMY)->getY();
+
+        bool x = (x1 == x2 && ((y1 - y2 < 0 && currentDirection == RIGHT) || (y1 - y2 > 0 && currentDirection == LEFT)));
+        bool y = (y1 == y2 && ((x1 - x2 < 0 && currentDirection == DOWN) || (x1 - x2 > 0 && currentDirection == UP)));
+
+        if (x || y) shoot();
+    }
+    return action;
+}
 
 int Agent::getScore(){ return gameState->getScore(cellType); }
 
@@ -161,7 +176,8 @@ void Agent::shoot(){
 }
 
 bool Agent::canShoot(){
-    return bullet.enable &&
+    return cellType == PLAYER &&
+           bullet.enable &&
            !isRotate() &&
            currentDirection != NONE;
 }

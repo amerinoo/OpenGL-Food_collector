@@ -32,7 +32,7 @@ public:
     Agent(CellType, Strategy *);
 
     // Getters
-    Strategy * getStrategy();
+    Direction getAction();
     int getScore();
     State getState();
     bool isQuiet();

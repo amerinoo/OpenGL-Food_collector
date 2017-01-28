@@ -89,7 +89,7 @@ void Game::integrate(Agent * agent, long t){
         if (map->hasFood()) {
             if (agent->getNeedAction()) {
                 agent->setPosition(agent->getNextPosition());
-                Direction d = agent->getStrategy()->getAction();
+                Direction d = agent->getAction();
                 agent->setNextDirection(d);
                 agent->tryNextDirection();
             }
