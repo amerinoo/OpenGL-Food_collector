@@ -67,13 +67,16 @@ map<string, float> ApproximateQAgent::getFeatures(Map state, Direction action){
     map<string, float> features;
     features["bias"] = 1.0;
     Cell * nextEnemyPosition = state.getNextState(state.getPosition(agent1), action);
-    features["#-of-ghosts-1-step-away"] = manhattanDistance(
-      state.getPosition(agent1), state.getPosition(agent2)) == 1 ? 1 : 0;
-    if (features["#-of-ghosts-1-step-away"] == 0 && nextEnemyPosition->hasFood())
-        features["eats-food"] = 1.0;
+    if ((abs(manhattanDistance(state.getPosition(agent1), state.getPosition(agent2)) - 2) < 0.00000001))
+        features["#-of-ghosts-1-step-away"] = 1;
+    if (!state.getBulletEnable() &&
+      (abs(manhattanDistance(state.getPosition(agent1), state.getPosition(BULLET)) - 3) < 0.00000001))
+        features["#-of-bullets-1-step-away"] = 1.0;
 
+    if (features["#-of-bullets-1-step-away"] == 0 && nextEnemyPosition->hasFood())
+        features["eats-food"] = 1.0;
     int dist = closestFoodDistance(state, nextEnemyPosition);
-    if (dist > 1) // No estic segur de que el resultat de la operacio sigui un float
+    if (dist > 0) // No estic segur de que el resultat de la operacio sigui un float
         features["closest-food"] = float(dist) / (state.getHeight() * state.getWidth());
 
     divideAll(features, 10.0);
