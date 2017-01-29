@@ -1,17 +1,38 @@
 #include "approximateQAgent.h"
 
+const char * ApproximateQAgent::weightsFileName = "weights.dat";
+
 ApproximateQAgent::ApproximateQAgent(){ }
 
 ApproximateQAgent::ApproximateQAgent(Map * gameState, CellType agent, float epsilon,
   float alpha, float discount, int numTraining)
-    : PacmanQAgent(gameState, agent, epsilon, alpha, discount, numTraining){ }
+    : PacmanQAgent(gameState, agent, epsilon, alpha, discount, numTraining){
+    readWeightsFile();
+}
+
+void ApproximateQAgent::readWeightsFile(){
+    FILE * input = fopen(weightsFileName, "r");
+
+    if (input != NULL) {
+        std::cout << "Reading " << weightsFileName << " file" << std::endl;
+        char key[30];
+        float value;
+        while (fscanf(input, "%s %f", key, &value) != EOF) {
+            string keyString(key);
+            weights[keyString] = value;
+        }
+        fclose(input);
+    } else {
+        std::cout << "Unable to read " << weightsFileName << " file" << std::endl;
+    }
+}
 
 float ApproximateQAgent::getQValue(Map state, Direction action){
     float qValue = 0.0;
 
     map<string, float> features = getFeatures(state, action);
     for (map<string, float>::iterator it = features.begin(); it != features.end(); ++it)
-        qValue += (it->second * weights[it->first]);
+        qValue += (features[it->first] * weights[it->first]);
     return qValue;
 }
 
@@ -30,6 +51,15 @@ void ApproximateQAgent::final(Map state){
     // did we finish training?
     if (episodesSoFar == numTraining) {
         // you might want to print your weights here for debugging
+        ofstream myfile(weightsFileName);
+        for (map<string, float>::iterator it = weights.begin(); it != weights.end(); ++it) {
+            cout << it->first << " " << weights[it->first] << endl;
+            if (myfile.is_open()) {
+                myfile << it->first << " " << weights[it->first] << endl;
+            }
+        }
+        myfile.close();
+        std::cout << std::endl;
     }
 }
 
