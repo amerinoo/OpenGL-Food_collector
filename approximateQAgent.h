@@ -16,7 +16,7 @@ public:
     void final(Map state);
     /************** End ReinforcementAgent **************/
 protected:
-    map<string, double> weights;
+    map<string, float> weights;
 private:
     int closestFoodDistance(Map state, Cell * position);
     map<string, float> getFeatures(Map state, Direction action);
