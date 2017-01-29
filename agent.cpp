@@ -12,8 +12,8 @@ int Agent::bulletVelocity = Agent::agentVelocity / 1.8;
 
 void Agent::setVelocity(int v){
     Agent::agentVelocity  = v;
-    Agent::rotateVelocity = Agent::agentVelocity / 1.5;
-    Agent::bulletVelocity = Agent::agentVelocity / 1.8;
+    Agent::rotateVelocity = v / 1.5;
+    Agent::bulletVelocity = v / 1.8;
 }
 
 Bullet::Bullet(){ enable = true; }

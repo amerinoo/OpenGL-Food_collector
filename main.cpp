@@ -93,11 +93,11 @@ int main(int argc, char * argv[]){
                 if (!quiet) printf("Strategy Enemy : %s\n", optarg);
                 break;
             case 'f':
-                Agent::agentVelocity = 20;
+                Agent::setVelocity(50);
                 if (!quiet) printf("Fast mode activated\n");
                 break;
             case 't':
-                Agent::agentVelocity = 500;
+                Agent::setVelocity(900);
                 if (!quiet) printf("Turtle mode activated\n");
                 break;
         }
