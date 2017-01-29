@@ -70,6 +70,7 @@ void Game::newGame(){
     level += 1;
     player->setMap(map);
     enemy->setMap(map);
+    enemy->registerInitialState();
     std::cout << map->toString();
 }
 

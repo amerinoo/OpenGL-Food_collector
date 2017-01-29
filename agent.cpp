@@ -26,9 +26,7 @@ Agent::Agent(){ }
 
 Agent::Agent(CellType cellType, Strategy * strategy)
     : cellType(cellType), strategy(strategy),
-    gameState(), score(0){
-    strategy->registerInitialState();
-}
+    gameState(), score(0){ }
 
 // Getters
 Direction Agent::getAction(){
@@ -104,6 +102,8 @@ void Agent::goInitPosition(){
     nextDirection    = NONE;
     needAction       = true;
 }
+
+void Agent::registerInitialState(){ strategy->registerInitialState(); }
 
 void Agent::eat(){
     gameState->eat(cellType);
