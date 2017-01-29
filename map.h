@@ -59,6 +59,7 @@ public:
     vector<Direction> getLegalActions(Cell *);
     Map generateSuccessor(CellType, Direction);
     Cell * getNextState(Cell *, Direction);
+    void crash(CellType);
 
     // Print
     void print();

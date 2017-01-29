@@ -156,6 +156,7 @@ bool Agent::isCrash(){
 }
 
 void Agent::crash(){
+    gameState->crash(cellType);
     agent->getCurrentPosition()->setCellType(CORRIDOR);
     agent->goInitPosition();
 }

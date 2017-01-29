@@ -453,3 +453,15 @@ void Map::incrementScore(CellType agent){
         scoreEnemy += 1 * multiplier;
     }
 }
+
+void Map::crash(CellType agent){
+    int multiplier = 10;
+
+    if (agent == PLAYER && !isInInitialPosition(ENEMY)) {
+        scorePlayer += 0.5 * multiplier;
+        scoreEnemy  -= 1 * multiplier;
+    } else if (agent == ENEMY && !isInInitialPosition(PLAYER)) {
+        scoreEnemy  += 2 * multiplier;
+        scorePlayer -= 1 * multiplier;
+    }
+}
