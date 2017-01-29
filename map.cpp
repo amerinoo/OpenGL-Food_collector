@@ -16,9 +16,10 @@ Map::Map(){ }
 
 Map::Map(int height, int width)
     : height(height), width(width){
-    scorePlayer = 0;
-    scoreEnemy  = 0;
-    totalFood   = -2;
+    scorePlayer  = 0;
+    scoreEnemy   = 0;
+    totalFood    = -2;
+    bulletEnable = true;
 }
 
 Map::Map(char fname[]){ getMapFromFile(fname); }
@@ -81,8 +82,10 @@ Cell * Map::getInitPosition(CellType agent){
 void Map::setPosition(CellType agent, Cell * c){
     if (agent == PLAYER) {
         player = c;
-    } else {
+    } else if (agent == ENEMY) {
         enemy = c;
+    } else {
+        bullet = c;
     }
 }
 
@@ -415,8 +418,18 @@ int Map::getScore(CellType agent){
 }
 
 Cell * Map::getPosition(CellType agent){
-    return (agent == PLAYER) ? player : enemy;
+    if (agent == PLAYER) {
+        return player;
+    } else if (agent == ENEMY) {
+        return enemy;
+    } else {
+        return bullet;
+    }
 }
+
+void Map::setBulletEnable(bool enable){ bulletEnable = enable; }
+
+bool Map::getBulletEnable(){ return bulletEnable; }
 
 bool Map::isInInitialPosition(CellType agent){
     return getInitPosition(agent) == getPosition(agent);

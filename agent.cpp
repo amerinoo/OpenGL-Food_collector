@@ -74,6 +74,10 @@ void Agent::setMap(Map * gameState){
 }
 
 void Agent::setPosition(Cell * cell){
+    setPosition(cellType, cell);
+}
+
+void Agent::setPosition(CellType cellType, Cell * cell){
     cell->setCellType(cellType);
     gameState->setPosition(cellType, cell);
 }
@@ -218,10 +222,19 @@ bool Agent::integrate(long t){
 }
 
 void Agent::moveBullet(){
+    gameState->setBulletEnable(false);
     bullet.position = getNextPosition(bullet.direction, bullet.position);
-    if (bullet.position->isWall()) bullet.enable = true;
-    else if (isCrashBullet()) crashBullet();
-    else bullet.particle.init_movement(getTranslation(bullet.direction), Agent::bulletVelocity);
+    if (bullet.position->isWall()) {
+        bullet.enable = true;
+        gameState->setBulletEnable(true);
+    } else if (isCrashBullet()) {
+        crashBullet();
+    } else {
+        CellType type = bullet.position->getType();
+        setPosition(BULLET, bullet.position);
+        bullet.position->setCellType(type);
+        bullet.particle.init_movement(getTranslation(bullet.direction), Agent::bulletVelocity);
+    }
 }
 
 bool Agent::isCrashBullet(){
@@ -236,7 +249,7 @@ float Agent::manhattanDistance(Cell * c1, Cell * c2){
     return abs(c2->getX() - c1->getX()) + abs(c2->getY() - c1->getY());
 }
 
-void Agent::crashBullet(){ crash(); bullet.enable = true; }
+void Agent::crashBullet(){ crash(); bullet.enable = true; gameState->setBulletEnable(true); }
 
 void Agent::draw(){
     Drawer& drawer         = Drawer::getInstance();

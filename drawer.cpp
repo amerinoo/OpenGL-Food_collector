@@ -97,7 +97,7 @@ void Drawer::draw(CellType cellType, float x, float y, bool print,
     glTranslatef(-(width - y) * Drawer::cellSize + ((width + 1) * Drawer::cellSize / 2.0 + transalationX),
       (height - x) * Drawer::cellSize - ((height + 1) * Drawer::cellSize / 2.0 + transalationY),
       0);
-    if (print || (cellType != ENEMY && cellType != PLAYER)) {
+    if (print || (cellType != ENEMY && cellType != PLAYER && cellType != BULLET)) {
         switch (cellType) {
             case WALL:
                 drawWall();

@@ -47,6 +47,7 @@ public:
     // Setters
     void setMap(Map * gameState);
     void setPosition(Cell *);
+    void setPosition(CellType, Cell *);
     void setDirection(Direction);
     void setNextDirection(Direction);
     void setAgent(Agent *);

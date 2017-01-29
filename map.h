@@ -49,6 +49,8 @@ public:
     bool isCandidate(Cell *);
     int getScore(CellType);
     Cell * getPosition(CellType);
+    void setBulletEnable(bool);
+    bool getBulletEnable();
     bool isInInitialPosition(CellType);
     int getFoodRemaining();
     bool hasFood();
@@ -88,5 +90,7 @@ protected:
     int totalFood;
     Cell * player;
     Cell * enemy;
+    Cell * bullet;
+    bool bulletEnable;
 };
 #endif // ifndef map_h
