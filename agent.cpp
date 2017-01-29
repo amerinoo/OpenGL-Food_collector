@@ -116,7 +116,6 @@ void Agent::move(){
             needAction = false;
         } else {
             move(getNextPosition(currentDirection, getCurrentPosition()));
-            observationFunction(*gameState);
             needAction = true;
         }
     }
@@ -216,6 +215,7 @@ bool Agent::integrate(long t){
         currentPosition->setCellType(CORRIDOR);
         currentPosition = nextPosition;
         if (currentPosition->hasFood()) eat();
+        if (needAction) observationFunction(*gameState);
         currentPosition->setCellType(cellType);
         return true;
     }

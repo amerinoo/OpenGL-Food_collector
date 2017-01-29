@@ -54,6 +54,7 @@ public:
 
     // Methods
     void goInitPosition();
+    void registerInitialState();
     void initMovement(Direction, int);
     bool integrate(long);
     void moveBullet();
