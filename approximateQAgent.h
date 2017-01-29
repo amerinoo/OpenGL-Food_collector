@@ -11,7 +11,7 @@ public:
 
     ApproximateQAgent();
     ApproximateQAgent(Map * gameState, CellType agent, float epsilon = 5,
-      float alpha = 0.2, float discount = 0.9, int numTraining = 50);
+      float alpha = 0.2, float discount = 0.9, int numTraining = 10);
     void readWeightsFile();
     float getQValue(Map state, Direction action);
     void update(Map state, Direction action, Map nextState, float reward);

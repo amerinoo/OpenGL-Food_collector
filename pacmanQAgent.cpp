@@ -128,18 +128,14 @@ void PacmanQAgent::final(Map state){
     lastWindowAccumRewards += state.getScore(agent1);
 
     int NUM_EPS_UPDATE = 5;
-    if (episodesSoFar % NUM_EPS_UPDATE == 0) {
+    if (episodesSoFar % NUM_EPS_UPDATE == 0 && episodesSoFar <= numTraining) {
         cout << "Reinforcement Learning Status:" << endl;
+
         float windowAvg = lastWindowAccumRewards / float(NUM_EPS_UPDATE);
-        if (episodesSoFar <= numTraining) {
-            float trainAvg = accumTrainRewards / float(episodesSoFar);
-            cout << "\tCompleted " << episodesSoFar << " out of " << numTraining << " training episodes" << endl;
-            cout << "\tAverage Rewards over all training: " << trainAvg << endl;
-        } else {
-            float testAvg = float(accumTestRewards) / (episodesSoFar - numTraining);
-            cout << "\tCompleted " << episodesSoFar - numTraining << " test episodes" << endl;
-            cout << "\tAverage Rewards over testing: " << testAvg << endl;
-        }
+        float trainAvg  = accumTrainRewards / float(episodesSoFar);
+        cout << "\tCompleted " << episodesSoFar << " out of " << numTraining << " training episodes" << endl;
+        cout << "\tAverage Rewards over all training: " << trainAvg << endl;
+
         cout << "\tAverage Rewards for last " << NUM_EPS_UPDATE << " episodes: " << windowAvg << endl;
         lastWindowAccumRewards = 0.0;
     }
