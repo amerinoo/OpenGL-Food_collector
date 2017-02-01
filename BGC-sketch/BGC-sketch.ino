@@ -134,7 +134,6 @@ void loop() {
   if (mySerial.available()) {
     char inChar = (char)mySerial.read(); //read the input
     int inInt =  (char)mySerial.read() - '0';
-    Serial.println(inInt);
     if (inChar == 'H') {
       showBPM = inInt;
     } else if (inChar == 'P') {
