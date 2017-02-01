@@ -88,3 +88,7 @@ vector<Direction> Strategy::blindSearchGraph(Map gameState, Cell * initial){
         }
     }
 } // blindSearchGraph
+
+int Strategy::closestFoodDistance(Map state, Cell * position){
+    return blindSearchGraph(state, position).size();
+}

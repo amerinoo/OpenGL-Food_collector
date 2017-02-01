@@ -39,6 +39,7 @@ public:
     float getDistance(Map, Cell *, Cell *);
     float manhattanDistance(Cell *, Cell *);
     vector<Direction> blindSearchGraph(Map, Cell *);
+    int closestFoodDistance(Map state, Cell * position);
 
 protected:
     Map * gameState;

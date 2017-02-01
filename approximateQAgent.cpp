@@ -85,10 +85,6 @@ map<string, float> ApproximateQAgent::getFeatures(Map state, Direction action){
 
 /************** End ReinforcementAgent **************/
 
-int ApproximateQAgent::closestFoodDistance(Map state, Cell * position){
-    return blindSearchGraph(state, position).size();
-}
-
 void ApproximateQAgent::divideAll(map<string, float> features, float number){
     for (map<string, float>::iterator it = features.begin(); it != features.end(); ++it)
         features[it->first] = it->second / number;

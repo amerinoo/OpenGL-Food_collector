@@ -21,7 +21,6 @@ public:
 protected:
     map<string, float> weights;
 private:
-    int closestFoodDistance(Map state, Cell * position);
     map<string, float> getFeatures(Map state, Direction action);
     void divideAll(map<string, float> features, float number);
 };
