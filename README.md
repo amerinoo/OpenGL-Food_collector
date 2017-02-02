@@ -55,3 +55,10 @@ The next step is to connect all the sensors to the Arduino board following the n
 ![tag](https://raw.githubusercontent.com/pestomerdes/food_collector/master/Images/arduino_connections.PNG)
 
 Once you have prepared the Arduino environment you can upload the arduino sketch available on the `BGC-sketch` folder of the project on the arduino. Then when you execute the game, if the game detect the arduino, you will be able to play with the Biometrical Game Controller. See game information to more information about the arduino parameters in the game.
+
+# Monitoring the BGC
+If you are playing with the BGC and you can see all the values readed by the arduino you can use the simple application that we create for you available in the `App` folder. It's available only with Android devices but we are working hard to develop it for more platforms.
+![](https://raw.githubusercontent.com/pestomerdes/food_collector/master/Images/Screenshot_BGC_APP.png)
+
+# Documentation
+In the `Documentation` folder you can find a PDF that explains all the work that we did related with the Biometrical Game Controller. We hope that you enjoy with our Food Collector project! :D
