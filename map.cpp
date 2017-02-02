@@ -465,3 +465,90 @@ void Map::crash(CellType agent){
         scorePlayer -= 1 * multiplier;
     }
 }
+
+void Map::getStateRepresentation(Map currentState, Map lastState){
+    // 2 x 5 x H x W
+    vector<vector<vector<vector<int> > > > all;
+    vector<vector<vector<int> > > a1;
+    vector<vector<int>  > a2;
+    all.push_back(a1);
+    all.push_back(a1);
+
+    all[0].push_back(a2); // WALL
+    all[0].push_back(a2); // FOOD
+    all[0].push_back(a2); // PLAYER
+    all[0].push_back(a2); // ENEMY
+    all[0].push_back(a2); // BULLET
+
+    all[1].push_back(a2); // WALL
+    all[1].push_back(a2); // FOOD
+    all[1].push_back(a2); // PLAYER
+    all[1].push_back(a2); // ENEMY
+    all[1].push_back(a2); // BULLET
+
+    populateStateRepresentation(all, 0, currentState);
+    populateStateRepresentation(all, 1, lastState);
+
+    printState(all);
+} // getStateRepresentation
+
+void Map::populateStateRepresentation(vector<vector<vector<vector<int> > > > &all, int tensor, Map state){
+    vector<vector<Cell *> > map = state.getMap();
+
+    vector<int> a3;
+    for (unsigned int i = 0; i < map.size(); i++) {
+        all[tensor][0].push_back(a3);
+        all[tensor][1].push_back(a3);
+        all[tensor][2].push_back(a3);
+        all[tensor][3].push_back(a3);
+        all[tensor][4].push_back(a3);
+        for (unsigned int j = 0; j < map[i].size(); j++) {
+            Cell * c = map[i][j];
+            all[tensor][0][i].push_back(0);
+            all[tensor][1][i].push_back(0);
+            all[tensor][2][i].push_back(0);
+            all[tensor][3][i].push_back(0);
+            all[tensor][4][i].push_back(0);
+            switch (c->getType()) {
+                case WALL:
+                    all[tensor][0][i].pop_back();
+                    all[tensor][0][i].push_back(1);
+                    break;
+                case CORRIDOR:
+                    break;
+                case FOOD:
+                    all[tensor][1][i].pop_back();
+                    all[tensor][1][i].push_back(1);
+                    break;
+                case PLAYER:
+                    all[tensor][2][i].pop_back();
+                    all[tensor][2][i].push_back(1);
+                    break;
+                case ENEMY:
+                    all[tensor][3][i].pop_back();
+                    all[tensor][3][i].push_back(1);
+                    break;
+                case BULLET:
+                    all[tensor][4][i].pop_back();
+                    all[tensor][4][i].push_back(1);
+                    break;
+            }
+        }
+    }
+} // populateStateRepresentation
+
+void Map::printState(vector<vector<vector<vector<int> > > > all){
+    for (unsigned int i = 0; i < all.size(); i++) {
+        for (unsigned int j = 0; j < all[0].size(); j++) {
+            for (unsigned int q = 0; q < all[0][0].size(); q++) {
+                for (unsigned int w = 0; w < all[0][0][0].size(); w++) {
+                    if (all[i][j][q][w] == 0) std::cout << "0 ";
+                    else std::cout << "  ";
+                }
+                std::cout << std::endl;
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
+    }
+}

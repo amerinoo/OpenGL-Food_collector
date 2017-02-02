@@ -60,6 +60,7 @@ public:
     Map generateSuccessor(CellType, Direction);
     Cell * getNextState(Cell *, Direction);
     void crash(CellType);
+    void getStateRepresentation(Map currentState, Map lastState);
 
     // Print
     void print();
@@ -83,9 +84,10 @@ private:
 
     void getMapFromFile(char *);
     void print(vector<vector<Cell *> > );
-
-protected:
-    int height, width;
+    void populateStateRepresentation(vector<vector<vector<vector<int> > > > &all, int tensor, Map state);
+    void printState(vector<vector<vector<vector<int> > > > all);
+protected
+    : int height, width;
     vector<vector<Cell *> > map;
     vector<vector<Cell *> > visited;
     int totalFood;
