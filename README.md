@@ -42,3 +42,16 @@ If you want to see more information about the parameters of the program use the 
 ```
 ./food_collector -h
 ```
+# Arduino setup
+In order to run the game using the Arduino game controller you need to install the Arduino IDE and the following libraries:
+
+- Arduino IDE : https://www.arduino.cc/en/Main/Software
+- Adafruit Sensor: https://github.com/adafruit/Adafruit_Sensor
+- Adafruit ADXL345: https://github.com/adafruit/Adafruit_ADXL345
+- DHT sensor library: https://github.com/adafruit/DHT-sensor-library
+
+## Arduino connections
+The next step is to connect all the sensors to the Arduino board following the next specifications:
+![tag](https://raw.githubusercontent.com/pestomerdes/food_collector/master/Images/arduino_connections.PNG)
+
+Once you have prepared the Arduino environment you can upload the arduino sketch available on the `BGC-sketch` folder of the project on the arduino. Then when you execute the game, if the game detect the arduino, you will be able to play with the Biometrical Game Controller. See game information to more information about the arduino parameters in the game.
