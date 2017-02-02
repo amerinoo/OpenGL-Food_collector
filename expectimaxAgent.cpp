@@ -59,19 +59,20 @@ Direction ExpectimaxAgent::expectimaxDecision(){
         alarm = false;
         best  = 0;
     }
-    if (!bestDirections.empty()) {
-        actions.push_back(bestDirections.back());
-        bestDirections.pop_back();
-    } else {
-        for (unsigned int i = 0; i < legalActions.size(); i++) {
-            u = minValue(result(*gameState, agent1, legalActions[i]), agent2, depth);
-            if (u == v) {
-                actions.push_back(legalActions[i]);
-            } else if (u > v) {
-                v = u;
-                actions.clear();
-                actions.push_back(legalActions[i]);
-            }
+
+    for (unsigned int i = 0; i < legalActions.size(); i++) {
+        u = minValue(result(*gameState, agent1, legalActions[i]), agent2, depth);
+        if (!bestDirections.empty() && legalActions[i] == bestDirections.back()) {
+            u *= 2;
+            bestDirections.pop_back();
+        }
+        // std::cout << "u: " << u << '\n';
+        if (u == v) {
+            actions.push_back(legalActions[i]);
+        } else if (u > v) {
+            v = u;
+            actions.clear();
+            actions.push_back(legalActions[i]);
         }
     }
 
@@ -101,14 +102,11 @@ float ExpectimaxAgent::evaluationFunction(Map currentGameState){
     float staticScore    = currentGameState.getScore(agent1);
     float mapScore       = 0.0;
     Cell * enemyPosition = currentGameState.getPosition(agent1);
-    float d;
+    int d = closestFoodDistance(currentGameState, enemyPosition);
 
-    vector<Cell *> food = currentGameState.getCandidateFood();
-    for (unsigned int i = 0; i < food.size(); i++) {
-        d         = getDistance(currentGameState, enemyPosition, food[i]);
-        mapScore += (d == 0.0) ? 50 : 1.0 / (d * d);
-    }
-    if (!currentGameState.isInInitialPosition(agent2)) {
+    mapScore += (d == 0.0) ? 50 : 1.0 / (d * d);
+
+    if (agent1 == ENEMY && !currentGameState.isInInitialPosition(agent2)) {
         d = getDistance(currentGameState, enemyPosition, currentGameState.getPosition(agent2));
         if (d <= 1.0) mapScore += 70;
     }

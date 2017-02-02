@@ -97,7 +97,7 @@ int main(int argc, char * argv[]){
                 if (!quiet) printf("Fast mode activated\n");
                 break;
             case 't':
-                Agent::setVelocity(900);
+                Agent::setVelocity(500);
                 if (!quiet) printf("Turtle mode activated\n");
                 break;
         }
@@ -135,7 +135,7 @@ void usage(char * name){
          << "  -p, --port         Serial port Arduino is connected to (default /dev/ttyACM0)" << endl
          << "\nAgent options:" << endl
          << "  -P  --player       Select player strategy (Default Human)" << endl
-         << "  -E  --enemy        Select enemy strategy (Default Expectimax)" << endl
+         << "  -E  --enemy        Select enemy strategy (Default Reinforcement Learing)" << endl
          << "  Options:" << endl
          << "    · reflex" << endl
          << "    · expectimax" << endl
