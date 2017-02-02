@@ -36,9 +36,9 @@ public:
     virtual void final(Map state);
     Direction randomChoice(vector<Direction> );
     vector<Direction> getLegalActions(Cell *);
-    float getDistance(Map, Cell *, Cell *);
-    float manhattanDistance(Cell *, Cell *);
+    int getDistance(Map, Cell *, Cell *);
     vector<Direction> blindSearchGraph(Map, Cell *);
+    vector<Direction> closestDistance(Map gameState, Cell * initial, Cell * goal);
     int closestFoodDistance(Map state, Cell * position);
 
 protected:
